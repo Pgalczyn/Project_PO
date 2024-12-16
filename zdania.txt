@@ -1,0 +1,9 @@
+Podział zadań
+
+Paweł:
+
+stworzenie klasy animal
+
+Szymon:
+stworzenie klasy Grass
+storzenie mapy 
