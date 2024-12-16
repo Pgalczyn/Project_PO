@@ -1,0 +1,5 @@
+Podział zadań
+
+Paweł:
+
+stworzenie klasy animal
