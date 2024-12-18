@@ -19,8 +19,8 @@ public class Vector2D {
     public int getY() {
         return y;
     }
-    public Vector2D addVector(Vector2D v1, Vector2D v2) {
-        return new Vector2D(v1.getX() + v2.getX(),v1.getY() + v2.getY());
+    public Vector2D addVector( Vector2D v1) {
+        return new Vector2D(v1.getX() + this.getX(),v1.getY() + this.getY());
     }
 
     @Override
