@@ -1,5 +1,7 @@
 package agh.oop.pdw.model;
 
+import java.util.Random;
+
 public enum MapDirection {
     NORTH,NORTH_EAST,NORTH_WEST,SOUTH_EAST,SOUTH_WEST,SOUTH,WEST,EAST;
 
@@ -30,8 +32,11 @@ public enum MapDirection {
             case EAST -> new Vector2D(1,0);
 
         }
+    }
 
-
-
+    public static MapDirection randomDirection(){
+        Random random = new Random();
+        MapDirection[] directions = values();
+        return directions[random.nextInt(directions.length)];
     }
 }
