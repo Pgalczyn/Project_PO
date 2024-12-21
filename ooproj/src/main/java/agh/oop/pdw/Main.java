@@ -10,11 +10,6 @@ import agh.oop.pdw.model.util.RandomUtils;
 public class Main {
     public static void main(String[] args) {
         WorldMap map = new WorldMap();
-        Animal animal1 = new Animal(new Vector2D(0, 0));
-        Animal animal2 = new Animal(new Vector2D(100, 100));
-
-        map.placeAnimal(animal1);
-        map.placeAnimal(animal2);
 
         map.spawnGrass(new Grass(new Vector2D(3, 3)));
 
