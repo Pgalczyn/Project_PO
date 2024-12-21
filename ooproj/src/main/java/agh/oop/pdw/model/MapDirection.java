@@ -20,8 +20,8 @@ public enum MapDirection {
         };
     }
 
-    public void toVector(){
-        switch (this){
+    public Vector2D toVector(){
+        return switch (this){
             case NORTH -> new Vector2D(0,1);
             case NORTH_EAST -> new Vector2D(1,1);
             case NORTH_WEST -> new Vector2D(-1,1);
@@ -31,8 +31,22 @@ public enum MapDirection {
             case WEST -> new Vector2D(-1,0);
             case EAST -> new Vector2D(1,0);
 
-        }
+        };
     }
+
+    public MapDirection nextDirection(){
+        return switch (this){
+            case NORTH -> NORTH_EAST;
+            case NORTH_EAST -> EAST;
+            case NORTH_WEST -> NORTH;
+            case SOUTH_EAST -> SOUTH;
+            case SOUTH_WEST -> WEST;
+            case SOUTH -> SOUTH_WEST;
+            case WEST -> NORTH_WEST;
+            case EAST -> SOUTH_WEST;
+        };
+    }
+
 
     public static MapDirection randomDirection(){
         Random random = new Random();
