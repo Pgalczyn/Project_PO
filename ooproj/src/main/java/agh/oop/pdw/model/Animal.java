@@ -6,7 +6,7 @@ import java.util.Random;
 
 import static agh.oop.pdw.model.MapDirection.randomDirection;
 
-public class Animal implements WorldElement,AnimalObserver{
+public class Animal implements WorldElement, AnimalObserver {
     private MapDirection direction;
     private Vector2D position;
     private int currentEnergy;
@@ -35,6 +35,7 @@ public class Animal implements WorldElement,AnimalObserver{
         Random rand = new Random();
         this.activeGene = rand.nextInt(8);
     }
+
     //constructor for aniamls which we put on the map
     public Animal(Vector2D position, int StartEnergy, int LengthOfGenotype, int usedEnergyToReproduce, List<AnimalObserver> observers) {
         this.position = position;
@@ -44,8 +45,8 @@ public class Animal implements WorldElement,AnimalObserver{
         this.lengthOfGenotype = LengthOfGenotype;
         this.observers = observers;
         Random rand = new Random();
-        int[] genotyp = new int [lengthOfGenotype];
-        for (int i =0 ; i < lengthOfGenotype; i++) {
+        int[] genotyp = new int[lengthOfGenotype];
+        for (int i = 0; i < lengthOfGenotype; i++) {
             genotyp[i] = rand.nextInt(8);
         }
         this.genotype = genotype;
@@ -59,7 +60,7 @@ public class Animal implements WorldElement,AnimalObserver{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Position: " + position.toString() + ", direction: " + direction.toString();
     }
 
@@ -76,9 +77,8 @@ public class Animal implements WorldElement,AnimalObserver{
             //wspólny i będzei mu się zwiększała liczba potomków kilka razy trzeba bedzie chyba użyć treeSeta
 
         }
-
-
-
+        // TODO - change return value
+        return null;
     }
 
     public int[] getGenotype(Animal animal_1, Animal animal_2) {
@@ -99,15 +99,14 @@ public class Animal implements WorldElement,AnimalObserver{
 
             for (int i = 0; i < animal_1.lengthOfGenotype; i++) {
 
-                if(i < Animal_1_Part) newGenotype[i] = animal_1.genotype[i];
+                if (i < Animal_1_Part) newGenotype[i] = animal_1.genotype[i];
                 else newGenotype[i] = animal_2.genotype[i];
 
             }
 
-        }
-        else {
+        } else {
             for (int i = 0; i < animal_2.lengthOfGenotype; i++) {
-                if(i < Animal_2_Part) newGenotype[i] = animal_2.genotype[i];
+                if (i < Animal_2_Part) newGenotype[i] = animal_2.genotype[i];
                 else newGenotype[i] = animal_1.genotype[i];
             }
         }
@@ -117,15 +116,14 @@ public class Animal implements WorldElement,AnimalObserver{
     }
 
 
+    public void move(int activeGene, MoveValidator validator) {
 
-    public void move(int activeGene,MoveValidator validator){
-
-        for (int i =0 ; i < genotype[activeGene]; i++) {
+        for (int i = 0; i < genotype[activeGene]; i++) {
 
             this.direction = this.direction.nextDirection();
 
         }
-        if (validator.canMoveTo(position.addVector(this.direction.toVector()))){
+        if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
 
             this.position = this.position.addVector(this.direction.toVector());
         }
@@ -135,20 +133,19 @@ public class Animal implements WorldElement,AnimalObserver{
 
     }
 
-    public void addObserver(AnimalObserver observer){
+    public void addObserver(AnimalObserver observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(AnimalObserver observer){
+    public void removeObserver(AnimalObserver observer) {
         observers.remove(observer);
     }
 
-    public void notifyObservers(){
+    public void notifyObservers() {
         for (AnimalObserver observer : observers) {
-            if (this.amountOfDaysUntilDeath == Integer.MAX_VALUE ) {
+            if (this.amountOfDaysUntilDeath == Integer.MAX_VALUE) {
                 removeObserver(observer);
-            }
-            else observer.updateDescendants();
+            } else observer.updateDescendants();
         }
     }
 
@@ -179,6 +176,6 @@ public class Animal implements WorldElement,AnimalObserver{
     @Override
     public void updateDescendants() {
 
-            this.amountOfDescendants++;
+        this.amountOfDescendants++;
     }
 }
