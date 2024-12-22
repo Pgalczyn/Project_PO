@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class RandomUtils {
-    private static final Random RANDOM = new Random();
+    public static final Random RANDOM = new Random();
 
     public Vector2D getGrassSpawnPosition(WorldMap worldMap){
         Map<Vector2D, Grass> elements = worldMap.getGrasses();
