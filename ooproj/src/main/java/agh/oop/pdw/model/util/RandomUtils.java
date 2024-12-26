@@ -4,29 +4,32 @@ import agh.oop.pdw.model.Grass;
 import agh.oop.pdw.model.Vector2D;
 import agh.oop.pdw.model.WorldMap;
 
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class RandomUtils {
     private static final Random RANDOM = new Random();
 
-    public Vector2D getGrassSpawnPosition(WorldMap worldMap){
-        Map<Vector2D, Grass> elements = worldMap.getGrasses();
-        if (RANDOM.nextInt() < 80){
-            Boundary boundary = new Boundary(new Vector2D(30,30), new Vector2D(69,69));
-            Vector2D position = getRandomPosition(boundary);
-            while (elements.containsKey(position)){
-                position = getRandomPosition(boundary);
-            }
-            return position;
+    public static Vector2D getGrassSpawnPosition(WorldMap worldMap){
+        List<Vector2D> possibleFields = worldMap.getEmptyFields();
+        // TODO - implement exception handling
+        if(possibleFields.isEmpty()){
+            return null;
         }
-        else return new Vector2D(-1, -1);
+        return possibleFields.get(RANDOM.nextInt(possibleFields.size()));
     }
 
-    private Vector2D getRandomPosition(Boundary boundary){
+    public Vector2D getRandomPosition(Boundary boundary){
         return new Vector2D(
                 RANDOM.nextInt(boundary.topRight().getX() - boundary.bottomLeft().getX()) + boundary.bottomLeft().getX(),
                 RANDOM.nextInt(boundary.topRight().getY() - boundary.bottomLeft().getY()) + boundary.bottomLeft().getY()
         );
+    }
+
+    public static int[] genotype(int n){
+        int[] genotype = new int[n];
+        for(int i = 0; i < n; i++){
+            genotype[i] = RANDOM.nextInt(8);
+        }
+        return genotype;
     }
 }

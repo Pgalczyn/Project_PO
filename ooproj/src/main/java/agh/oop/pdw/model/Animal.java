@@ -1,8 +1,6 @@
 package agh.oop.pdw.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static agh.oop.pdw.model.MapDirection.randomDirection;
 
@@ -12,7 +10,7 @@ public class Animal implements WorldElement, AnimalObserver {
     private int currentEnergy;
     private int[] genotype;
     private int lengthOfGenotype;
-    private int activeGene;
+    private int activeGene = 0;
     private int amountOfEatenPlants = 0;
     private int amountOfChildren = 0;
     private int amountOfDescendants = 0;
@@ -33,7 +31,6 @@ public class Animal implements WorldElement, AnimalObserver {
         this.currentEnergy = StartEnergy;
         this.observers = new ArrayList<>();
         Random rand = new Random();
-        this.activeGene = rand.nextInt(8);
     }
 
     //constructor for aniamls which we put on the map
@@ -49,9 +46,7 @@ public class Animal implements WorldElement, AnimalObserver {
         for (int i = 0; i < lengthOfGenotype; i++) {
             genotyp[i] = rand.nextInt(8);
         }
-        this.genotype = genotype;
-        this.activeGene = rand.nextInt(8);
-
+        this.genotype = genotyp;
     }
 
     @Override
@@ -61,7 +56,10 @@ public class Animal implements WorldElement, AnimalObserver {
 
     @Override
     public String toString() {
-        return "Position: " + position.toString() + ", direction: " + direction.toString();
+        return "Position: " + position.toString() +
+                ", direction: " + direction.toString() +
+                ", current energy: " + currentEnergy +
+                "days alive: " + amountOfDaysAlive;
     }
 
 
@@ -75,6 +73,8 @@ public class Animal implements WorldElement, AnimalObserver {
 
             //trzeba stworzyć listę observerów dla nowego zwierzaka ale może pojawic się problem że jakiś observer będzie
             //wspólny i będzei mu się zwiększała liczba potomków kilka razy trzeba bedzie chyba użyć treeSeta
+
+
 
         }
         // TODO - change return value
@@ -116,17 +116,16 @@ public class Animal implements WorldElement, AnimalObserver {
     }
 
 
-    public void move(int activeGene, MoveValidator validator) {
-
+    public void move() {
         for (int i = 0; i < genotype[activeGene]; i++) {
 
             this.direction = this.direction.nextDirection();
 
         }
-        if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
+        //if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
 
             this.position = this.position.addVector(this.direction.toVector());
-        }
+        //}
 
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
 
@@ -173,9 +172,16 @@ public class Animal implements WorldElement, AnimalObserver {
         return readyToReproduce;
     }
 
+    public int getCurrentEnergy() {
+        return currentEnergy;
+    }
+
+
     @Override
     public void updateDescendants() {
 
         this.amountOfDescendants++;
     }
+
+
 }
