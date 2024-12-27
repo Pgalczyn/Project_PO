@@ -3,6 +3,7 @@ package agh.oop.pdw.model;
 import java.util.*;
 
 import static agh.oop.pdw.model.MapDirection.randomDirection;
+import static agh.oop.pdw.model.util.RandomUtils.RANDOM;
 
 public class Animal implements WorldElement, AnimalObserver {
     private MapDirection direction;
@@ -18,33 +19,35 @@ public class Animal implements WorldElement, AnimalObserver {
     private int amountOfDaysUntilDeath = Integer.MAX_VALUE;
     private boolean readyToReproduce = false;  //ustalimy początkowe wartości tak żeby zwierze musiało zjeść chociaż jedną rośline żeby móc się rozmnażać
     private int usedEnergyToReproduce;
-    private List<AnimalObserver> observers;
+    private HashSet<AnimalObserver> observers;
 
 
-    //constructor for aniamals that were born on the map
-    public Animal(Vector2D position, int StartEnergy, int[] genotype, int usedEnergyToReproduce) {
+    //constructor for animals that were born on the map
+    public Animal(Vector2D position, int StartEnergy, int[] genotype, int usedEnergyToReproduce,HashSet<AnimalObserver> observers) {
         this.position = position;
         this.genotype = genotype;
         this.lengthOfGenotype = genotype.length;
         this.usedEnergyToReproduce = usedEnergyToReproduce;
         this.direction = randomDirection();
         this.currentEnergy = StartEnergy;
+
         this.observers = new ArrayList<>();
         Random rand = new Random();
+
     }
 
-    //constructor for aniamls which we put on the map
-    public Animal(Vector2D position, int StartEnergy, int LengthOfGenotype, int usedEnergyToReproduce, List<AnimalObserver> observers) {
+    //constructor for animals which we put on the map
+    public Animal(Vector2D position, int StartEnergy, int LengthOfGenotype, int usedEnergyToReproduce) {
         this.position = position;
         this.usedEnergyToReproduce = usedEnergyToReproduce;
         this.direction = randomDirection();
         this.currentEnergy = StartEnergy;
         this.lengthOfGenotype = LengthOfGenotype;
-        this.observers = observers;
+        this.observers = new HashSet<>();
         Random rand = new Random();
-        int[] genotyp = new int[lengthOfGenotype];
+        int[] genotype = new int[lengthOfGenotype];
         for (int i = 0; i < lengthOfGenotype; i++) {
-            genotyp[i] = rand.nextInt(8);
+            genotype[i] = rand.nextInt(8);
         }
         this.genotype = genotyp;
     }
@@ -66,22 +69,40 @@ public class Animal implements WorldElement, AnimalObserver {
     public Animal reproduce(Animal otherAnimal) {
 
         if (this.readyToReproduce && otherAnimal.readyToReproduce) {
-            int[] newGenotype = getGenotype(this, otherAnimal);
+            int[] newGenotype = getGenotypeForAnimal(this, otherAnimal);
 
+            //subtracting energy to reproduce new animal
             this.currentEnergy -= this.usedEnergyToReproduce;
             otherAnimal.currentEnergy -= this.usedEnergyToReproduce;
 
-            //trzeba stworzyć listę observerów dla nowego zwierzaka ale może pojawic się problem że jakiś observer będzie
-            //wspólny i będzei mu się zwiększała liczba potomków kilka razy trzeba bedzie chyba użyć treeSeta
+            //creating set of observers for new animal
+            HashSet<AnimalObserver> newObservers = new HashSet<>();
+            newObservers.addAll(this.observers);
+            newObservers.addAll(otherAnimal.observers);
+
+            //adding parents to observers
+            newObservers.add(this);
+            newObservers.add(otherAnimal);
+
+            //increasing number of children
+            this.amountOfChildren += 1;
+            otherAnimal.amountOfChildren += 1;
+
+            Animal child = new Animal(this.position,2* this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce,newObservers);
 
 
+
+
+
+            child.notifyObservers();
+
+            return child;
 
         }
-        // TODO - change return value
-        return null;
+     return null;
     }
 
-    public int[] getGenotype(Animal animal_1, Animal animal_2) {
+    public int[] getGenotypeForAnimal(Animal animal_1, Animal animal_2) {
         int[] newGenotype = new int[genotype.length];
         int energy_1 = animal_1.currentEnergy;
         int energy_2 = animal_2.currentEnergy;
@@ -115,8 +136,30 @@ public class Animal implements WorldElement, AnimalObserver {
 
     }
 
+    public void mutateGenotype() {
 
-    public void move() {
+        // drawing how many numbers will be changed
+        int amountOfChangedGenes = RANDOM.nextInt(this.genotype.length + 1);
+
+
+        HashSet<Integer> randomIndexes = new HashSet<>();
+        while (randomIndexes.size() < amountOfChangedGenes) {
+            randomIndexes.add(RANDOM.nextInt(this.genotype.length));
+        }
+
+        for (int index : randomIndexes) {
+
+            this.genotype[index] = RANDOM.nextInt(this.genotype.length);
+
+        }
+    }
+
+
+
+    //w czasie wolnym poprawić optymalizacja
+    public void move(int activeGene, MoveValidator validator) {
+
+
         for (int i = 0; i < genotype[activeGene]; i++) {
 
             this.direction = this.direction.nextDirection();
@@ -146,6 +189,9 @@ public class Animal implements WorldElement, AnimalObserver {
                 removeObserver(observer);
             } else observer.updateDescendants();
         }
+    }
+    public int[] getGenotype() {
+        return genotype;
     }
 
     public int getAmountOfEatenPlants() {
@@ -183,5 +229,17 @@ public class Animal implements WorldElement, AnimalObserver {
         this.amountOfDescendants++;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return activeGene == animal.activeGene && amountOfEatenPlants == animal.amountOfEatenPlants && amountOfChildren == animal.amountOfChildren && amountOfDescendants == animal.amountOfDescendants && amountOfDaysAlive == animal.amountOfDaysAlive && amountOfDaysUntilDeath == animal.amountOfDaysUntilDeath && readyToReproduce == animal.readyToReproduce && direction == animal.direction && Objects.equals(position, animal.position) && Objects.deepEquals(genotype, animal.genotype) && Objects.equals(observers, animal.observers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(direction, position, Arrays.hashCode(genotype), activeGene, amountOfEatenPlants, amountOfChildren, amountOfDescendants, amountOfDaysAlive, amountOfDaysUntilDeath, readyToReproduce, observers);
+    }
 
 }

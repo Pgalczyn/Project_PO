@@ -7,7 +7,7 @@ import agh.oop.pdw.model.WorldMap;
 import java.util.*;
 
 public class RandomUtils {
-    private static final Random RANDOM = new Random();
+    public static final Random RANDOM = new Random();
 
     public static Vector2D getGrassSpawnPosition(WorldMap worldMap){
         List<Vector2D> possibleFields = worldMap.getEmptyFields();
