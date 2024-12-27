@@ -11,7 +11,7 @@ public class Animal implements WorldElement, AnimalObserver {
     private int currentEnergy;
     private int[] genotype;
     private int lengthOfGenotype;
-    private int activeGene;
+    private int activeGene = 0;
     private int amountOfEatenPlants = 0;
     private int amountOfChildren = 0;
     private int amountOfDescendants = 0;
@@ -30,8 +30,10 @@ public class Animal implements WorldElement, AnimalObserver {
         this.usedEnergyToReproduce = usedEnergyToReproduce;
         this.direction = randomDirection();
         this.currentEnergy = StartEnergy;
-        this.observers = observers;
-        this.activeGene = RANDOM.nextInt(8);
+
+        this.observers = new ArrayList<>();
+        Random rand = new Random();
+
     }
 
     //constructor for animals which we put on the map
@@ -47,9 +49,7 @@ public class Animal implements WorldElement, AnimalObserver {
         for (int i = 0; i < lengthOfGenotype; i++) {
             genotype[i] = rand.nextInt(8);
         }
-        this.genotype = genotype;
-        this.activeGene = rand.nextInt(8);
-
+        this.genotype = genotyp;
     }
 
     @Override
@@ -59,7 +59,10 @@ public class Animal implements WorldElement, AnimalObserver {
 
     @Override
     public String toString() {
-        return "Position: " + position.toString() + ", direction: " + direction.toString();
+        return "Position: " + position.toString() +
+                ", direction: " + direction.toString() +
+                ", current energy: " + currentEnergy +
+                "days alive: " + amountOfDaysAlive;
     }
 
 
@@ -87,9 +90,14 @@ public class Animal implements WorldElement, AnimalObserver {
 
             Animal child = new Animal(this.position,2* this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce,newObservers);
 
+
+
+
+
             child.notifyObservers();
 
             return child;
+
         }
      return null;
     }
@@ -151,15 +159,16 @@ public class Animal implements WorldElement, AnimalObserver {
     //w czasie wolnym poprawić optymalizacja
     public void move(int activeGene, MoveValidator validator) {
 
+
         for (int i = 0; i < genotype[activeGene]; i++) {
 
             this.direction = this.direction.nextDirection();
 
         }
-        if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
+        //if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
 
             this.position = this.position.addVector(this.direction.toVector());
-        }
+        //}
 
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
 
@@ -209,6 +218,11 @@ public class Animal implements WorldElement, AnimalObserver {
         return readyToReproduce;
     }
 
+    public int getCurrentEnergy() {
+        return currentEnergy;
+    }
+
+
     @Override
     public void updateDescendants() {
 
@@ -227,4 +241,5 @@ public class Animal implements WorldElement, AnimalObserver {
     public int hashCode() {
         return Objects.hash(direction, position, Arrays.hashCode(genotype), activeGene, amountOfEatenPlants, amountOfChildren, amountOfDescendants, amountOfDaysAlive, amountOfDaysUntilDeath, readyToReproduce, observers);
     }
+
 }
