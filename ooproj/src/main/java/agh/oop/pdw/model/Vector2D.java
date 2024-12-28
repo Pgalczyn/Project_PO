@@ -23,6 +23,14 @@ public class Vector2D {
         return new Vector2D(v1.getX() + this.getX(),v1.getY() + this.getY());
     }
 
+    public boolean precedes(Vector2D other) {
+        return x <= other.x && y <= other.y;
+    }
+
+    public boolean follows(Vector2D other) {
+        return x >= other.x && y >= other.y;
+    }
+
     @Override
     public String toString() {
         return "Vector2D [x=" + x + ", y=" + y + "]";
