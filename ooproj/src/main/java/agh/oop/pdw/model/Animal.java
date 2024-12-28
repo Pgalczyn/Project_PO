@@ -1,5 +1,7 @@
 package agh.oop.pdw.model;
 
+import agh.oop.pdw.model.util.RandomUtils;
+
 import java.util.*;
 
 import static agh.oop.pdw.model.MapDirection.randomDirection;
@@ -30,10 +32,7 @@ public class Animal implements WorldElement, AnimalObserver {
         this.usedEnergyToReproduce = usedEnergyToReproduce;
         this.direction = randomDirection();
         this.currentEnergy = StartEnergy;
-
-        this.observers = new ArrayList<>();
-        Random rand = new Random();
-
+        this.observers = observers;
     }
 
     //constructor for animals which we put on the map
@@ -44,12 +43,7 @@ public class Animal implements WorldElement, AnimalObserver {
         this.currentEnergy = StartEnergy;
         this.lengthOfGenotype = LengthOfGenotype;
         this.observers = new HashSet<>();
-        Random rand = new Random();
-        int[] genotype = new int[lengthOfGenotype];
-        for (int i = 0; i < lengthOfGenotype; i++) {
-            genotype[i] = rand.nextInt(8);
-        }
-        this.genotype = genotyp;
+        this.genotype = RandomUtils.genotype(LengthOfGenotype);
     }
 
     @Override

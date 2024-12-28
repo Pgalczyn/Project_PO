@@ -1,33 +1,50 @@
 package agh.oop.pdw;
 
 
-import agh.oop.pdw.model.Animal;
-import agh.oop.pdw.model.Grass;
-import agh.oop.pdw.model.Vector2D;
-import agh.oop.pdw.model.WorldMap;
+import agh.oop.pdw.model.*;
 import agh.oop.pdw.model.util.RandomUtils;
 
 import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-//        WorldMap map = new WorldMap();
-//
-//        map.spawnGrass(new Grass(new Vector2D(3, 3)));
-//
-//
-//        for (Animal animal : map.getAnimals().values()) {
-//            System.out.println(animal);
-//        }
-//
-//        RandomUtils randomUtils = new RandomUtils();
-//        for(int i = 0; i < 30; i++){
-//             System.out.println(randomUtils.getGrassSpawnPosition(map));
-//        }
+        final int MAP_WIDTH = 20;
+        final int MAP_HEIGHT = 20;
+        final int START_ENERGY = 100;
+        final boolean MAP_POLES = false;
+        final int PLANTS = 10;
+        final int ENERGY_PER_PLANT = 10;
+        final int PLANTS_PER_DAY = 1;
+        final int ENERGY_LOSS_PER_DAY = 1;
+        final int START_ANIMALS = 3;
+        final int ENERGY_TO_BREED = 20;
+        final int ENERGY_LOSS_ON_BREED = 10;
+        final int MAX_CHILDREN_MUTATIONS = 3;
+        final int MIN_CHILDREN_MUTATIONS = 1;
+        final boolean SPECIAL_MUTATIONS = false;
 
-        Animal animal = new Animal(new Vector2D(1,1),56,5,3);
-        animal.mutateGenotype();
-        System.out.println(Arrays.toString(animal.getGenotype()));
+        final int SIMULATION_LIMIT = 300;
+
+        SimulationProps props = new SimulationProps(
+                MAP_WIDTH,
+                MAP_HEIGHT,
+                START_ENERGY,
+                MAP_POLES,
+                PLANTS,
+                ENERGY_PER_PLANT,
+                PLANTS_PER_DAY,
+                ENERGY_LOSS_PER_DAY,
+                START_ANIMALS,
+                ENERGY_TO_BREED,
+                ENERGY_LOSS_ON_BREED,
+                MAX_CHILDREN_MUTATIONS,
+                MIN_CHILDREN_MUTATIONS,
+                SPECIAL_MUTATIONS,
+                SIMULATION_LIMIT
+        );
+
+        Simulation simulation = new Simulation(props);
+
 
     }
 }

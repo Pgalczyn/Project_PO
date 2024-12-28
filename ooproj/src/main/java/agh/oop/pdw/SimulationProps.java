@@ -9,7 +9,7 @@ public class SimulationProps {
     private final int plants;
     private final int energyOnEat;
     private final int plantsPerDay;
-    private final int energyPerDay;
+    private final int energyPerMove;
     private final int startAnimals;
     private final int energyToBreed;
     private final int energyLossOnBreed;
@@ -17,9 +17,13 @@ public class SimulationProps {
     private final int maxChildrenMutations;
     private final boolean isSpecialMutation; // Starość nie radość
 
+    private final int dayLimit;
 
-    public SimulationProps(int mapWidth, int mapHeight, int startEnergy, boolean isMapPoles, int plants, int energyOnEat, int plantsPerDay, int energyPerDay, int startAnimals, int energyToBreed, int energyLossOnBreed, int minChildrenMutations, int maxChildrenMutations, boolean isSpecialMutation) {
+    public int getDayLimit() {
+        return dayLimit;
+    }
 
+    public SimulationProps(int mapWidth, int mapHeight, int startEnergy, boolean isMapPoles, int plants, int energyOnEat, int plantsPerDay, int energyPerMove, int startAnimals, int energyToBreed, int energyLossOnBreed, int minChildrenMutations, int maxChildrenMutations, boolean isSpecialMutation, int dayLimit) {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         this.startEnergy = startEnergy;
@@ -27,13 +31,14 @@ public class SimulationProps {
         this.plants = plants;
         this.energyOnEat = energyOnEat;
         this.plantsPerDay = plantsPerDay;
-        this.energyPerDay = energyPerDay;
+        this.energyPerMove = energyPerMove;
         this.startAnimals = startAnimals;
         this.energyToBreed = energyToBreed;
         this.energyLossOnBreed = energyLossOnBreed;
         this.minChildrenMutations = minChildrenMutations;
         this.maxChildrenMutations = maxChildrenMutations;
         this.isSpecialMutation = isSpecialMutation;
+        this.dayLimit = dayLimit;
     }
 
     public int getMapWidth() {
@@ -64,8 +69,8 @@ public class SimulationProps {
         return plantsPerDay;
     }
 
-    public int getEnergyPerDay() {
-        return energyPerDay;
+    public int getEnergyPerMove() {
+        return energyPerMove;
     }
 
     public int getStartAnimals() {
