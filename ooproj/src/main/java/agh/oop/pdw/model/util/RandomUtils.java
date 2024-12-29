@@ -18,7 +18,7 @@ public class RandomUtils {
         return possibleFields.get(RANDOM.nextInt(possibleFields.size()));
     }
 
-    public Vector2D getRandomPosition(Boundary boundary){
+    public static Vector2D getRandomPosition(Boundary boundary){
         return new Vector2D(
                 RANDOM.nextInt(boundary.topRight().getX() - boundary.bottomLeft().getX()) + boundary.bottomLeft().getX(),
                 RANDOM.nextInt(boundary.topRight().getY() - boundary.bottomLeft().getY()) + boundary.bottomLeft().getY()
