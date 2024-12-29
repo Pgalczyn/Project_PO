@@ -151,7 +151,7 @@ public class Animal implements WorldElement, AnimalObserver {
 
 
     //w czasie wolnym poprawić optymalizacja
-    public void move(int activeGene, MoveValidator validator) {
+    public void move() {
 
 
         for (int i = 0; i < genotype[activeGene]; i++) {
