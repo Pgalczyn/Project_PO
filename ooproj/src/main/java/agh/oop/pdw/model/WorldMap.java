@@ -9,12 +9,14 @@ public class WorldMap {
     private final Map<Vector2D, Animal> animals = new HashMap<>();
     private final Map<Vector2D, Grass> grasses = new HashMap<>();
     private final List<Vector2D> emptyFields = new ArrayList<>(); // Possible positions for grass to spawn on.
+
+
     private final Boundary boundary;
     private Boundary jungleBoundary;
 
 
     public WorldMap(int height, int width, int plants) {
-        this.boundary = new Boundary(new Vector2D(0, 0), new Vector2D(height- 1, width - 1));
+        this.boundary = new Boundary(new Vector2D(0, 0), new Vector2D(height - 1, width - 1));
         createJungle();
         spawnStartingGrass(plants);
     }
@@ -39,12 +41,12 @@ public class WorldMap {
     }
 
     private void spawnStartingGrass(int plants) {
-        for(int i = 0; i < getHeight(); i ++) {
+        for (int i = 0; i < getHeight(); i++) {
             for (int j = 0; j < getWidth(); j++) {
                 emptyFields.add(new Vector2D(i, j));
             }
         }
-        for(int i = 0; i < plants; i++) {
+        for (int i = 0; i < plants; i++) {
             spawnGrass(new Grass(RandomUtils.getGrassSpawnPosition(this)));
         }
     }
@@ -74,5 +76,9 @@ public class WorldMap {
 
     public List<Vector2D> getEmptyFields() {
         return emptyFields;
+    }
+
+    public Boundary getBoundary() {
+        return boundary;
     }
 }
