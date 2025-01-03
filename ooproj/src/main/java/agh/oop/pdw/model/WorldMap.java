@@ -6,7 +6,7 @@ import agh.oop.pdw.model.util.RandomUtils;
 import java.util.*;
 
 public class WorldMap {
-    private final Map<Vector2D, Animal> animals = new HashMap<>();
+    private final Map<Vector2D, Animal[]> animals = new HashMap<>();
     private final Map<Vector2D, Grass> grasses = new HashMap<>();
     private final List<Vector2D> emptyFields = new ArrayList<>(); // Possible positions for grass to spawn on.
 
@@ -17,25 +17,35 @@ public class WorldMap {
 
     public WorldMap(int height, int width, int plants) {
         this.boundary = new Boundary(new Vector2D(0, 0), new Vector2D(height - 1, width - 1));
-        createJungle();
+        this.jungleBoundary = createJungle();
         spawnStartingGrass(plants);
     }
 
     // Creates a jungle's boundaries in the middle of the map, which is 20% of the map's area.
-    private void createJungle() {
+    private Boundary createJungle() {
         int jungleWidth = (int) (getWidth() * Math.sqrt(0.2));
         int jungleHeight = (int) (getHeight() * Math.sqrt(0.2));
-        this.jungleBoundary = new Boundary(
+        return new Boundary(
                 new Vector2D((getWidth() - jungleWidth) / 2, (getHeight() - jungleHeight) / 2),
                 new Vector2D((getWidth() + jungleWidth) / 2, (getHeight() + jungleHeight) / 2)
         );
     }
 
     public void placeAnimal(Animal animal) {
-        animals.put(animal.getPosition(), animal);
+        if (animals.containsKey(animal.getPosition())) {
+            Animal[] animalsOnPosition = animals.get(animal.getPosition());
+            Animal[] newAnimalsOnPosition = Arrays.copyOf(animalsOnPosition, animalsOnPosition.length + 1);
+            newAnimalsOnPosition[animalsOnPosition.length] = animal;
+            animals.put(animal.getPosition(), newAnimalsOnPosition);
+        } else {
+            animals.put(animal.getPosition(), new Animal[]{animal});
+        }
     }
 
-    public void spawnGrass(Grass grass) {
+    public void spawnGrass() {
+        Vector2D position = RandomUtils.getGrassSpawnPosition(this);
+        Grass grass = new Grass(position);
+        if (position == null) return;
         grasses.put(grass.getPosition(), grass);
         emptyFields.remove(grass.getPosition());
     }
@@ -47,7 +57,7 @@ public class WorldMap {
             }
         }
         for (int i = 0; i < plants; i++) {
-            spawnGrass(new Grass(RandomUtils.getGrassSpawnPosition(this)));
+            spawnGrass();
         }
     }
 
@@ -59,7 +69,7 @@ public class WorldMap {
         return boundary.topRight().getX() + 1;
     }
 
-    public Map<Vector2D, Animal> getAnimals() {
+    public Map<Vector2D, Animal[]> getAnimals() {
         return animals;
     }
 
@@ -67,15 +77,13 @@ public class WorldMap {
         return grasses;
     }
 
-    public Map<Vector2D, WorldElement> getElements() {
-        Map<Vector2D, WorldElement> elements = new HashMap<>();
-        elements.putAll(animals);
-        elements.putAll(grasses);
-        return elements;
-    }
 
     public List<Vector2D> getEmptyFields() {
         return emptyFields;
+    }
+
+    public Boundary getJungleBoundary() {
+        return jungleBoundary;
     }
 
     public Boundary getBoundary() {

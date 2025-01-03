@@ -12,11 +12,14 @@ public class RandomUtils {
     public static Vector2D getGrassSpawnPosition(WorldMap worldMap){
         List<Vector2D> possibleFields = worldMap.getEmptyFields();
         // TODO - implement exception handling
-        if(possibleFields.isEmpty()){
-            return null;
+        if(possibleFields.isEmpty()) return null;
+        List<Vector2D> jungleFields = possibleFields.stream().filter(p -> worldMap.getJungleBoundary().contains(p)).toList();
+        if (RANDOM.nextFloat() < 0.8 && !jungleFields.isEmpty()) {
+            return jungleFields.get(RANDOM.nextInt(jungleFields.size()));
         }
         return possibleFields.get(RANDOM.nextInt(possibleFields.size()));
     }
+
 
     public static Vector2D getRandomPosition(Boundary boundary){
         return new Vector2D(

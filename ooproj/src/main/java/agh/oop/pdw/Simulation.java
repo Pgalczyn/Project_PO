@@ -1,9 +1,6 @@
 package agh.oop.pdw;
 
-import agh.oop.pdw.model.Animal;
-import agh.oop.pdw.model.AnimalsCreator;
-import agh.oop.pdw.model.Vector2D;
-import agh.oop.pdw.model.WorldMap;
+import agh.oop.pdw.model.*;
 
 import java.util.*;
 
@@ -24,6 +21,10 @@ public class Simulation {
             nextDay();
         }
         System.out.println("Day limit reached");
+        for (Grass grass : map.getGrasses().values()) {
+            System.out.println(grass);
+        }
+        System.out.println("Grass count: " + map.getGrasses().size());
     }
 
     public void nextDay() {
@@ -34,29 +35,33 @@ public class Simulation {
         spawnGrass();
     }
 
-    private void runWithLimit() {
+    private void runWithLimit(){
         for (int i = 0; i < props.getDayLimit(); i++) {
             run();
         }
     }
 
     private void removeDeadAnimals() {
-        Map<Vector2D, Animal> mapAnimals = map.getAnimals();
-        mapAnimals.forEach((position, animal) -> {
-            if (animal.getCurrentEnergy() <= 0) {
-                System.out.println("Animal died: " + animal);
-                mapAnimals.remove(position);
+        for (Animal[] animalsOnPosition : map.getAnimals().values()) {
+            for (Animal animal : animalsOnPosition) {
+                if (animal.getCurrentEnergy() <= 0) {
+                    System.out.println("Animal died: " + animal);
+                    animalsOnPosition =
+                            Arrays.stream(animalsOnPosition)
+                                    .filter(a -> a != animal)
+                                    .toArray(Animal[]::new);
+                }
             }
-        });
-
+        }
     }
 
     private void moveAnimals() {
-        Map<Vector2D, Animal> mapAnimals = map.getAnimals();
-        mapAnimals.forEach((position, animal) -> {
-            animal.move();
-            System.out.println("Animal moved: " + animal);
-        });
+        for (Animal[] animalsOnPosition : map.getAnimals().values()) {
+            for (Animal animal : animalsOnPosition) {
+                animal.move();
+                System.out.println("Animal moved: " + animal);
+            }
+        }
     }
 
     private void animalsEatGrass() {
@@ -68,7 +73,9 @@ public class Simulation {
     }
 
     private void spawnGrass() {
-
+        for(int i = 0; i < props.getPlantsPerDay(); i++){
+            map.spawnGrass();
+        }
     }
 
 }

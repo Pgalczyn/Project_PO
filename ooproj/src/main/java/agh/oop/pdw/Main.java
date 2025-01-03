@@ -8,8 +8,8 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        final int MAP_WIDTH = 20;
-        final int MAP_HEIGHT = 20;
+        final int MAP_WIDTH = 50;
+        final int MAP_HEIGHT = 50;
         final int START_ENERGY = 100;
         final boolean MAP_POLES = false;
         final int PLANTS = 10;
