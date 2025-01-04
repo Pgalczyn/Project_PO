@@ -85,10 +85,8 @@ public class Animal implements WorldElement, AnimalObserver {
             Animal child = new Animal(this.position,2* this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce,newObservers);
 
 
-
-
-
             child.notifyObservers();
+            child.mutateGenotype();
 
             return child;
 
@@ -154,20 +152,33 @@ public class Animal implements WorldElement, AnimalObserver {
     public void move(int activeGene, MoveValidator validator) {
 
 
-        for (int i = 0; i < genotype[activeGene]; i++) {
+   if (!this.isMissingMove()){
+       for (int i = 0; i < genotype[activeGene]; i++) {
 
-            this.direction = this.direction.nextDirection();
+           this.direction = this.direction.nextDirection();
 
-        }
-        //if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
+       }
+       //if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
 
-            this.position = this.position.addVector(this.direction.toVector());
-        //}
+       this.position = this.position.addVector(this.direction.toVector());
+       //}
 
-        this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
+       this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
+
+   }
+
+        --this.currentEnergy; //na obecną chwilę przyjąłem że zebieramy -1 energi za ruch to się też zmieni potem
 
 
     }
+    //przyjąłem na sztywno 800 i 1000 dni jeśli będziemy chcieli można będzie to podać w dodatkowych atrybutach
+    public Boolean isMissingMove(){
+
+        int chanceBoundary = Math.min(this.amountOfDaysAlive, 800);
+
+           return RANDOM.nextInt(1000) < chanceBoundary;
+    }
+
 
     public void addObserver(AnimalObserver observer) {
         observers.add(observer);
