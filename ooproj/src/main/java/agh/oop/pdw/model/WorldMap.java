@@ -5,12 +5,10 @@ import agh.oop.pdw.model.util.RandomUtils;
 
 import java.util.*;
 
-public class WorldMap {
+public class WorldMap implements MoveValidator {
     private final Map<Vector2D, Animal[]> animals = new HashMap<>();
     private final Map<Vector2D, Grass> grasses = new HashMap<>();
     private final List<Vector2D> emptyFields = new ArrayList<>(); // Possible positions for grass to spawn on.
-
-
     private final Boundary boundary;
     private Boundary jungleBoundary;
 
@@ -88,5 +86,10 @@ public class WorldMap {
 
     public Boundary getBoundary() {
         return boundary;
+    }
+
+    @Override
+    public boolean canMoveTo(Vector2D position) {
+        return position.getY() <= this.getHeight() && position.getY() >= 0;
     }
 }
