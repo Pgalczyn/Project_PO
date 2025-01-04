@@ -8,20 +8,21 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        final int MAP_WIDTH = 20;
-        final int MAP_HEIGHT = 20;
+        final int MAP_WIDTH = 50;
+        final int MAP_HEIGHT = 50;
         final int START_ENERGY = 100;
         final boolean MAP_POLES = false;
         final int PLANTS = 10;
         final int ENERGY_PER_PLANT = 10;
         final int PLANTS_PER_DAY = 1;
         final int ENERGY_LOSS_PER_DAY = 1;
-        final int START_ANIMALS = 3;
+        final int START_ANIMALS = 2;
         final int ENERGY_TO_BREED = 20;
         final int ENERGY_LOSS_ON_BREED = 10;
         final int MAX_CHILDREN_MUTATIONS = 3;
         final int MIN_CHILDREN_MUTATIONS = 1;
         final boolean SPECIAL_MUTATIONS = false;
+        final int ANIMAL_GENOME_LENGTH = 10;
 
         final int SIMULATION_LIMIT = 300;
 
@@ -40,11 +41,12 @@ public class Main {
                 MAX_CHILDREN_MUTATIONS,
                 MIN_CHILDREN_MUTATIONS,
                 SPECIAL_MUTATIONS,
-                SIMULATION_LIMIT
+                SIMULATION_LIMIT,
+                ANIMAL_GENOME_LENGTH
         );
 
         Simulation simulation = new Simulation(props);
-
+        simulation.run();
 
     }
 }
