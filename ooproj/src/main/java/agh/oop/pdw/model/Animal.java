@@ -25,7 +25,7 @@ public class Animal implements WorldElement, AnimalObserver {
 
 
     //constructor for animals that were born on the map
-    public Animal(Vector2D position, int StartEnergy, int[] genotype, int usedEnergyToReproduce,HashSet<AnimalObserver> observers) {
+    public Animal(Vector2D position, int StartEnergy, int[] genotype, int usedEnergyToReproduce, HashSet<AnimalObserver> observers) {
         this.position = position;
         this.genotype = genotype;
         this.lengthOfGenotype = genotype.length;
@@ -82,7 +82,7 @@ public class Animal implements WorldElement, AnimalObserver {
             this.amountOfChildren += 1;
             otherAnimal.amountOfChildren += 1;
 
-            Animal child = new Animal(this.position,2* this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce,newObservers);
+            Animal child = new Animal(this.position, 2 * this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce, newObservers);
 
 
             child.notifyObservers();
@@ -91,7 +91,7 @@ public class Animal implements WorldElement, AnimalObserver {
             return child;
 
         }
-     return null;
+        return null;
     }
 
     public int[] getGenotypeForAnimal(Animal animal_1, Animal animal_2) {
@@ -147,30 +147,30 @@ public class Animal implements WorldElement, AnimalObserver {
     }
 
 
-
     //w czasie wolnym poprawić optymalizacja
     public void move(MoveValidator validator) {
 
 
-   if (!this.isMissingMove()){
-       for (int i = 0; i < genotype[activeGene]; i++) {
+        if (!this.isMissingMove()) {
+            for (int i = 0; i < genotype[activeGene]; i++) {
 
-           this.direction = this.direction.nextDirection();
-       }
-       if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
+                this.direction = this.direction.nextDirection();
+            }
+            if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
 
-       this.position = this.position.addVector(this.direction.toVector());
-       }
-   }
+                this.position = this.position.addVector(this.direction.toVector());
+            }
+        }
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
         --this.currentEnergy; //na obecną chwilę przyjąłem że zebieramy -1 energi za ruch to się też zmieni potem
     }
+
     //przyjąłem na sztywno 800 i 1000 dni jeśli będziemy chcieli można będzie to podać w dodatkowych atrybutach
-    public Boolean isMissingMove(){
+    public Boolean isMissingMove() {
 
         int chanceBoundary = Math.min(this.amountOfDaysAlive, 800);
 
-           return RANDOM.nextInt(1000) < chanceBoundary;
+        return RANDOM.nextInt(1000) < chanceBoundary;
     }
 
 
@@ -189,6 +189,7 @@ public class Animal implements WorldElement, AnimalObserver {
             } else observer.updateDescendants();
         }
     }
+
     public int[] getGenotype() {
         return genotype;
     }
@@ -211,6 +212,19 @@ public class Animal implements WorldElement, AnimalObserver {
 
     public int getAmountOfDaysUntilDeath() {
         return amountOfDaysUntilDeath;
+    }
+
+    public MapDirection getDirection() {
+        return direction;
+    }
+
+    public void setGenotype(int[] genotype) {
+        this.genotype = genotype;
+        this.lengthOfGenotype = genotype.length;
+    }
+
+    public void setDirection(MapDirection direction) {
+        this.direction = direction;
     }
 
     public boolean isReadyToReproduce() {
