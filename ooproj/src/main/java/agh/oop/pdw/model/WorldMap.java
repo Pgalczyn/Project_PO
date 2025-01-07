@@ -90,6 +90,20 @@ public class WorldMap implements MoveValidator {
 
     @Override
     public boolean canMoveTo(Vector2D position) {
-        return position.getY() <= this.getHeight() && position.getY() >= 0;
+        return position.getY() < this.getHeight() && position.getY() >= 0;
+    }
+
+    @Override
+    public Vector2D getNextPosition(Animal animal) {
+        Vector2D nextPosition = animal.getPosition().addVector(animal.getDirection().toVector());
+        if (!canMoveTo(nextPosition)) {
+            return animal.getPosition();
+        }
+        if (nextPosition.getX() >= getWidth()) {
+            nextPosition = new Vector2D(0, nextPosition.getY());
+        } else if (nextPosition.getX() < 0) {
+            nextPosition = new Vector2D(getWidth() - 1, nextPosition.getY());
+        }
+        return nextPosition;
     }
 }
