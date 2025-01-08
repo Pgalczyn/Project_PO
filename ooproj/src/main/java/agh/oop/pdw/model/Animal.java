@@ -145,11 +145,17 @@ public class Animal implements WorldElement, AnimalObserver {
 
         }
     }
-    // changing direction of the animal when exciting the map
-    public void moveBy4(){
+    // changing direction of the animal when exiting the map
+    public void moveBy4(WorldMap map){
 
-        if (this.direction == WEST) this.direction = EAST;
-        else this.direction = WEST;
+        if (this.direction == WEST) {
+            this.direction = EAST;
+            this.position = new Vector2D(map.getWidth(),this.position.getY());
+        }
+        else {
+            this.direction = WEST;
+            this.position = new Vector2D(0,this.position.getY());
+        };
 
     }
 

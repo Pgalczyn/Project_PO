@@ -59,11 +59,11 @@ public class WorldMap implements MoveValidator {
         }
     }
 
-    private int getHeight() {
+    public int getHeight() {
         return boundary.topRight().getY() + 1;
     }
 
-    private int getWidth() {
+    public int getWidth() {
         return boundary.topRight().getX() + 1;
     }
 
