@@ -154,9 +154,7 @@ public class Animal implements WorldElement, AnimalObserver {
     }
 
     //w czasie wolnym poprawić optymalizacja
-    public void move(MoveValidator validator) {
-
-
+    public void move(MoveValidator validator,int heightOfMap) {
    if (!this.isMissingMove()){
        for (int i = 0; i < genotype[activeGene]; i++) {
 
@@ -168,7 +166,8 @@ public class Animal implements WorldElement, AnimalObserver {
        }
    }
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
-        --this.currentEnergy; //na obecną chwilę przyjąłem że zebieramy -1 energi za ruch to się też zmieni potem
+        this.currentEnergy = currentEnergy - substractingEnergyAlgo(heightOfMap); //A4 - dodatkowy feature
+        // poprzez pomnożenie substractingEnergyAlgo(heightOfMap) mozemy ustawic jaką minimalnie energi zwierze bedzie tracić za ruch
     }
     //przyjąłem na sztywno 800 i 1000 dni jeśli będziemy chcieli można będzie to podać w dodatkowych atrybutach
     public Boolean isMissingMove(){
@@ -178,8 +177,23 @@ public class Animal implements WorldElement, AnimalObserver {
            return RANDOM.nextInt(1000) < chanceBoundary;
     }
 
+    //[A] bieguny – bieguny zdefiniowane są na dolnej i górnej krawędzi mapy.
+    // Im bliżej bieguna znajduje się zwierzę, tym większą energię traci podczas pojedynczego ruchu (na biegunach jest zimno);
 
+    public int getDistanceFromPole(int heightOfMap){
 
+        int currentAnimalPositionY = this.position.getY();
+
+        return Math.min(Math.abs(currentAnimalPositionY - heightOfMap),currentAnimalPositionY);
+
+    }
+
+    public int substractingEnergyAlgo(int heightOfMap){
+
+        int distance = 1/getDistanceFromPole(heightOfMap);
+
+        return (int) distance * heightOfMap/2;
+    }
 
 
     public void addObserver(AnimalObserver observer) {
