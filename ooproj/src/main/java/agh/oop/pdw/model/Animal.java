@@ -4,7 +4,7 @@ import agh.oop.pdw.model.util.RandomUtils;
 
 import java.util.*;
 
-import static agh.oop.pdw.model.MapDirection.randomDirection;
+import static agh.oop.pdw.model.MapDirection.*;
 import static agh.oop.pdw.model.util.RandomUtils.RANDOM;
 
 public class Animal implements WorldElement, AnimalObserver {
@@ -145,8 +145,13 @@ public class Animal implements WorldElement, AnimalObserver {
 
         }
     }
+    // changing direction of the animal when exciting the map
+    public void moveBy4(){
 
+        if (this.direction == WEST) this.direction = EAST;
+        else this.direction = WEST;
 
+    }
 
     //w czasie wolnym poprawić optymalizacja
     public void move(MoveValidator validator) {
@@ -174,6 +179,9 @@ public class Animal implements WorldElement, AnimalObserver {
     }
 
 
+
+
+
     public void addObserver(AnimalObserver observer) {
         observers.add(observer);
     }
@@ -189,6 +197,12 @@ public class Animal implements WorldElement, AnimalObserver {
             } else observer.updateDescendants();
         }
     }
+
+    //comparator
+    public static final  Comparator<Animal>  ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN = Comparator.comparingInt(Animal::getCurrentEnergy).thenComparing(Animal::getAmountOfDaysAlive).thenComparing(Animal::getAmountOfChildren);
+
+
+
     public int[] getGenotype() {
         return genotype;
     }
