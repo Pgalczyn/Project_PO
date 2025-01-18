@@ -22,9 +22,6 @@ public class Simulation implements Runnable{
         for (int i = 0; i < props.getDayLimit(); i++) {
             nextDay();
             this.day += 1;
-            if (i == 50) {
-                Thread.wait();
-            }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
