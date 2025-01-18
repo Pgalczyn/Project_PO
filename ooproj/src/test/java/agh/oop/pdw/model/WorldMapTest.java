@@ -2,6 +2,8 @@ package agh.oop.pdw.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WorldMapTest {
@@ -80,6 +82,27 @@ public class WorldMapTest {
             double ratio = map.getJungleBoundary().getArea() / map.getBoundary().getArea();
             assertTrue(Math.abs(ratio - 0.2) < 0.1);
         }
+    }
+
+    @Test
+    public void testAnimalMovement() {
+        WorldMap map = new WorldMap(10, 10, 0);
+        Animal animal = new Animal(new Vector2D(5, 5), 1, 1, 0);
+        animal.setDirection(MapDirection.NORTH);
+        animal.setGenotype(new int[]{1,3,6,7});
+        map.placeAnimal(animal);
+
+        animal.move(map);
+        assertEquals(new Vector2D(6, 6), animal.getPosition());
+
+        animal.move(map);
+        assertEquals(new Vector2D(6, 5), animal.getPosition());
+
+        animal.move(map);
+        assertEquals(new Vector2D(7, 5), animal.getPosition());
+
+        animal.move(map);
+        assertEquals(new Vector2D(8, 6), animal.getPosition());
     }
 
     private Vector2D getAnimalNextPosition(Animal animal) {
