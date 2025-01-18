@@ -7,4 +7,6 @@ public interface MoveValidator {
     boolean canMoveTo(Vector2D position);
 
     Vector2D getNextPosition(Animal animal);
+
+    Boundary getBoundary();
 }

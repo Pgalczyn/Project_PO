@@ -3,7 +3,7 @@ package agh.oop.pdw.model;
 import java.util.Random;
 
 public enum MapDirection {
-    NORTH,NORTH_EAST,NORTH_WEST,SOUTH_EAST,SOUTH_WEST,SOUTH,WEST,EAST;
+    NORTH,NORTH_EAST,EAST,SOUTH_EAST,SOUTH,SOUTH_WEST,WEST,NORTH_WEST;
 
     @Override
     public String toString() {
@@ -31,19 +31,6 @@ public enum MapDirection {
             case WEST -> new Vector2D(-1,0);
             case EAST -> new Vector2D(1,0);
 
-        };
-    }
-
-    public MapDirection nextDirection(){
-        return switch (this){
-            case NORTH -> NORTH_EAST;
-            case NORTH_EAST -> EAST;
-            case NORTH_WEST -> NORTH;
-            case SOUTH_EAST -> SOUTH;
-            case SOUTH_WEST -> WEST;
-            case SOUTH -> SOUTH_WEST;
-            case WEST -> NORTH_WEST;
-            case EAST -> SOUTH_WEST;
         };
     }
 
