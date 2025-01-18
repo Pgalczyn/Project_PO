@@ -4,7 +4,7 @@ import agh.oop.pdw.model.util.RandomUtils;
 
 import java.util.*;
 
-import static agh.oop.pdw.model.MapDirection.randomDirection;
+import static agh.oop.pdw.model.MapDirection.*;
 import static agh.oop.pdw.model.util.RandomUtils.RANDOM;
 
 public class Animal implements WorldElement, AnimalObserver {
@@ -145,15 +145,23 @@ public class Animal implements WorldElement, AnimalObserver {
 
         }
     }
+    // changing direction of the animal when exiting the map
+    public void moveBy4(WorldMap map){
 
+        if (this.direction == WEST) {
+            this.direction = EAST;
+            this.position = new Vector2D(map.getWidth(),this.position.getY());
+        }
+        else {
+            this.direction = WEST;
+            this.position = new Vector2D(0,this.position.getY());
+        };
+    }
 
     //w czasie wolnym poprawić optymalizacja
-    public void move(MoveValidator validator) {
-
-
-        if (!this.isMissingMove()) {
-            for (int i = 0; i < genotype[activeGene]; i++) {
-
+    public void move(MoveValidator validator,int heightOfMap) {
+   if (!this.isMissingMove()){
+       for (int i = 0; i < genotype[activeGene]; i++) {
                 this.direction = this.direction.nextDirection();
             }
             if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
@@ -162,7 +170,8 @@ public class Animal implements WorldElement, AnimalObserver {
             }
         }
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
-        --this.currentEnergy; //na obecną chwilę przyjąłem że zebieramy -1 energi za ruch to się też zmieni potem
+        this.currentEnergy = currentEnergy - substractingEnergyAlgo(heightOfMap); //A4 - dodatkowy feature
+        // poprzez pomnożenie substractingEnergyAlgo(heightOfMap) mozemy ustawic jaką minimalnie energi zwierze bedzie tracić za ruch
     }
 
     //przyjąłem na sztywno 800 i 1000 dni jeśli będziemy chcieli można będzie to podać w dodatkowych atrybutach
@@ -171,6 +180,24 @@ public class Animal implements WorldElement, AnimalObserver {
         int chanceBoundary = Math.min(this.amountOfDaysAlive, 800);
 
         return RANDOM.nextInt(1000) < chanceBoundary;
+    }
+
+    //[A] bieguny – bieguny zdefiniowane są na dolnej i górnej krawędzi mapy.
+    // Im bliżej bieguna znajduje się zwierzę, tym większą energię traci podczas pojedynczego ruchu (na biegunach jest zimno);
+
+    public int getDistanceFromPole(int heightOfMap){
+
+        int currentAnimalPositionY = this.position.getY();
+
+        return Math.min(Math.abs(currentAnimalPositionY - heightOfMap),currentAnimalPositionY);
+
+    }
+
+    public int substractingEnergyAlgo(int heightOfMap){
+
+        int distance = 1/getDistanceFromPole(heightOfMap);
+
+        return (int) distance * heightOfMap/2;
     }
 
 
@@ -189,6 +216,9 @@ public class Animal implements WorldElement, AnimalObserver {
             } else observer.updateDescendants();
         }
     }
+
+    public static final  Comparator<Animal>  ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN = Comparator.comparingInt(Animal::getCurrentEnergy).thenComparing(Animal::getAmountOfDaysAlive).thenComparing(Animal::getAmountOfChildren);
+
 
     public int[] getGenotype() {
         return genotype;
