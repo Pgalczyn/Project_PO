@@ -14,18 +14,17 @@ public class WorldMap implements MoveValidator {
 
 
     public WorldMap(int height, int width, int plants) {
-        this.boundary = new Boundary(new Vector2D(0, 0), new Vector2D(height - 1, width - 1));
+        this.boundary = new Boundary(new Vector2D(0, 0), new Vector2D(width - 1, height - 1));
         this.jungleBoundary = createJungle();
         spawnStartingGrass(plants);
     }
 
-    // Creates a jungle's boundaries in the middle of the map, which is 20% of the map's area.
+    // Creates a strip of jungle in the middle of the map.
     private Boundary createJungle() {
-        int jungleWidth = (int) (getWidth() * Math.sqrt(0.2));
-        int jungleHeight = (int) (getHeight() * Math.sqrt(0.2));
+        int jungleHeight = (int) Math.ceil(0.2 * this.getHeight());
         return new Boundary(
-                new Vector2D((getWidth() - jungleWidth) / 2, (getHeight() - jungleHeight) / 2),
-                new Vector2D((getWidth() + jungleWidth) / 2, (getHeight() + jungleHeight) / 2)
+                new Vector2D(0, Math.ceilDiv(getHeight() - jungleHeight, 2)),
+                new Vector2D(getWidth() - 1, Math.ceilDiv(getHeight() - jungleHeight, 2) + jungleHeight - 1)
         );
     }
 
@@ -90,6 +89,20 @@ public class WorldMap implements MoveValidator {
 
     @Override
     public boolean canMoveTo(Vector2D position) {
-        return position.getY() <= this.getHeight() && position.getY() >= 0;
+        return position.getY() < this.getHeight() && position.getY() >= 0;
+    }
+
+    @Override
+    public Vector2D getNextPosition(Animal animal) {
+        Vector2D nextPosition = animal.getPosition().addVector(animal.getDirection().toVector());
+        if (!canMoveTo(nextPosition)) {
+            return animal.getPosition();
+        }
+        if (nextPosition.getX() >= getWidth()) {
+            nextPosition = new Vector2D(0, nextPosition.getY());
+        } else if (nextPosition.getX() < 0) {
+            nextPosition = new Vector2D(getWidth() - 1, nextPosition.getY());
+        }
+        return nextPosition;
     }
 }
