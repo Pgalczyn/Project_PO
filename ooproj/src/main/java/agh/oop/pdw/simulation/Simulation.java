@@ -1,4 +1,4 @@
-package agh.oop.pdw;
+package agh.oop.pdw.simulation;
 
 import agh.oop.pdw.model.*;
 

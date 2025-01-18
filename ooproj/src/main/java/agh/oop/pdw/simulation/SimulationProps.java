@@ -1,22 +1,22 @@
-package agh.oop.pdw;
+package agh.oop.pdw.simulation;
 
 // Opcje symulacji
 public class SimulationProps {
-    private final int mapWidth;
-    private final int mapHeight;
-    private final int startEnergy;
+    private final int mapWidth; //
+    private final int mapHeight;//
+    private final int startEnergy;//
     private final boolean isMapPoles; // Czy wariant specjalny z biegunami
-    private final int plants;
-    private final int energyOnEat;
-    private final int plantsPerDay;
-    private final int energyPerMove;
+    private final int plants;//
+    private final int energyOnEat;//
+    private final int plantsPerDay;//
+    private final int energyPerMove;//
     private final int startAnimals;
-    private final int energyToBreed;
-    private final int energyLossOnBreed;
+    private final int energyToBreed;//
+    private final int energyLossOnBreed;//
     private final int minChildrenMutations;
     private final int maxChildrenMutations;
     private final boolean isSpecialMutation; // Starość nie radość
-    private final int animalGenomeLength;
+    private final int animalGenomeLength;//
 
     private final int dayLimit;
 
