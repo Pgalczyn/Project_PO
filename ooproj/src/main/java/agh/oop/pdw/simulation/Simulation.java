@@ -76,7 +76,7 @@ public class Simulation implements Runnable{
     private void moveAnimals() {
         for (Animal[] animalsOnPosition : map.getAnimals().values()) {
             for (Animal animal : animalsOnPosition) {
-                animal.move(map,map.getHeight());
+                animal.move(map);
                 System.out.println("Animal moved: " + animal);
             }
         }
