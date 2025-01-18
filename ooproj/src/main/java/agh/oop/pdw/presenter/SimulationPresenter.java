@@ -1,15 +1,21 @@
 package agh.oop.pdw.presenter;
 
+import agh.oop.pdw.simulation.SimulationEngine;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
 public class SimulationPresenter {
-    @FXML
-    private Button startSimulationButton;
+    private SimulationEngine engine;
 
-    public void startSimulation(){
-        System.out.println("Simulation started");
-        System.out.println(startSimulationButton);
+
+    public void openSimulationWindow(){
+        System.out.println("HEHEHE");
+        engine.runSimulation();
     }
+
+    public void setEngine(SimulationEngine engine){
+        this.engine = engine;
+    }
+
 
 }

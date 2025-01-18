@@ -58,6 +58,22 @@ public class WorldMap implements MoveValidator {
         }
     }
 
+    public boolean isOccupied(Vector2D position) {
+        return objectAt(position) != null;
+    }
+
+    public Object objectAt(Vector2D position) {
+        if (animals.containsKey(position)) {
+
+            return animals.get(position);
+        }
+        if (grasses.containsKey(position)) {
+
+            return grasses.get(position);
+        }
+        return null;
+    }
+
     public int getHeight() {
         return boundary.topRight().getY() + 1;
     }
@@ -82,6 +98,7 @@ public class WorldMap implements MoveValidator {
     public Boundary getJungleBoundary() {
         return jungleBoundary;
     }
+
 
     public Boundary getBoundary() {
         return boundary;
