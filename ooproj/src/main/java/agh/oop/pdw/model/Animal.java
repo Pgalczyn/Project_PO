@@ -56,8 +56,6 @@ public class Animal implements WorldElement, AnimalObserver {
         return "Position: " + position.toString() +
                 ", direction: " + direction.toString() +
                 ", current energy: " + currentEnergy +
-                ", genotype: " + Arrays.toString(genotype) +
-                ", active gene: " + activeGene +
                 "days alive: " + amountOfDaysAlive;
     }
 
@@ -147,7 +145,6 @@ public class Animal implements WorldElement, AnimalObserver {
 
         }
     }
-
     // changing direction of the animal when exiting the map
     public void moveBy4(WorldMap map) {
 
@@ -166,6 +163,7 @@ public class Animal implements WorldElement, AnimalObserver {
         if (!this.isMissingMove()) {
             this.rotate();
             if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
+
                 this.position = this.position.addVector(this.direction.toVector());
             }
         }
@@ -192,7 +190,7 @@ public class Animal implements WorldElement, AnimalObserver {
     //[A] bieguny – bieguny zdefiniowane są na dolnej i górnej krawędzi mapy.
     // Im bliżej bieguna znajduje się zwierzę, tym większą energię traci podczas pojedynczego ruchu (na biegunach jest zimno);
 
-    public int getDistanceFromPole(int heightOfMap) {
+    public int getDistanceFromPole(int heightOfMap){
 
         int currentAnimalPositionY = this.position.getY();
 
@@ -200,11 +198,11 @@ public class Animal implements WorldElement, AnimalObserver {
 
     }
 
-    public int substractingEnergyAlgo(int heightOfMap) {
+    public int substractingEnergyAlgo(int heightOfMap){
 
         int distance = 1/getDistanceFromPole(heightOfMap);
 
-        return (int) distance * heightOfMap / 2;
+        return (int) distance * heightOfMap/2;
     }
 
 
@@ -224,7 +222,7 @@ public class Animal implements WorldElement, AnimalObserver {
         }
     }
 
-    public static final Comparator<Animal> ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN = Comparator.comparingInt(Animal::getCurrentEnergy).thenComparing(Animal::getAmountOfDaysAlive).thenComparing(Animal::getAmountOfChildren);
+    public static final  Comparator<Animal>  ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN = Comparator.comparingInt(Animal::getCurrentEnergy).thenComparing(Animal::getAmountOfDaysAlive).thenComparing(Animal::getAmountOfChildren);
 
 
     public int[] getGenotype() {
