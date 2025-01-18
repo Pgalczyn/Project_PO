@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<BorderPane minHeight="650.0" minWidth="850.0" style="-fx-background-color: #ddd;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agh.oop.pdw.presenter.SimulationWorldMap">
+    <center>
+        <GridPane fx:id="mapGrid" BorderPane.alignment="CENTER" style="-fx-border-color: #000; -fx-border-width: 2" minWidth="300" minHeight="300" >
+
+        </GridPane>
+    </center>
+    <bottom>
+
+        <HBox alignment="CENTER" prefHeight="50.0">
+            <Button onAction="#startSimulation" mnemonicParsing="false" prefHeight="26.0" prefWidth="432.0" text="START" />
+        </HBox>
+    </bottom>
+    <top>
+        <VBox prefHeight="91.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label text="liczba wszystkich zwierzaków: " />
+                <Label text="liczba wszystkich roślin: " />
+                <Label text="liczba wolnych pól: " />
+                <Label text="najpopularniejszy genotyp: " />
+                <Label text="średni poziomu energii dla żyjących zwierzaków: " />
+                <Label text="średnia długości życia zwierzaków dla martwych zwierzaków: " />
+                <Label text="średnia liczby dzieci dla żyjących zwierzaków: " />
+            </children>
+            <BorderPane.margin>
+                <Insets left="2.0" />
+            </BorderPane.margin>
+        </VBox>
+    </top>
+</BorderPane>

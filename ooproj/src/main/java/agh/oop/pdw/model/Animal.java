@@ -189,13 +189,13 @@ public class Animal implements WorldElement, AnimalObserver {
 
         int currentAnimalPositionY = this.position.getY();
 
-        return Math.min(Math.abs(currentAnimalPositionY - heightOfMap),currentAnimalPositionY);
+        return Math.min(Math.abs(currentAnimalPositionY - heightOfMap),currentAnimalPositionY) + 1;
 
     }
 
     public int substractingEnergyAlgo(int heightOfMap){
 
-        int distance = 1/getDistanceFromPole(heightOfMap);
+        int distance = 1/(getDistanceFromPole(heightOfMap));
 
         return (int) distance * heightOfMap/2;
     }

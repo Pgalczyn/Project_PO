@@ -4,10 +4,12 @@ import agh.oop.pdw.model.*;
 
 import java.util.*;
 
-public class Simulation {
+public class Simulation implements Runnable{
     SimulationProps props;
     private final WorldMap map;
     private final AnimalsCreator animalsCreator;
+    private final List<SimulationListener> listeners = new ArrayList<>();
+    private int day = 0;
 
     public Simulation(SimulationProps props) {
         this.props = props;
@@ -19,6 +21,15 @@ public class Simulation {
         animalsCreator.createAnimals(props.getStartAnimals());
         for (int i = 0; i < props.getDayLimit(); i++) {
             nextDay();
+            this.day += 1;
+            if (i == 50) {
+                Thread.wait();
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         System.out.println("Day limit reached");
         for (Grass grass : map.getGrasses().values()) {
@@ -33,6 +44,13 @@ public class Simulation {
         animalsEatGrass();
         animalsBreed();
         spawnGrass();
+        for (SimulationListener listener : listeners) {
+            listener.dayPassed();
+        }
+    }
+
+    public void subscribe(SimulationListener subscriber) {
+        this.listeners.add(subscriber);
     }
 
     private void runWithLimit(){
@@ -76,6 +94,10 @@ public class Simulation {
         for(int i = 0; i < props.getPlantsPerDay(); i++){
             map.spawnGrass();
         }
+    }
+
+    public int getDay() {
+        return day;
     }
 
 }

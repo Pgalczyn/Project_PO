@@ -335,7 +335,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="70.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Button fx:id="startSimulationButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="133.0" text="Zacznij symulację" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="startSimulationButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="133.0" text="Zacznij symulację" onAction="#openSimulationWindow" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
          </children>
