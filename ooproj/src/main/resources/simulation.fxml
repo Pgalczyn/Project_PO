@@ -28,7 +28,7 @@
                <children>
                   <VBox spacing="5.0" VBox.vgrow="NEVER">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ustawienia zwierząt" textAlignment="CENTER">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ustawienia mapy świata" textAlignment="CENTER">
                            <font>
                               <Font name="Baloo 2 Bold" size="23.0" />
                            </font>
