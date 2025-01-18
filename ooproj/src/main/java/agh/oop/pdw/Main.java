@@ -1,10 +1,8 @@
 package agh.oop.pdw;
 
 
-import agh.oop.pdw.model.*;
-import agh.oop.pdw.model.util.RandomUtils;
-
-import java.util.Arrays;
+import agh.oop.pdw.simulation.Simulation;
+import agh.oop.pdw.simulation.SimulationProps;
 
 public class Main {
     public static void main(String[] args) {
