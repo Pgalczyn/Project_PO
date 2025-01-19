@@ -32,10 +32,11 @@ public class SimulationEngine extends Application{
         primaryStage.minHeightProperty().bind(viewRoot.minHeightProperty());
     }
 
-    public void runSimulation() {
-        String[] args = new String[2];
+    public void runSimulation(SimulationProps props) {
+        System.out.println("Running simulation engine");
         Stage newStage = new Stage();
-        SimulationWindow window = new SimulationWindow(newStage);
+        Simulation newSimulation = new Simulation(props);
+        SimulationWindow window = new SimulationWindow(newStage, newSimulation);
     }
 
 }

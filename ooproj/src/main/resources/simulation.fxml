@@ -90,7 +90,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="plantsOnStart1" prefHeight="26.0" prefWidth="330.0" promptText="10" text="10" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="dailyPlants" prefHeight="26.0" prefWidth="330.0" promptText="10" text="10" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -246,7 +246,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="minMutation" promptText="0" text="0" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="minMutations" promptText="0" text="0" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -260,7 +260,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="maxMutation" promptText="5" text="5" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="maxMutations" promptText="5" text="5" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -274,7 +274,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="maxMutation1" promptText="100" text="100" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="dayLimit" promptText="100" text="100" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -335,7 +335,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="70.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Button fx:id="startSimulationButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="133.0" text="Zacznij symulację" onAction="#openSimulationWindow" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+                  <Button fx:id="startSimulationButton" mnemonicParsing="false" onAction="#openSimulationWindow" prefHeight="36.0" prefWidth="133.0" text="Zacznij symulację" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
          </children>

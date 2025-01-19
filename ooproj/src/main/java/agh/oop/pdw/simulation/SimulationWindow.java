@@ -9,12 +9,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class SimulationWindow extends Application{
-
-    public SimulationWindow(Stage stage) {
+    private Simulation simulation;
+    public SimulationWindow(Stage stage, Simulation simulation) {
+        this.simulation = simulation;
         try {
             this.start(stage);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -25,6 +26,7 @@ public class SimulationWindow extends Application{
         loader.setLocation(getClass().getClassLoader().getResource("SimulationMapGridPaneScene.fxml"));
         BorderPane viewRoot = loader.load();
         SimulationWorldMap presenter = loader.getController();
+        presenter.setSimulation(simulation);
         configureStage(stage, viewRoot);
         stage.show();
     }

@@ -5,6 +5,8 @@ import agh.oop.pdw.model.*;
 import java.util.*;
 
 public class Simulation implements Runnable{
+    private boolean running = true;
+    private boolean paused = false;
     SimulationProps props;
     private final WorldMap map;
     private final AnimalsCreator animalsCreator;
@@ -20,6 +22,16 @@ public class Simulation implements Runnable{
     public void run() {
         animalsCreator.createAnimals(props.getStartAnimals());
         for (int i = 0; i < props.getDayLimit(); i++) {
+            synchronized (this) {
+                while (paused) {
+                    System.out.println("Paused");
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
             nextDay();
             this.day += 1;
             try {
@@ -34,6 +46,7 @@ public class Simulation implements Runnable{
         }
         System.out.println("Grass count: " + map.getGrasses().size());
     }
+
 
     public void nextDay() {
         removeDeadAnimals();
@@ -74,7 +87,6 @@ public class Simulation implements Runnable{
         for (Animal[] animalsOnPosition : map.getAnimals().values()) {
             for (Animal animal : animalsOnPosition) {
                 animal.move(map);
-                System.out.println("Animal moved: " + animal);
             }
         }
     }
@@ -84,7 +96,6 @@ public class Simulation implements Runnable{
     }
 
     private void animalsBreed() {
-git
     }
 
     private void spawnGrass() {
@@ -93,8 +104,38 @@ git
         }
     }
 
+    public void pause() {
+        this.paused = true;
+    }
+
+    public void resume() {
+        this.paused = false;
+        synchronized (this) {
+            notify();
+        }
+    }
+
     public int getDay() {
         return day;
     }
 
+    public WorldMap getMap() {
+        return map;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
 }

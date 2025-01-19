@@ -2,23 +2,27 @@ package agh.oop.pdw.simulation;
 
 // Opcje symulacji
 public class SimulationProps {
-    private final int mapWidth; //
-    private final int mapHeight;//
-    private final int startEnergy;//
-    private final boolean isMapPoles; // Czy wariant specjalny z biegunami
-    private final int plants;//
-    private final int energyOnEat;//
-    private final int plantsPerDay;//
-    private final int energyPerMove;//
-    private final int startAnimals;
-    private final int energyToBreed;//
-    private final int energyLossOnBreed;//
-    private final int minChildrenMutations;
-    private final int maxChildrenMutations;
-    private final boolean isSpecialMutation; // Starość nie radość
-    private final int animalGenomeLength;//
+    private int mapWidth; //
+    private int mapHeight;//
+    private int startEnergy;//
+    private boolean isMapPoles; // Czy wariant specjalny z biegunami
+    private int plants;//
+    private int energyOnEat;//
+    private int plantsPerDay;//
+    private int energyPerMove;//
+    private int startAnimals;
+    private int energyToBreed;//
+    private int energyLossOnBreed;//
+    private int minChildrenMutations;
+    private int maxChildrenMutations;
+    private boolean isSpecialMutation; // Starość nie radość
+    private int animalGenomeLength;//
 
-    private final int dayLimit;
+    private int dayLimit;
+
+    public SimulationProps() {
+
+    }
 
     public int getDayLimit() {
         return dayLimit;
@@ -101,5 +105,69 @@ public class SimulationProps {
 
     public int getAnimalGenomeLength() {
         return animalGenomeLength;
+    }
+
+    public void setMapWidth(int mapWidth) {
+        this.mapWidth = mapWidth;
+    }
+
+    public void setMapHeight(int mapHeight) {
+        this.mapHeight = mapHeight;
+    }
+
+    public void setStartEnergy(int startEnergy) {
+        this.startEnergy = startEnergy;
+    }
+
+    public void setMapPoles(boolean mapPoles) {
+        isMapPoles = mapPoles;
+    }
+
+    public void setPlants(int plants) {
+        this.plants = plants;
+    }
+
+    public void setEnergyOnEat(int energyOnEat) {
+        this.energyOnEat = energyOnEat;
+    }
+
+    public void setPlantsPerDay(int plantsPerDay) {
+        this.plantsPerDay = plantsPerDay;
+    }
+
+    public void setEnergyPerMove(int energyPerMove) {
+        this.energyPerMove = energyPerMove;
+    }
+
+    public void setStartAnimals(int startAnimals) {
+        this.startAnimals = startAnimals;
+    }
+
+    public void setEnergyToBreed(int energyToBreed) {
+        this.energyToBreed = energyToBreed;
+    }
+
+    public void setEnergyLossOnBreed(int energyLossOnBreed) {
+        this.energyLossOnBreed = energyLossOnBreed;
+    }
+
+    public void setMinChildrenMutations(int minChildrenMutations) {
+        this.minChildrenMutations = minChildrenMutations;
+    }
+
+    public void setMaxChildrenMutations(int maxChildrenMutations) {
+        this.maxChildrenMutations = maxChildrenMutations;
+    }
+
+    public void setSpecialMutation(boolean specialMutation) {
+        isSpecialMutation = specialMutation;
+    }
+
+    public void setAnimalGenomeLength(int animalGenomeLength) {
+        this.animalGenomeLength = animalGenomeLength;
+    }
+
+    public void setDayLimit(int dayLimit) {
+        this.dayLimit = dayLimit;
     }
 }
