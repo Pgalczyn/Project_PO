@@ -21,7 +21,7 @@ public class Main {
         final int MIN_CHILDREN_MUTATIONS = 1;
         final boolean SPECIAL_MUTATIONS = false;
         final int ANIMAL_GENOME_LENGTH = 10;
-
+        final int DAY_OFFSET = 100;
         final int SIMULATION_LIMIT = 300;
 
         SimulationProps props = new SimulationProps(
@@ -40,7 +40,8 @@ public class Main {
                 MIN_CHILDREN_MUTATIONS,
                 SPECIAL_MUTATIONS,
                 SIMULATION_LIMIT,
-                ANIMAL_GENOME_LENGTH
+                ANIMAL_GENOME_LENGTH,
+                DAY_OFFSET
         );
 
         Simulation simulation = new Simulation(props);

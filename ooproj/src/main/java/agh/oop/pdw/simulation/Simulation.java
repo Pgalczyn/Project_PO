@@ -21,7 +21,7 @@ public class Simulation implements Runnable{
 
     public void run() {
         animalsCreator.createAnimals(props.getStartAnimals());
-        for (int i = 0; i < props.getDayLimit(); i++) {
+        while (day < props.getDayLimit()){
             synchronized (this) {
                 while (paused) {
                     System.out.println("Paused");
@@ -35,7 +35,7 @@ public class Simulation implements Runnable{
             nextDay();
             this.day += 1;
             try {
-                Thread.sleep(1000);
+                Thread.sleep(props.getDayOffset());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

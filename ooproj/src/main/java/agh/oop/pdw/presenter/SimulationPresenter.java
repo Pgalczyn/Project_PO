@@ -42,6 +42,8 @@ public class SimulationPresenter {
     private CheckBox specialMutation;
     @FXML
     private CheckBox mapPoles;
+    @FXML
+    private TextField simulationTimeout;
 
     private SimulationEngine engine;
 
@@ -63,6 +65,7 @@ public class SimulationPresenter {
         props.setDayLimit(Integer.parseInt(dayLimit.getText()));
         props.setSpecialMutation(specialMutation.isSelected());
         props.setMapPoles(mapPoles.isSelected());
+        props.setDayOffset(Integer.parseInt(simulationTimeout.getText()));
         engine.runSimulation(props);
         System.out.println("Simulation started");
 

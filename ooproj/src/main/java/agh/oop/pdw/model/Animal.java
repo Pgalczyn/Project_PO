@@ -169,7 +169,9 @@ public class Animal implements WorldElement, AnimalObserver {
         }
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
         int heightOfMap = validator.getBoundary().topRight().y;
-        this.currentEnergy = currentEnergy - substractingEnergyAlgo(heightOfMap); //A4 - dodatkowy feature
+        this.currentEnergy = currentEnergy - substractingEnergyAlgo(heightOfMap);
+        this.amountOfDaysAlive += 1;
+        //A4 - dodatkowy feature
         // poprzez pomnożenie substractingEnergyAlgo(heightOfMap) mozemy ustawic jaką minimalnie energi zwierze bedzie tracić za ruch
     }
 
