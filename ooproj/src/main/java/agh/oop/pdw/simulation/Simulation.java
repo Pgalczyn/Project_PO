@@ -49,6 +49,7 @@ public class Simulation implements Runnable{
 
 
     public void nextDay() {
+        System.out.println(map.theMostPopularGenotype());
         removeDeadAnimals();
         moveAnimals();
         animalsEatGrass();

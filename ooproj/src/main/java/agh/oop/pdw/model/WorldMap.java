@@ -74,6 +74,85 @@ public class WorldMap implements MoveValidator {
         return null;
     }
 
+
+    public String amountOfAnimalsOnTheMap(){
+        int totalNumberOfAnimals = 0;
+        for(Animal[] animalsArray : animals.values()) {
+            for(Animal animal : animalsArray) {
+                totalNumberOfAnimals++;
+            }
+        }
+        return String.valueOf(totalNumberOfAnimals);
+    }
+    public  int amountOfGrassOnTheMap(){
+        return grasses.size();
+    }
+    public int amountOfEmptyFields() {
+        return emptyFields.size();
+    }
+    public String theMostPopularGenotype(){
+
+        Map<String,Integer> countGenotype = new HashMap<>();
+
+        for(Animal[] animalsArray : animals.values()) {
+            for(Animal animal : animalsArray) {
+                String genotypeKey = Arrays.toString(animal.getGenotype());
+                countGenotype.put(genotypeKey, countGenotype.getOrDefault(genotypeKey, 0) + 1);
+
+            }
+        }
+
+        String mostPopularGenotype = null;
+        int maxCount = 0;
+
+        for (Map.Entry<String,Integer> entry : countGenotype.entrySet()){
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                mostPopularGenotype = entry.getKey();
+            }
+
+        }
+     return mostPopularGenotype;
+    }
+
+    public double averageLevelOfEnergyOfAnimals(){
+        int totalEnergy = 0;
+        int amountOfAnimals = 0;
+
+
+        for(Animal[] animalsArray : animals.values()) {
+            for(Animal animal : animalsArray) {
+                totalEnergy += animal.getCurrentEnergy();
+            }
+        }
+        return (double) totalEnergy/amountOfAnimals;
+    }
+    public double avgLifeTimeForDeadAnimal(){
+        int totalLifeTime = 0;
+        int amountOfAnimals = 0;
+        for(Animal[] animalsArray : animals.values()) {
+            for(Animal animal : animalsArray) {
+               if(animal.getAmountOfDaysUntilDeath() != Integer.MAX_VALUE) {
+                   totalLifeTime+= animal.getAmountOfDaysUntilDeath();
+               }
+            }
+        }
+        return (double) totalLifeTime/amountOfAnimals;
+    }
+
+    public double avgAmountOfChildren(){
+        int amountOfAnimals = 0;
+        int totalChildren = 0;
+        for(Animal[] animalsArray : animals.values()) {
+            for(Animal animal : animalsArray) {
+                totalChildren += animal.getAmountOfChildren();
+                amountOfAnimals++;
+            }
+        }
+        return (double) totalChildren/amountOfAnimals;
+    }
+
+
     public int getHeight() {
         return boundary.topRight().getY() + 1;
     }

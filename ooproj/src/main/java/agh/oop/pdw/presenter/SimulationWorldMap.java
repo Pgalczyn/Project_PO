@@ -23,7 +23,20 @@ public class SimulationWorldMap implements SimulationListener {
     private GridPane mapGrid;
 
     @FXML
-    private Label label;
+    private Label allAnimalsAmount;
+    @FXML
+    private Label allGrassAMount;
+    @FXML
+    private Label allFreeSpotsAmount;
+    @FXML
+    private Label mostPopularGeno;
+    @FXML
+    private Label avgEnergy;
+    @FXML
+    private Label avgLife;
+    @FXML
+    private Label avgChildren;
+
 
     @FXML
     private Button startStopButton;
@@ -38,8 +51,21 @@ public class SimulationWorldMap implements SimulationListener {
     }
 
 
+    public void setLabels(){
+        allAnimalsAmount.setText("liczba wszystkich zwierzaków:" + worldMap.amountOfAnimalsOnTheMap());
+        allGrassAMount.setText("liczba wszystkich roślin: " + worldMap.amountOfGrassOnTheMap());
+        allFreeSpotsAmount.setText("liczba wolnych pól:" + worldMap.amountOfEmptyFields() );
+        mostPopularGeno.setText("najpopularniejszy genotyp: " + worldMap.theMostPopularGenotype());
+        avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + worldMap.averageLevelOfEnergyOfAnimals());
+        avgChildren.setText("średnia długości życia zwierzaków dla martwych zwierzaków: " + worldMap.avgAmountOfChildren());
+        avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + worldMap.avgLifeTimeForDeadAnimal());
+    }
+
+
+
     public void drawMap() {
         clearGrid();
+        setLabels();
         int MX = worldMap.getWidth();
         int MY = worldMap.getHeight();
         int mX = 0;
