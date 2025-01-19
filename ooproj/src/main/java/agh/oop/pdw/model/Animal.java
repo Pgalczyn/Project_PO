@@ -59,6 +59,11 @@ public class Animal implements WorldElement, AnimalObserver {
                 "days alive: " + amountOfDaysAlive;
     }
 
+    @Override
+    public String srcImage() {
+        return "/Images/greenDot.png";
+    }
+
 
     public Animal reproduce(Animal otherAnimal) {
 

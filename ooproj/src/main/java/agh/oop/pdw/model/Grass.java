@@ -17,4 +17,9 @@ public class Grass implements WorldElement {
     public String toString() {
         return "Grass: " + position;
     }
+
+    @Override
+    public String srcImage() {
+        return "/Images/grassSquare.jpg";
+    }
 }

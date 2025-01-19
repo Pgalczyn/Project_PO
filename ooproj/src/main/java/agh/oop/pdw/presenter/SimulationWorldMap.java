@@ -2,6 +2,7 @@ package agh.oop.pdw.presenter;
 
 import agh.oop.pdw.model.SimulationListener;
 import agh.oop.pdw.model.Vector2D;
+import agh.oop.pdw.model.WorldElement;
 import agh.oop.pdw.model.WorldMap;
 import agh.oop.pdw.simulation.Simulation;
 import agh.oop.pdw.simulation.SimulationProps;
@@ -10,10 +11,15 @@ import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SimulationWorldMap implements SimulationListener {
     private WorldMap worldMap;
@@ -83,9 +89,27 @@ public class SimulationWorldMap implements SimulationListener {
                     rowConstraints.setPercentHeight(100.0 / (MY));
                     mapGrid.getRowConstraints().add(rowConstraints);
                 }
-                label.setText(Integer.toString(simulation.getDay()));
+             //  label.setText(Integer.toString(simulation.getDay()));
                 label.setStyle("-fx-background-color: #999");
-                mapGrid.add(label, j, i);
+               // mapGrid.add(label, j, i);
+                Vector2D position = new Vector2D(j,i);
+                label.setStyle("-fx-border-color: #000;-fx-border-width: 1");
+                if (worldMap.isOccupied(position)) {
+
+                    List<WorldElement> elementsOnTheSamePole = worldMap.objectAt(position);
+
+                    for (WorldElement element : elementsOnTheSamePole) {
+                        Image image = new Image(element.srcImage(), 20, 20, true, true);
+                        ImageView imageView = new ImageView(image);
+                        imageView.setFitWidth(2);
+                        imageView.setFitHeight(2);
+                        label.setGraphic(new ImageView(image));
+
+                        mapGrid.add(label, j,i);
+                    }
+
+                }
+
                 GridPane.setHalignment(label, HPos.CENTER);
             }
         }
@@ -94,6 +118,7 @@ public class SimulationWorldMap implements SimulationListener {
 
     @Override
     public void dayPassed() {
+        mapGrid.setGridLinesVisible(true);
         Platform.runLater(this::drawMap);
     }
 

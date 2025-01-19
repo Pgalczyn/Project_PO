@@ -27,13 +27,13 @@
    <left>
         <VBox spacing="15.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="allAnimalsAmount"/>
-                <Label fx:id="allGrassAMount"/>
-                <Label fx:id="allFreeSpotsAmount"/>
-                <Label fx:id="mostPopularGeno"/>
-                <Label fx:id="avgEnergy"/>
-                <Label fx:id="avgLife"/>
-                <Label fx:id="avgChildren"/>
+                <Label fx:id="allAnimalsAmount" text="liczba wszystkich zwierzaków: " />
+                <Label fx:id="allGrassAMount" text="liczba wszystkich roślin: " />
+                <Label fx:id="allFreeSpotsAmount" text="liczba wolnych pól: " />
+                <Label fx:id="mostPopularGeno" text="najpopularniejszy genotyp: " />
+                <Label fx:id="avgEnergy" text="średni poziomu energii dla żyjących zwierzaków: " />
+                <Label fx:id="avgLife" text="średnia długości życia zwierzaków dla martwych zwierzaków: " />
+                <Label fx:id="avgChildren" text="średnia liczby dzieci dla żyjących zwierzaków: " />
             </children>
             <BorderPane.margin>
                 <Insets left="2.0" />

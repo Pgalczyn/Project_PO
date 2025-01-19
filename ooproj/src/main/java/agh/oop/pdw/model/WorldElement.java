@@ -8,4 +8,6 @@ public interface WorldElement {
     // Wyświetlanie elementu
     String toString();
 
+    // ścieżka do wyświetlanego zdjęcia
+    String srcImage();
 }
