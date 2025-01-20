@@ -39,7 +39,7 @@ public class WorldMapTest {
 
         Animal animal2 = new Animal(new Vector2D(0, 0), 1, 1, 0);
         map.placeAnimal(animal2);
-        assertEquals(2, map.getAnimals().get(animal.getPosition()).length);
+        assertEquals(2, map.getAnimals().get(animal.getPosition()).size());
     }
 
     @Test

@@ -4,6 +4,7 @@ import agh.oop.pdw.model.SimulationListener;
 import agh.oop.pdw.model.Vector2D;
 import agh.oop.pdw.model.WorldElement;
 import agh.oop.pdw.model.WorldMap;
+import agh.oop.pdw.presenter.elements.WorldMapCell;
 import agh.oop.pdw.simulation.Simulation;
 import agh.oop.pdw.simulation.SimulationProps;
 import javafx.application.Platform;
@@ -24,7 +25,7 @@ import java.util.List;
 public class SimulationWorldMap implements SimulationListener {
     private WorldMap worldMap;
     private Simulation simulation;
-    private boolean isRunning = false;
+//    private boolean isRunning = false;
     @FXML
     private GridPane mapGrid;
 
@@ -48,69 +49,48 @@ public class SimulationWorldMap implements SimulationListener {
     private Button startStopButton;
 
 
-    private void clearGrid() {
-        if (!mapGrid.getChildren().isEmpty()) {
-            mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
-        } // hack to retain visible grid lines
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
-    }
-
-
-    public void setLabels(){
+    public void setLabels() {
         allAnimalsAmount.setText("liczba wszystkich zwierzaków:" + worldMap.amountOfAnimalsOnTheMap());
         allGrassAMount.setText("liczba wszystkich roślin: " + worldMap.amountOfGrassOnTheMap());
-        allFreeSpotsAmount.setText("liczba wolnych pól:" + worldMap.amountOfEmptyFields() );
+        allFreeSpotsAmount.setText("liczba wolnych pól:" + worldMap.amountOfEmptyFields());
         mostPopularGeno.setText("najpopularniejszy genotyp: " + worldMap.theMostPopularGenotype());
         avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + worldMap.averageLevelOfEnergyOfAnimals());
         avgChildren.setText("średnia długości życia zwierzaków dla martwych zwierzaków: " + worldMap.avgAmountOfChildren());
         avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + worldMap.avgLifeTimeForDeadAnimal());
     }
 
+    private void clearGrid() {
+        if (!mapGrid.getChildren().isEmpty()) {
+            mapGrid.getChildren().clear();
+        }
+        mapGrid.getColumnConstraints().clear();
+        mapGrid.getRowConstraints().clear();
+    }
+
+
+    private void createConstrains(int MX, int MY) {
+        for (int i = 0; i < MX; i++) {
+            ColumnConstraints columnConstraints = new ColumnConstraints();
+            columnConstraints.setPercentWidth(100.0 / (MX));
+            mapGrid.getColumnConstraints().add(columnConstraints);
+        }
+        for (int i = 0; i < MY; i++) {
+            RowConstraints rowConstraints = new RowConstraints();
+            rowConstraints.setPercentHeight(100.0 / (MY));
+            mapGrid.getRowConstraints().add(rowConstraints);
+        }
+    }
 
 
     public void drawMap() {
         clearGrid();
+        createConstrains(worldMap.getWidth(), worldMap.getHeight());
         setLabels();
-        int MX = worldMap.getWidth();
-        int MY = worldMap.getHeight();
-        int mX = 0;
-        int mY = 0;
-        for (int i = 0; i < MY; i++) {
-            for (int j = 0; j < MX; j++) {
-                Label label = new Label();
-                if (i == 0) {
-                    ColumnConstraints columnConstraints = new ColumnConstraints();
-                    columnConstraints.setPercentWidth(100.0 / (MX));
-                    mapGrid.getColumnConstraints().add(columnConstraints);
-                }
-                if (j == 0) {
-                    RowConstraints rowConstraints = new RowConstraints();
-                    rowConstraints.setPercentHeight(100.0 / (MY));
-                    mapGrid.getRowConstraints().add(rowConstraints);
-                }
-             //  label.setText(Integer.toString(simulation.getDay()));
-                label.setStyle("-fx-background-color: #999");
-               // mapGrid.add(label, j, i);
-                Vector2D position = new Vector2D(j,i);
-                label.setStyle("-fx-border-color: #000;-fx-border-width: 1");
-                if (worldMap.isOccupied(position)) {
-
-                    List<WorldElement> elementsOnTheSamePole = worldMap.objectAt(position);
-
-                    for (WorldElement element : elementsOnTheSamePole) {
-                        Image image = new Image(element.srcImage(), 20, 20, true, true);
-                        ImageView imageView = new ImageView(image);
-                        imageView.setFitWidth(2);
-                        imageView.setFitHeight(2);
-                        label.setGraphic(new ImageView(image));
-
-                        mapGrid.add(label, j,i);
-                    }
-
-                }
-
-                GridPane.setHalignment(label, HPos.CENTER);
+        for (int i = 0; i < worldMap.getHeight(); i++) {
+            for (int j = 0; j < worldMap.getWidth(); j++) {
+                WorldMapCell cell = new WorldMapCell(worldMap, new Vector2D(j, i));
+                mapGrid.add(cell, j, i);
+                GridPane.setHalignment(cell, HPos.CENTER);
             }
         }
     }
@@ -124,12 +104,7 @@ public class SimulationWorldMap implements SimulationListener {
 
 
     public void startStopSimulation() {
-        Thread thread = new Thread(simulation);
-        thread.start();
-        if (!isRunning) {
-            isRunning = true;
-        }
-        else if (simulation.isPaused()) {
+        if (simulation.isPaused()) {
             simulation.resume();
         } else {
             simulation.pause();
@@ -141,6 +116,9 @@ public class SimulationWorldMap implements SimulationListener {
     public void setSimulation(Simulation simulation) {
         this.worldMap = simulation.getMap();
         this.simulation = simulation;
+        Thread thread = new Thread(simulation);
+        thread.start();
+        simulation.pause();
         simulation.subscribe(this);
     }
 }

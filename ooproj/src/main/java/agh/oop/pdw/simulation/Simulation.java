@@ -3,8 +3,9 @@ package agh.oop.pdw.simulation;
 import agh.oop.pdw.model.*;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Simulation implements Runnable{
+public class Simulation implements Runnable {
     private boolean running = true;
     private boolean paused = false;
     SimulationProps props;
@@ -21,7 +22,10 @@ public class Simulation implements Runnable{
 
     public void run() {
         animalsCreator.createAnimals(props.getStartAnimals());
-        while (day < props.getDayLimit()){
+        for (SimulationListener listener : listeners) {
+            listener.dayPassed();
+        }
+        while (day < props.getDayLimit()) {
             synchronized (this) {
                 while (paused) {
                     System.out.println("Paused");
@@ -64,30 +68,31 @@ public class Simulation implements Runnable{
         this.listeners.add(subscriber);
     }
 
-    private void runWithLimit(){
+    private void runWithLimit() {
         for (int i = 0; i < props.getDayLimit(); i++) {
             run();
         }
     }
 
     private void removeDeadAnimals() {
-        for (Animal[] animalsOnPosition : map.getAnimals().values()) {
+        Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
+        for (Vector2D position : keySet) {
+            ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
             for (Animal animal : animalsOnPosition) {
                 if (animal.getCurrentEnergy() <= 0) {
-                    System.out.println("Animal died: " + animal);
-                    animalsOnPosition =
-                            Arrays.stream(animalsOnPosition)
-                                    .filter(a -> a != animal)
-                                    .toArray(Animal[]::new);
+                    map.removeAnimal(animal);
                 }
             }
         }
     }
 
     private void moveAnimals() {
-        for (Animal[] animalsOnPosition : map.getAnimals().values()) {
+        Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
+        for (Vector2D position : keySet) {
+            ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
             for (Animal animal : animalsOnPosition) {
-                animal.move(map);
+                map.move(animal);
+                animal.setCurrentEnergy(animal.getCurrentEnergy() - props.getEnergyPerMove());
             }
         }
     }
@@ -100,7 +105,7 @@ public class Simulation implements Runnable{
     }
 
     private void spawnGrass() {
-        for(int i = 0; i < props.getPlantsPerDay(); i++){
+        for (int i = 0; i < props.getPlantsPerDay(); i++) {
             map.spawnGrass();
         }
     }

@@ -4,13 +4,14 @@ import agh.oop.pdw.model.util.Boundary;
 import agh.oop.pdw.model.util.RandomUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class WorldMap implements MoveValidator {
-    private final Map<Vector2D, Animal[]> animals = new HashMap<>();
+    private final Map<Vector2D, ArrayList<Animal>> animals = new HashMap<>();
     private final Map<Vector2D, Grass> grasses = new HashMap<>();
     private final List<Vector2D> emptyFields = new ArrayList<>(); // Possible positions for grass to spawn on.
     private final Boundary boundary;
-    private Boundary jungleBoundary;
+    private final Boundary jungleBoundary;
 
 
     public WorldMap(int height, int width, int plants) {
@@ -30,26 +31,25 @@ public class WorldMap implements MoveValidator {
 
     public void placeAnimal(Animal animal) {
         if (animals.containsKey(animal.getPosition())) {
-            Animal[] animalsOnPosition = animals.get(animal.getPosition());
-            Animal[] newAnimalsOnPosition = Arrays.copyOf(animalsOnPosition, animalsOnPosition.length + 1);
-            newAnimalsOnPosition[animalsOnPosition.length] = animal;
-            animals.put(animal.getPosition(), newAnimalsOnPosition);
+            ArrayList<Animal> animalsOnPosition = animals.get(animal.getPosition());
+            animalsOnPosition.add(animal);
+            animals.put(animal.getPosition(), animalsOnPosition);
         } else {
-            animals.put(animal.getPosition(), new Animal[]{animal});
+            animals.put(animal.getPosition(), new ArrayList<>(Collections.singletonList(animal)));
         }
     }
 
     public void spawnGrass() {
         Vector2D position = RandomUtils.getGrassSpawnPosition(this);
-        Grass grass = new Grass(position);
         if (position == null) return;
+        Grass grass = new Grass(position);
         grasses.put(grass.getPosition(), grass);
         emptyFields.remove(grass.getPosition());
     }
 
     private void spawnStartingGrass(int plants) {
-        for (int i = 0; i < getHeight(); i++) {
-            for (int j = 0; j < getWidth(); j++) {
+        for (int i = 0; i < getWidth(); i++) {
+            for (int j = 0; j < getHeight(); j++) {
                 emptyFields.add(new Vector2D(i, j));
             }
         }
@@ -67,8 +67,7 @@ public class WorldMap implements MoveValidator {
         List<WorldElement> elementsOnTheSamePole = new ArrayList<>();
 //dodaje tylko jednego animala bo i tak jesteśmy w stanie wyświtlić tylko jednego animala na mapie na danym polu
         if (animals.containsKey(position)) {
-            elementsOnTheSamePole.add(animals.get(position)[0]);
-
+            elementsOnTheSamePole.addAll(animals.get(position));
         }
         if (grasses.containsKey(position)) {
             elementsOnTheSamePole.add(grasses.get(position));
@@ -83,7 +82,7 @@ public class WorldMap implements MoveValidator {
 
     public String amountOfAnimalsOnTheMap(){
         int totalNumberOfAnimals = 0;
-        for(Animal[] animalsArray : animals.values()) {
+        for(ArrayList<Animal> animalsArray : animals.values()) {
             for(Animal animal : animalsArray) {
                 totalNumberOfAnimals++;
             }
@@ -100,7 +99,7 @@ public class WorldMap implements MoveValidator {
 
         Map<String,Integer> countGenotype = new HashMap<>();
 
-        for(Animal[] animalsArray : animals.values()) {
+        for(ArrayList<Animal> animalsArray : animals.values()) {
             for(Animal animal : animalsArray) {
                 String genotypeKey = Arrays.toString(animal.getGenotype());
                 countGenotype.put(genotypeKey, countGenotype.getOrDefault(genotypeKey, 0) + 1);
@@ -126,7 +125,7 @@ public class WorldMap implements MoveValidator {
         int amountOfAnimals = 0;
 
 
-        for(Animal[] animalsArray : animals.values()) {
+        for(ArrayList<Animal> animalsArray : animals.values()) {
             for(Animal animal : animalsArray) {
                 totalEnergy += animal.getCurrentEnergy();
             }
@@ -136,7 +135,7 @@ public class WorldMap implements MoveValidator {
     public double avgLifeTimeForDeadAnimal(){
         int totalLifeTime = 0;
         int amountOfAnimals = 0;
-        for(Animal[] animalsArray : animals.values()) {
+        for(ArrayList<Animal> animalsArray : animals.values()) {
             for(Animal animal : animalsArray) {
                if(animal.getAmountOfDaysUntilDeath() != Integer.MAX_VALUE) {
                    totalLifeTime+= animal.getAmountOfDaysUntilDeath();
@@ -149,13 +148,21 @@ public class WorldMap implements MoveValidator {
     public double avgAmountOfChildren(){
         int amountOfAnimals = 0;
         int totalChildren = 0;
-        for(Animal[] animalsArray : animals.values()) {
+        for(ArrayList<Animal> animalsArray : animals.values()) {
             for(Animal animal : animalsArray) {
                 totalChildren += animal.getAmountOfChildren();
                 amountOfAnimals++;
             }
         }
         return (double) totalChildren/amountOfAnimals;
+    }
+
+    public void move(Animal animal){
+        Vector2D oldPosition = animal.getPosition();
+        animal.move(this);
+        ArrayList<Animal> animalsAtPosition = animals.get(oldPosition);
+        animalsAtPosition.remove(animal);
+        placeAnimal(animal);
     }
 
 
@@ -167,7 +174,7 @@ public class WorldMap implements MoveValidator {
         return boundary.topRight().getX() + 1;
     }
 
-    public Map<Vector2D, Animal[]> getAnimals() {
+    public Map<Vector2D, ArrayList<Animal>> getAnimals() {
         return animals;
     }
 
@@ -189,6 +196,7 @@ public class WorldMap implements MoveValidator {
         return boundary;
     }
 
+
     @Override
     public boolean canMoveTo(Vector2D position) {
         return position.getY() < this.getHeight() && position.getY() >= 0;
@@ -206,5 +214,16 @@ public class WorldMap implements MoveValidator {
             nextPosition = new Vector2D(getWidth() - 1, nextPosition.getY());
         }
         return nextPosition;
+    }
+
+    public void removeAnimal(Animal animal) {
+        ArrayList<Animal> animalsOnPosition = animals.get(animal.getPosition());
+        animalsOnPosition.remove(animal);
+        if (animalsOnPosition.isEmpty()) {
+            animals.remove(animal.getPosition());
+        } else {
+            animals.put(animal.getPosition(), animalsOnPosition);
+        }
+        System.out.println("Animal died at MAP: " + animal.getPosition());
     }
 }
