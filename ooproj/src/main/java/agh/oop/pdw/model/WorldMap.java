@@ -162,7 +162,17 @@ public class WorldMap implements MoveValidator {
         animal.move(this);
         ArrayList<Animal> animalsAtPosition = animals.get(oldPosition);
         animalsAtPosition.remove(animal);
+        if (animalsAtPosition.isEmpty()) {
+            animals.remove(oldPosition);
+        } else {
+            animals.put(oldPosition, animalsAtPosition);
+        }
         placeAnimal(animal);
+    }
+
+    public void removeGrass(Vector2D position) {
+        grasses.remove(position);
+        emptyFields.add(position);
     }
 
 

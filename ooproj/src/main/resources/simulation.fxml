@@ -154,7 +154,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="energyPerMove" promptText="100" text="100" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="energyPerMove" promptText="100" text="5" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -229,7 +229,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="startAnimals" prefHeight="26.0" prefWidth="258.0" promptText="5" text="5" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="startAnimals" prefHeight="26.0" prefWidth="258.0" promptText="5" text="1" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -274,7 +274,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="dayLimit" promptText="100" text="100" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="dayLimit" promptText="100" text="1000" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>

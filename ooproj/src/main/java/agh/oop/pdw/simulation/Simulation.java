@@ -103,16 +103,14 @@ public class Simulation implements Runnable {
         Map<Vector2D, ArrayList<Animal>> animalsMap =  map.getAnimals();
         Map<Vector2D, Grass> grasses = map.getGrasses();
         for (Vector2D position : animalsMap.keySet()) {
-
+            System.out.println(map.getGrasses().keySet());
             if (!grasses.containsKey(position)) return;
-            Animal animal = animalsMap.get(position)
-                    .stream()
-                    .sorted()
-                    .findFirst()
-                    .orElse(null);
-            if (animal == null) return;
-            System.out.println(map.getGrasses().get(position));
+            ArrayList<Animal> animalsOnPosition = new ArrayList<>(animalsMap.get(position));
+            if (animalsOnPosition.isEmpty()) return;
+            animalsOnPosition.sort(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN);
+            Animal animal = animalsOnPosition.getFirst();
             animal.eat(props.getEnergyOnEat());
+            map.removeGrass(position);
         }
     }
 

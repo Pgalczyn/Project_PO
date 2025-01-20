@@ -37,15 +37,14 @@ public class Vector2D {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (other == null || getClass() != other.getClass()) return false;
-        Vector2D vector = (Vector2D) other;
-        return this.getX() == vector.getX() && this.getY() == vector.getY();
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Vector2D vector2D)) return false;
+        return x == vector2D.x && y == vector2D.y;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x,y);
+        return Objects.hash(x, y);
     }
 }
