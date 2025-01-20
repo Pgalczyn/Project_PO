@@ -20,6 +20,6 @@ public class Grass implements WorldElement {
 
     @Override
     public String srcImage() {
-        return "/Images/grassSquare.jpg";
+        return "/Images/grass.png";
     }
 }

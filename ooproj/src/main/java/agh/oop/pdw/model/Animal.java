@@ -9,6 +9,7 @@ import static agh.oop.pdw.model.util.RandomUtils.RANDOM;
 
 public class Animal implements WorldElement, AnimalObserver {
     private MapDirection direction;
+    private final List<MoveValidator> listeners = new ArrayList<>();
     private Vector2D position;
     private int currentEnergy;
     private int[] genotype;
@@ -150,6 +151,7 @@ public class Animal implements WorldElement, AnimalObserver {
 
         }
     }
+
     // changing direction of the animal when exiting the map
     public void moveBy4(WorldMap map) {
 
@@ -168,14 +170,14 @@ public class Animal implements WorldElement, AnimalObserver {
         if (!this.isMissingMove()) {
             this.rotate();
             if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
-
-                this.position = this.position.addVector(this.direction.toVector());
+                this.position = validator.getNextPosition(this);
             }
         }
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
         int heightOfMap = validator.getBoundary().topRight().y;
         this.currentEnergy = currentEnergy - substractingEnergyAlgo(heightOfMap);
         this.amountOfDaysAlive += 1;
+        System.out.println("Animal energy: " + this.currentEnergy);
         //A4 - dodatkowy feature
         // poprzez pomnożenie substractingEnergyAlgo(heightOfMap) mozemy ustawic jaką minimalnie energi zwierze bedzie tracić za ruch
     }
@@ -197,19 +199,16 @@ public class Animal implements WorldElement, AnimalObserver {
     //[A] bieguny – bieguny zdefiniowane są na dolnej i górnej krawędzi mapy.
     // Im bliżej bieguna znajduje się zwierzę, tym większą energię traci podczas pojedynczego ruchu (na biegunach jest zimno);
 
-    public int getDistanceFromPole(int heightOfMap){
-
+    public int getDistanceFromPole(int heightOfMap) {
         int currentAnimalPositionY = this.position.getY();
-
-        return Math.min(Math.abs(currentAnimalPositionY - heightOfMap),currentAnimalPositionY) + 1;
+        return Math.min(Math.abs(currentAnimalPositionY - heightOfMap), currentAnimalPositionY) + 1;
 
     }
 
-    public int substractingEnergyAlgo(int heightOfMap){
-
-        int distance = 1/getDistanceFromPole(heightOfMap);
-
-        return (int) distance * heightOfMap/2;
+    public int substractingEnergyAlgo(int heightOfMap) {
+        int distance = 1 / getDistanceFromPole(heightOfMap);
+        System.out.println((int) distance * heightOfMap / 2);
+        return (int) distance * heightOfMap / 2;
     }
 
 
@@ -229,7 +228,7 @@ public class Animal implements WorldElement, AnimalObserver {
         }
     }
 
-    public static final  Comparator<Animal>  ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN = Comparator.comparingInt(Animal::getCurrentEnergy).thenComparing(Animal::getAmountOfDaysAlive).thenComparing(Animal::getAmountOfChildren);
+    public static final Comparator<Animal> ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN = Comparator.comparingInt(Animal::getCurrentEnergy).thenComparing(Animal::getAmountOfDaysAlive).thenComparing(Animal::getAmountOfChildren);
 
 
     public int[] getGenotype() {
@@ -277,6 +276,9 @@ public class Animal implements WorldElement, AnimalObserver {
         return currentEnergy;
     }
 
+    public void setCurrentEnergy(int currentEnergy) {
+        this.currentEnergy = currentEnergy;
+    }
 
     @Override
     public void updateDescendants() {

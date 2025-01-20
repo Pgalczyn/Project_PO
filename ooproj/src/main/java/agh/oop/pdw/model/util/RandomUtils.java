@@ -1,6 +1,5 @@
 package agh.oop.pdw.model.util;
 
-import agh.oop.pdw.model.Grass;
 import agh.oop.pdw.model.Vector2D;
 import agh.oop.pdw.model.WorldMap;
 
@@ -11,9 +10,9 @@ public class RandomUtils {
 
     public static Vector2D getGrassSpawnPosition(WorldMap worldMap){
         List<Vector2D> possibleFields = worldMap.getEmptyFields();
-        // TODO - implement exception handling
         if(possibleFields.isEmpty()) return null;
-        List<Vector2D> jungleFields = possibleFields.stream().filter(p -> worldMap.getJungleBoundary().contains(p)).toList();
+        List<Vector2D> jungleFields = possibleFields.stream()
+                .filter(p -> worldMap.getJungleBoundary().contains(p)).toList();
         if (RANDOM.nextFloat() < 0.8 && !jungleFields.isEmpty()) {
             return jungleFields.get(RANDOM.nextInt(jungleFields.size()));
         }
