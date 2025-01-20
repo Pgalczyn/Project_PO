@@ -230,6 +230,9 @@ public class Animal implements WorldElement, AnimalObserver {
 
     public static final Comparator<Animal> ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN = Comparator.comparingInt(Animal::getCurrentEnergy).thenComparing(Animal::getAmountOfDaysAlive).thenComparing(Animal::getAmountOfChildren);
 
+    public void eat(int EnergyAfterEatingAdded){
+        this.currentEnergy += EnergyAfterEatingAdded;
+    }
 
     public int[] getGenotype() {
         return genotype;

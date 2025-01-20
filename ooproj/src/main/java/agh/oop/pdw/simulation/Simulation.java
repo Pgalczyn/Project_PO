@@ -5,6 +5,8 @@ import agh.oop.pdw.model.*;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static agh.oop.pdw.model.Animal.ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN;
+
 public class Simulation implements Runnable {
     private boolean running = true;
     private boolean paused = false;
@@ -98,7 +100,20 @@ public class Simulation implements Runnable {
     }
 
     private void animalsEatGrass() {
+        Map<Vector2D, ArrayList<Animal>> animalsMap =  map.getAnimals();
+        Map<Vector2D, Grass> grasses = map.getGrasses();
+        for (Vector2D position : animalsMap.keySet()) {
 
+            if (!grasses.containsKey(position)) return;
+            Animal animal = animalsMap.get(position)
+                    .stream()
+                    .sorted()
+                    .findFirst()
+                    .orElse(null);
+            if (animal == null) return;
+            System.out.println(map.getGrasses().get(position));
+            animal.eat(props.getEnergyOnEat());
+        }
     }
 
     private void animalsBreed() {
