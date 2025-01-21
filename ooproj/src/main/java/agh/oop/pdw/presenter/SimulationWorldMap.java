@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class SimulationWorldMap implements SimulationListener, WorldMapListener {
@@ -95,10 +96,6 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     }
 
 
-    @Override
-    public void dayPassed() {
-        Platform.runLater(this::setLabels);
-    }
 
 
     public void startStopSimulation() {
@@ -124,11 +121,20 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
 
     @Override
     public void fieldUpdated(Vector2D position) {
-        System.out.println("field updated");
         Platform.runLater(() -> {
             synchronized (this) {
-                this.cells.get(position).update();
+                this.cells.get(position).update(simulation.getDay());
             }
+        });
+    }
+
+    @Override
+    public void dayPassed(HashSet<Vector2D> updatedFields) {
+        Platform.runLater(() -> {
+            for (Vector2D position : updatedFields) {
+                this.cells.get(position).update(simulation.getDay());
+            }
+            setLabels();
         });
     }
 }

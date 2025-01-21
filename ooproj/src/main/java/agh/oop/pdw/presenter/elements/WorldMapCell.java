@@ -16,6 +16,7 @@ import static agh.oop.pdw.presenter.ImageLoader.GetImage;
 public class WorldMapCell extends Pane {
     private final Vector2D position;
     private final WorldMap map;
+    private int lastUpdateDay = 0;
 
     public WorldMapCell(WorldMap map, Vector2D position) {
         this.map = map;
@@ -37,7 +38,9 @@ public class WorldMapCell extends Pane {
     }
 
 
-    public void update() {
+    public void update(int day) {
+        if (day == lastUpdateDay) return;
+        lastUpdateDay = day;
         this.getChildren().clear();
         this.setStyle("-fx-padding: 3px;");
         if (map.objectAt(position) != null) {
