@@ -22,7 +22,6 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     private WorldMap worldMap;
     private Simulation simulation;
     private final Map<Vector2D, WorldMapCell> cells = new HashMap<>();
-//    private boolean isRunning = false;
     @FXML
     private GridPane mapGrid;
 
@@ -46,24 +45,16 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     private Button startStopButton;
 
 
-//    public void setLabels() {
-//        WorldMapInfo informer = worldMap.getInformer();
-//        informer.getInfoWorldMap(this.simulation);
-//        allAnimalsAmount.setText("liczba wszystkich zwierzaków:" + informer.getAmountOfAnimalsOnTheMap());
-//        allGrassAmount.setText("liczba wszystkich roślin: " + informer.getAmountOfGrassOnTheMap());
-//        allFreeSpotsAmount.setText("liczba wolnych pól:" + informer.getAmountOfEmptyFieldsOnTheMap());
-//        mostPopularGeno.setText("najpopularniejszy genotyp: " + informer.getTheMostPopularGenotype());
-//        avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + informer.getAverageLevelOfEnergyOfAnimals());
-//        avgChildren.setText("średnia długości  " + informer.getAvgLifeTimeForDeadAnimal());
-//        avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + informer.getAvgAmountOfChildren());
-//    }
-
-    private void clearGrid() {
-        if (!mapGrid.getChildren().isEmpty()) {
-            mapGrid.getChildren().clear();
-        }
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
+    public void setLabels() {
+        WorldMapInfo informer = worldMap.getInformer();
+        informer.getInfoWorldMap(this.simulation);
+        allAnimalsAmount.setText("liczba wszystkich zwierzaków:" + informer.getAmountOfAnimalsOnTheMap());
+        allGrassAmount.setText("liczba wszystkich roślin: " + informer.getAmountOfGrassOnTheMap());
+        allFreeSpotsAmount.setText("liczba wolnych pól:" + informer.getAmountOfEmptyFieldsOnTheMap());
+        mostPopularGeno.setText("najpopularniejszy genotyp: " + informer.getTheMostPopularGenotype());
+        avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + informer.getAverageLevelOfEnergyOfAnimals());
+        avgChildren.setText("średnia długości  " + informer.getAvgLifeTimeForDeadAnimal());
+        avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + informer.getAvgAmountOfChildren());
     }
 
 
@@ -83,7 +74,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
 
     public void Initialize() {
         createConstrains(worldMap.getWidth(), worldMap.getHeight());
-//        setLabels();
+        setLabels();
         for (int i = 0; i < worldMap.getHeight(); i++) {
             for (int j = 0; j < worldMap.getWidth(); j++) {
                 WorldMapCell cell = new WorldMapCell(worldMap, new Vector2D(j, i));
@@ -131,7 +122,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
             for (Vector2D position : updatedFields) {
                 this.cells.get(position).update(simulation.getDay());
             }
-           // setLabels();
+            setLabels();
         });
     }
 }

@@ -8,10 +8,10 @@ public class WorldMapInfo {
 
     private final WorldMap map;
     private int amountOfAnimalsOnTheMap = 0;
-    private  String theMostPopularGenotype = "0";
-    private  double averageLevelOfEnergyOfAnimals = 0;
-    private  double avgAmountOfChildren = 0;
-    private  double avgLifeTimeForDeadAnimal = 0;
+    private String theMostPopularGenotype = "0";
+    private double averageLevelOfEnergyOfAnimals = 0;
+    private double avgAmountOfChildren = 0;
+    private double avgLifeTimeForDeadAnimal = 0;
     private int amountOfGrassOnTheMap = 0;
     private int amountOfEmptyFieldsOnTheMap = 0;
 
@@ -20,8 +20,8 @@ public class WorldMapInfo {
         this.map = map;
     }
 
-    public void getInfoWorldMap(Simulation simulation){
-        Map<Vector2D,ArrayList<Animal>> animalsMap = map.getAnimals();
+    public void getInfoWorldMap(Simulation simulation) {
+        Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
         ArrayList<Animal> animals = new ArrayList<>();
         Map<String, Integer> countGenotype = new HashMap<>();
 
@@ -29,28 +29,31 @@ public class WorldMapInfo {
         int amountOfAnimals = 0;
         int totalChildren = 0;
 
-        for (ArrayList<Animal> animalList : animalsMap.values()){
-                for (Animal animal : animalList){
-                    amountOfAnimals ++;
-                    totalEnergy += animal.getCurrentEnergy();
-                    totalChildren += animal.getAmountOfChildren();
+        for (ArrayList<Animal> animalList : animalsMap.values()) {
+            for (Animal animal : animalList) {
+                amountOfAnimals++;
+                totalEnergy += animal.getCurrentEnergy();
+                totalChildren += animal.getAmountOfChildren();
 
                 //counting genotypes
-                    String genotypeKey = Arrays.toString(animal.getGenotype());
-                    countGenotype.put(genotypeKey, countGenotype.getOrDefault(genotypeKey, 0) + 1);
+                String genotypeKey = Arrays.toString(animal.getGenotype());
+                countGenotype.put(genotypeKey, countGenotype.getOrDefault(genotypeKey, 0) + 1);
 
-                }
             }
+        }
         theMostPopularGenotype(countGenotype);
 
-       if( amountOfAnimals > 0 ){
-           this.averageLevelOfEnergyOfAnimals = Math.round(((double) totalEnergy/amountOfAnimals) * 100.0) / 100.0;
-           this.avgAmountOfChildren =  Math.round(((double) totalChildren/amountOfAnimals) * 100.0) / 100.0;
-           this.amountOfAnimalsOnTheMap = amountOfAnimals;
-       }
-        if (simulation.getDeadAnimals() > 0 ){
+        if (amountOfAnimals > 0) {
+            this.averageLevelOfEnergyOfAnimals = Math.round(((double) totalEnergy / amountOfAnimals) * 100.0) / 100.0;
+            this.avgAmountOfChildren = Math.round(((double) totalChildren / amountOfAnimals) * 100.0) / 100.0;
+            this.amountOfAnimalsOnTheMap = amountOfAnimals;
+        }
+        if (simulation.getDeadAnimals() > 0) {
             avgLifeTimeForDeadAnimal(simulation.getDeadAnimals(), simulation.getSumOfDeadAnimalsDays());
         }
+
+        this.amountOfGrassOnTheMap = map.getGrasses().size();
+        this.amountOfEmptyFieldsOnTheMap = map.getEmptyFields().size();
     }
 
     public void theMostPopularGenotype(Map<String, Integer> countGenotype) {
@@ -66,25 +69,12 @@ public class WorldMapInfo {
         this.theMostPopularGenotype = mostPopularGenotype;
     }
 
-    public void avgLifeTimeForDeadAnimal(int amountOfDeadAnimals,int sumOfDaysAliveForDeadAnimals) {
-        this.avgLifeTimeForDeadAnimal = Math.round((double) sumOfDaysAliveForDeadAnimals/amountOfDeadAnimals * 100) /100.0;
+    public void avgLifeTimeForDeadAnimal(int amountOfDeadAnimals, int sumOfDaysAliveForDeadAnimals) {
+        this.avgLifeTimeForDeadAnimal = Math.round((double) sumOfDaysAliveForDeadAnimals / amountOfDeadAnimals * 100) / 100.0;
     }
 
 
-    public void amountOfGrassOnTheMap() {
-        if (map.getGrasses().isEmpty()) {
-            this.amountOfGrassOnTheMap = 0;
-        } else {
-            this.amountOfGrassOnTheMap = map.getGrasses().size();
-        }
-    }
-    public void amountOfEmptyFields() {
-        List<Vector2D> emptyFields = map.getEmptyFields();
-        this.amountOfEmptyFieldsOnTheMap = emptyFields.size();
-    }
-
-
-        public double getAvgLifeTimeForDeadAnimal() {
+    public double getAvgLifeTimeForDeadAnimal() {
         return avgLifeTimeForDeadAnimal;
     }
 
@@ -107,6 +97,7 @@ public class WorldMapInfo {
     public String getTheMostPopularGenotype() {
         return theMostPopularGenotype;
     }
+
     public int getAmountOfAnimalsOnTheMap() {
         return amountOfAnimalsOnTheMap;
     }
