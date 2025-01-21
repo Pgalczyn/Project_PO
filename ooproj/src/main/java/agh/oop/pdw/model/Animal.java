@@ -67,7 +67,6 @@ public class Animal implements WorldElement, AnimalObserver {
 
 
     public Animal reproduce(Animal otherAnimal) {
-
         if (this.readyToReproduce && otherAnimal.readyToReproduce) {
             int[] newGenotype = getGenotypeForAnimal(this, otherAnimal);
 
@@ -89,11 +88,7 @@ public class Animal implements WorldElement, AnimalObserver {
             otherAnimal.amountOfChildren += 1;
 
             Animal child = new Animal(this.position, 2 * this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce, newObservers);
-
-
-           // child.notifyObservers();
-            child.mutateGenotype();
-
+            child.notifyObservers();
             return child;
 
         }
@@ -134,36 +129,8 @@ public class Animal implements WorldElement, AnimalObserver {
 
     }
 
-    public void mutateGenotype() {
-
-        // drawing how many numbers will be changed
-        int amountOfChangedGenes = RANDOM.nextInt(this.genotype.length + 1);
 
 
-        HashSet<Integer> randomIndexes = new HashSet<>();
-        while (randomIndexes.size() < amountOfChangedGenes) {
-            randomIndexes.add(RANDOM.nextInt(this.genotype.length));
-        }
-
-        for (int index : randomIndexes) {
-
-            this.genotype[index] = RANDOM.nextInt(this.genotype.length);
-
-        }
-    }
-
-    // changing direction of the animal when exiting the map
-    public void moveBy4(WorldMap map) {
-
-        if (this.direction == WEST) {
-            this.direction = EAST;
-            this.position = new Vector2D(map.getWidth(), this.position.getY());
-        } else {
-            this.direction = WEST;
-            this.position = new Vector2D(0, this.position.getY());
-        }
-        ;
-    }
 
     //w czasie wolnym poprawić optymalizacja
     public void move(MoveValidator validator) {
@@ -175,9 +142,8 @@ public class Animal implements WorldElement, AnimalObserver {
         }
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
         int heightOfMap = validator.getBoundary().topRight().y;
-        this.currentEnergy = currentEnergy - substractingEnergyAlgo(heightOfMap);
+        this.currentEnergy = currentEnergy - subtractingEnergyAlgo(heightOfMap);
         this.amountOfDaysAlive += 1;
-        System.out.println("Animal energy: " + this.currentEnergy);
         //A4 - dodatkowy feature
         // poprzez pomnożenie substractingEnergyAlgo(heightOfMap) mozemy ustawic jaką minimalnie energi zwierze bedzie tracić za ruch
     }
@@ -205,9 +171,9 @@ public class Animal implements WorldElement, AnimalObserver {
 
     }
 
-    public int substractingEnergyAlgo(int heightOfMap) {
+    public int subtractingEnergyAlgo(int heightOfMap) {
         int distance = 1 / getDistanceFromPole(heightOfMap);
-        System.out.println((int) distance * heightOfMap / 2);
+//        System.out.println((int) distance * heightOfMap / 2);
         return (int) distance * heightOfMap / 2;
     }
 
@@ -219,6 +185,7 @@ public class Animal implements WorldElement, AnimalObserver {
     public void removeObserver(AnimalObserver observer) {
         observers.remove(observer);
     }
+
     public void notifyObservers() {
         for (AnimalObserver observer : new ArrayList<>(observers)) {
             if (observer.getCurrentEnergyObserver() <= 0 ) {
@@ -292,7 +259,6 @@ public class Animal implements WorldElement, AnimalObserver {
 
     @Override
     public void updateDescendants() {
-
         this.amountOfDescendants++;
     }
     @Override

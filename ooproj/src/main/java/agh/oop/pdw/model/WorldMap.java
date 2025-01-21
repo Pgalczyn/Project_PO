@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 public class WorldMap implements MoveValidator {
     private final Map<Vector2D, ArrayList<Animal>> animals = new HashMap<>();
     private final Map<Vector2D, Grass> grasses = new HashMap<>();
-    private final List<Vector2D> emptyFields = new ArrayList<>(); // Possible positions for grass to spawn on.
+    private final List<Vector2D> emptyFields = new ArrayList<>();
+    private HashSet<Vector2D> updatedFields = new HashSet<>();
     private final Boundary boundary;
     private final Boundary jungleBoundary;
     private final List<WorldMapListener> listeners = new ArrayList<>();
@@ -39,17 +40,16 @@ public class WorldMap implements MoveValidator {
         } else {
             animals.put(animal.getPosition(), new ArrayList<>(Collections.singletonList(animal)));
         }
-        notifySubscribers(animal.getPosition());
+        updatedFields.add(animal.getPosition());
     }
 
     public void spawnGrass() {
         if (emptyFields.isEmpty()) return;
         Vector2D position = RandomUtils.getGrassSpawnPosition(this);
-        notifySubscribers(position);
         Grass grass = new Grass(position);
         grasses.put(grass.getPosition(), grass);
         emptyFields.remove(grass.getPosition());
-        notifySubscribers(position);
+        updatedFields.add(grass.getPosition());
     }
 
     private void spawnStartingGrass(int plants) {
@@ -114,9 +114,7 @@ public class WorldMap implements MoveValidator {
     }
 
     public String theMostPopularGenotype() {
-
         Map<String, Integer> countGenotype = new HashMap<>();
-
         for (ArrayList<Animal> animalsArray : animals.values()) {
             for (Animal animal : animalsArray) {
                 String genotypeKey = Arrays.toString(animal.getGenotype());
@@ -189,13 +187,13 @@ public class WorldMap implements MoveValidator {
             animals.put(oldPosition, animalsAtPosition);
         }
         placeAnimal(animal);
-        notifySubscribers(oldPosition);
+        updatedFields.add(oldPosition);
     }
 
     public void removeGrass(Vector2D position) {
         grasses.remove(position);
         emptyFields.add(position);
-        notifySubscribers(position);
+        updatedFields.add(position);
     }
 
 
@@ -229,6 +227,13 @@ public class WorldMap implements MoveValidator {
         return boundary;
     }
 
+    public HashSet<Vector2D> getUpdatedFields() {
+        return updatedFields;
+    }
+
+    public void setUpdatedFields(HashSet<Vector2D> updatedFields) {
+        this.updatedFields = updatedFields;
+    }
 
     @Override
     public boolean canMoveTo(Vector2D position) {
@@ -257,7 +262,7 @@ public class WorldMap implements MoveValidator {
         } else {
             animals.put(animal.getPosition(), animalsOnPosition);
         }
-        System.out.println("Animal died at MAP: " + animal.getPosition());
-         notifySubscribers(animal.getPosition());
+//        System.out.println("Animal died at MAP: " + animal.getPosition());
+        updatedFields.add(animal.getPosition());
     }
 }

@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static agh.oop.pdw.model.Animal.ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN;
+import static agh.oop.pdw.model.util.RandomUtils.RANDOM;
 
 public class Simulation implements Runnable {
     private boolean running = true;
@@ -20,9 +21,6 @@ public class Simulation implements Runnable {
         this.props = props;
         this.map = new WorldMap(props.getMapHeight(), props.getMapWidth(), props.getPlants());
         this.animalsCreator = new AnimalsCreator(map, props.getEnergyToBreed(), props.getStartEnergy(), props.getAnimalGenomeLength());
-        for (SimulationListener listener : listeners) {
-            listener.dayPassed();
-        }
     }
 
     public void run() {
@@ -52,14 +50,40 @@ public class Simulation implements Runnable {
 
 
     public void nextDay() {
-//        System.out.println(map.theMostPopularGenotype());
+        long startTime = System.nanoTime(); // Start pomiaru
         removeDeadAnimals();
+        long endTime = System.nanoTime(); // Koniec pomiaru
+        long duration = endTime - startTime; // Czas wykonania w nanosekundach
+        System.out.println("Czas wykonania metody RemoveDead: " + duration + " ns");
+        startTime = System.nanoTime(); // Start pomiaru
         moveAnimals();
+        endTime = System.nanoTime(); // Koniec pomiaru
+        duration = endTime - startTime; // Czas wykonania w nanosekundach
+        System.out.println("Czas wykonania metody MOVE: " + duration + " ns");
+        startTime = System.nanoTime(); // Start pomiaru
         animalsEatGrass();
+        endTime = System.nanoTime(); // Koniec pomiaru
+        duration = endTime - startTime; // Czas wykonania w nanosekundach
+        System.out.println("Czas wykonania metody EAT: " + duration + " ns");
+        startTime = System.nanoTime(); // Start pomiaru
         animalsBreed();
+        endTime = System.nanoTime(); // Koniec pomiaru
+        duration = endTime - startTime; // Czas wykonania w nanosekundach
+        System.out.println("Czas wykonania metody BREED: " + duration + " ns");
+        startTime = System.nanoTime(); // Start pomiaru
         spawnGrass();
+        endTime = System.nanoTime(); // Koniec pomiaru
+        duration = endTime - startTime; // Czas wykonania w nanosekundach
+        System.out.println("Czas wykonania metody GRASS SPAWEN: " + duration + " ns");
+
+//        removeDeadAnimals();
+//        moveAnimals();
+//        animalsEatGrass();
+//        animalsBreed();
+//        spawnGrass();
         for (SimulationListener listener : listeners) {
-            listener.dayPassed();
+//            System.out.println("Day passed" + map.getUpdatedFields().size());
+            listener.dayPassed(map.getUpdatedFields());
         }
     }
 
@@ -92,8 +116,7 @@ public class Simulation implements Runnable {
     public void updateIfIsReadyToReproduceProp(Animal animal) {
         if (animal.getCurrentEnergy() >= props.getEnergyToBreed()) {
             animal.setIsReadyToReproduce(true);
-        }
-        else {
+        } else {
             animal.setIsReadyToReproduce(false);
         }
     }
@@ -125,10 +148,17 @@ public class Simulation implements Runnable {
     }
 
     private void animalsBreed() {
-        Map<Vector2D, ArrayList<Animal>> animalsMap =  map.getAnimals();
+        Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
+        long duration = 0;
+        long duration1 = 0;
         for (Vector2D position : animalsMap.keySet()) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(animalsMap.get(position));
             if (animalsOnPosition.isEmpty() || animalsOnPosition.size() == 1) continue;
+            long startTime = System.nanoTime(); // Start pomiaru
+            animalsOnPosition.sort(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN);
+            long endTime = System.nanoTime(); // Koniec pomiaru
+            duration += endTime - startTime;
+            startTime = System.nanoTime();
 
             animalsOnPosition.stream()
                     .filter(animal -> animal.getisReadyToReproduce()) // Filtrujemy zwierzęta gotowe do rozmnażania
@@ -136,15 +166,32 @@ public class Simulation implements Runnable {
             int i = 0;
             while (i < animalsOnPosition.size()-1) {
                 Animal animal = animalsOnPosition.get(i);
-                Animal child = animal.reproduce(animalsOnPosition.get(i+1));
-                i+=2;
-                if (child != null) {
-                    System.out.println("kurwa nie dziala");
-                    map.placeAnimal(child);
+                Animal child = animal.reproduce(animalsOnPosition.get(i + 1));
+                if (child == null) {
+                    break;
                 }
+                mutateNewAnimalGenotype(child);
+                map.placeAnimal(child);
             }
+            endTime = System.nanoTime();
+            duration1 += endTime - startTime;
         }
+        System.out.println("Czas sortowania: " + duration + " ns");
+        System.out.println("Czas WHILE: " + duration1 + " ns");
+    }
 
+    private void mutateNewAnimalGenotype(Animal child) {
+        Set<Integer> mutatedGenes = new HashSet<>();
+        int[] genotype = child.getGenotype();
+        int genesToMutate = RANDOM.nextInt(props.getMaxChildrenMutations()) + props.getMinChildrenMutations();
+        while (mutatedGenes.size() < genesToMutate) {
+            int geneIndex = RANDOM.nextInt(genotype.length);
+            mutatedGenes.add(geneIndex);
+        }
+        for (int geneIndex : mutatedGenes) {
+            genotype[geneIndex] = RANDOM.nextInt(8);
+        }
+        child.setGenotype(genotype);
     }
 
     private void spawnGrass() {
