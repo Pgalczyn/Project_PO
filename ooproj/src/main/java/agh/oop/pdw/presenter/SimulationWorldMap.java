@@ -46,17 +46,17 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     private Button startStopButton;
 
 
-//    public void setLabels() {
-//        WorldMapInfo informer = worldMap.getInformer();
-//        informer.getInfoWorldMap(this.simulation);
-//        allAnimalsAmount.setText("liczba wszystkich zwierzaków:" + informer.getAmountOfAnimalsOnTheMap());
-//        allGrassAmount.setText("liczba wszystkich roślin: " + informer.getAmountOfGrassOnTheMap());
-//        allFreeSpotsAmount.setText("liczba wolnych pól:" + informer.getAmountOfEmptyFieldsOnTheMap());
-//        mostPopularGeno.setText("najpopularniejszy genotyp: " + informer.getTheMostPopularGenotype());
-//        avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + informer.getAverageLevelOfEnergyOfAnimals());
-//        avgChildren.setText("średnia długości  " + informer.getAvgLifeTimeForDeadAnimal());
-//        avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + informer.getAvgAmountOfChildren());
-//    }
+    public void setLabels() {
+        WorldMapInfo informer = worldMap.getInformer();
+        informer.getInfoWorldMap(this.simulation);
+        allAnimalsAmount.setText("liczba wszystkich zwierzaków:" + informer.getAmountOfAnimalsOnTheMap());
+        allGrassAmount.setText("liczba wszystkich roślin: " + informer.getAmountOfGrassOnTheMap());
+        allFreeSpotsAmount.setText("liczba wolnych pól:" + informer.getAmountOfEmptyFieldsOnTheMap());
+        mostPopularGeno.setText("najpopularniejszy genotyp: " + informer.getTheMostPopularGenotype());
+        avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + informer.getAverageLevelOfEnergyOfAnimals());
+        avgChildren.setText("średnia długości  " + informer.getAvgLifeTimeForDeadAnimal());
+        avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + informer.getAvgAmountOfChildren());
+    }
 
     private void clearGrid() {
         if (!mapGrid.getChildren().isEmpty()) {
@@ -133,5 +133,6 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
             }
            // setLabels();
         });
+
     }
 }

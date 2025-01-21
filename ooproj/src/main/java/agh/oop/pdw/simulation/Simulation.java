@@ -18,11 +18,15 @@ public class Simulation implements Runnable {
     private int deadAnimals = 0;
     private int sumOfDeadAnimalsDays = 0;
     private int day = 0;
+    public static int SimulationId = 0;
+    private int myId;
 
     public Simulation(SimulationProps props) {
         this.props = props;
         this.map = new WorldMap(props.getMapHeight(), props.getMapWidth(), props.getPlants());
         this.animalsCreator = new AnimalsCreator(map, props.getEnergyToBreed(), props.getStartEnergy(), props.getAnimalGenomeLength());
+        SimulationId++;
+        this.myId = SimulationId;
     }
 
     public void run() {
@@ -45,6 +49,8 @@ public class Simulation implements Runnable {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+
+
         }
         System.out.println("Day limit reached");
         System.out.println("Grass count: " + map.getGrasses().size());
@@ -52,37 +58,16 @@ public class Simulation implements Runnable {
 
 
     public void nextDay() {
-        long startTime = System.nanoTime(); // Start pomiaru
-        removeDeadAnimals();
-        long endTime = System.nanoTime(); // Koniec pomiaru
-        long duration = endTime - startTime; // Czas wykonania w nanosekundach
-        System.out.println("Czas wykonania metody RemoveDead: " + duration + " ns");
-        startTime = System.nanoTime(); // Start pomiaru
-        moveAnimals();
-        endTime = System.nanoTime(); // Koniec pomiaru
-        duration = endTime - startTime; // Czas wykonania w nanosekundach
-        System.out.println("Czas wykonania metody MOVE: " + duration + " ns");
-        startTime = System.nanoTime(); // Start pomiaru
-        animalsEatGrass();
-        endTime = System.nanoTime(); // Koniec pomiaru
-        duration = endTime - startTime; // Czas wykonania w nanosekundach
-        System.out.println("Czas wykonania metody EAT: " + duration + " ns");
-        startTime = System.nanoTime(); // Start pomiaru
-        animalsBreed();
-        endTime = System.nanoTime(); // Koniec pomiaru
-        duration = endTime - startTime; // Czas wykonania w nanosekundach
-        System.out.println("Czas wykonania metody BREED: " + duration + " ns");
-        startTime = System.nanoTime(); // Start pomiaru
-        spawnGrass();
-        endTime = System.nanoTime(); // Koniec pomiaru
-        duration = endTime - startTime; // Czas wykonania w nanosekundach
-        System.out.println("Czas wykonania metody GRASS SPAWEN: " + duration + " ns");
 
-//        removeDeadAnimals();
-//        moveAnimals();
-//        animalsEatGrass();
-//        animalsBreed();
-//        spawnGrass();
+
+        removeDeadAnimals();
+        moveAnimals();
+        animalsEatGrass();
+        animalsBreed();
+        spawnGrass();
+
+        CsvExport.saveData(this.day,map.getInformer(),this.myId);
+
         for (SimulationListener listener : listeners) {
 //            System.out.println("Day passed" + map.getUpdatedFields().size());
             listener.dayPassed(map.getUpdatedFields());
