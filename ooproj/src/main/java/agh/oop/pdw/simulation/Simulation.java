@@ -20,13 +20,13 @@ public class Simulation implements Runnable {
         this.props = props;
         this.map = new WorldMap(props.getMapHeight(), props.getMapWidth(), props.getPlants());
         this.animalsCreator = new AnimalsCreator(map, props.getEnergyToBreed(), props.getStartEnergy(), props.getAnimalGenomeLength());
+        for (SimulationListener listener : listeners) {
+            listener.dayPassed();
+        }
     }
 
     public void run() {
         animalsCreator.createAnimals(props.getStartAnimals());
-        for (SimulationListener listener : listeners) {
-            listener.dayPassed();
-        }
         while (day < props.getDayLimit()) {
             synchronized (this) {
                 while (paused) {
@@ -47,15 +47,12 @@ public class Simulation implements Runnable {
             }
         }
         System.out.println("Day limit reached");
-        for (Grass grass : map.getGrasses().values()) {
-            System.out.println(grass);
-        }
         System.out.println("Grass count: " + map.getGrasses().size());
     }
 
 
     public void nextDay() {
-        System.out.println(map.theMostPopularGenotype());
+//        System.out.println(map.theMostPopularGenotype());
         removeDeadAnimals();
         moveAnimals();
         animalsEatGrass();
@@ -113,10 +110,9 @@ public class Simulation implements Runnable {
     }
 
     private void animalsEatGrass() {
-        Map<Vector2D, ArrayList<Animal>> animalsMap =  map.getAnimals();
+        Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
         Map<Vector2D, Grass> grasses = map.getGrasses();
         for (Vector2D position : animalsMap.keySet()) {
-            System.out.println(map.getGrasses().keySet());
             if (!grasses.containsKey(position)) return;
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(animalsMap.get(position));
             if (animalsOnPosition.isEmpty()) return;
