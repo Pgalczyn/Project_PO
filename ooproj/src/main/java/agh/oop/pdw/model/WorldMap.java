@@ -69,12 +69,6 @@ public class WorldMap implements MoveValidator {
         listeners.add(listener);
     }
 
-    public void notifySubscribers(Vector2D position) {
-        for (WorldMapListener listener : listeners) {
-            listener.fieldUpdated(position);
-        }
-    }
-
     public boolean isOccupied(Vector2D position) {
         return objectAt(position) != null;
     }
@@ -96,19 +90,12 @@ public class WorldMap implements MoveValidator {
         return elementsOnTheSamePole;
     }
 
-
     public void move(Animal animal) {
-        Vector2D oldPosition = animal.getPosition();
+        removeAnimal(animal);
+        updatedFields.add(animal.getPosition());
         animal.move(this);
-        ArrayList<Animal> animalsAtPosition = animals.get(oldPosition);
-        animalsAtPosition.remove(animal);
-        if (animalsAtPosition.isEmpty()) {
-            animals.remove(oldPosition);
-        } else {
-            animals.put(oldPosition, animalsAtPosition);
-        }
         placeAnimal(animal);
-        updatedFields.add(oldPosition);
+        updatedFields.add(animal.getPosition());
     }
 
     public void removeGrass(Vector2D position) {
