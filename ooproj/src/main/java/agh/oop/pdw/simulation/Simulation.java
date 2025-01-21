@@ -82,7 +82,7 @@ public class Simulation implements Runnable {
     }
 
 
-    private void removeDeadAnimals() {
+    void removeDeadAnimals() {
         Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
         for (Vector2D position : keySet) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
@@ -92,18 +92,19 @@ public class Simulation implements Runnable {
                     sumOfDeadAnimalsDays += animal.getAmountOfDaysAlive();
                     deadAnimals++;
                 }
-                animal.increaseAmountOfDaysAlive();
+                //zwiększamy już to w animalu w move
+               // animal.increaseAmountOfDaysAlive();
             }
         }
     }
 
 
-    private void moveAnimals() {
+    void moveAnimals() {
         Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
         for (Vector2D position : keySet) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
             for (Animal animal : animalsOnPosition) {
-                map.move(animal);
+                map.move(animal,this.props.getDayLimit());
                 if (props.isMapPoles()) animal.setCurrentEnergy(animal.getCurrentEnergy() - animalCold(animal));
                 animal.setCurrentEnergy(animal.getCurrentEnergy() - props.getEnergyPerMove());
             }
@@ -117,6 +118,7 @@ public class Simulation implements Runnable {
             if (!grasses.containsKey(position)) continue;
             Animal animal = animalsMap.get(position).stream().max(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN).orElse(null);
             animal.eat(props.getEnergyOnEat());
+            animal.increaseAmountOfEatenPlants();
             map.removeGrass(position);
         }
     }

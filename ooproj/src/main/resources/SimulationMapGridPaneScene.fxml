@@ -47,7 +47,7 @@
                <font>
                   <Font name="Arial" size="11.0" />
                </font></Label>
-                <Label fx:id="avgLife" text="Średnia długości życia zwierzaków dla martwych zwierzaków: ">
+                <Label fx:id="avgLife" text="Avg długości życia zwierzaków dla martwych zwierzaków: ">
                <font>
                   <Font name="Arial" size="11.0" />
                </font></Label>

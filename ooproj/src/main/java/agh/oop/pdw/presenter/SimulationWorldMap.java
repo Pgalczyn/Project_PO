@@ -53,7 +53,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         allFreeSpotsAmount.setText("liczba wolnych pól:" + informer.getAmountOfEmptyFieldsOnTheMap());
         mostPopularGeno.setText("najpopularniejszy genotyp: " + informer.getTheMostPopularGenotype());
         avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + informer.getAverageLevelOfEnergyOfAnimals());
-        avgChildren.setText("średnia długości  " + informer.getAvgLifeTimeForDeadAnimal());
+        avgChildren.setText("Avg długości życia zwierzaków dla martwych zw.:" + informer.getAvgLifeTimeForDeadAnimal());
         avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + informer.getAvgAmountOfChildren());
 
     }

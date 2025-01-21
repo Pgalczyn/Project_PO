@@ -90,10 +90,10 @@ public class WorldMap implements MoveValidator {
         return elementsOnTheSamePole;
     }
 
-    public void move(Animal animal) {
+    public void move(Animal animal,int LenghtOfSimulationInDays) {
         removeAnimal(animal);
         updatedFields.add(animal.getPosition());
-        animal.move(this);
+        animal.move(this,LenghtOfSimulationInDays);
         placeAnimal(animal);
         updatedFields.add(animal.getPosition());
     }
