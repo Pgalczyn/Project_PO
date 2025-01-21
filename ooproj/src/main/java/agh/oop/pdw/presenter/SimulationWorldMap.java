@@ -54,8 +54,8 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         allFreeSpotsAmount.setText("liczba wolnych pól:" + worldMap.amountOfEmptyFields());
         mostPopularGeno.setText("najpopularniejszy genotyp: " + worldMap.theMostPopularGenotype());
         avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + worldMap.averageLevelOfEnergyOfAnimals());
-        avgChildren.setText("średnia długości życia zwierzaków dla martwych zwierzaków: " + worldMap.avgAmountOfChildren());
-        avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + worldMap.avgLifeTimeForDeadAnimal());
+        avgChildren.setText("średnia długości  " );
+        avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + worldMap.avgAmountOfChildren());
     }
 
     private void clearGrid() {

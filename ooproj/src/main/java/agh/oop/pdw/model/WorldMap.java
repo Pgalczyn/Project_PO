@@ -177,7 +177,8 @@ public class WorldMap implements MoveValidator {
             }
         }
         if (amountOfAnimals == 0) return 0;
-        return (double) totalChildren/amountOfAnimals;
+        System.out.println("Witaj, świecie!" + (double) totalChildren/amountOfAnimals);
+        return Math.round(((double) totalChildren/amountOfAnimals) * 100);
     }
 
     public void move(Animal animal) {

@@ -219,12 +219,13 @@ public class Animal implements WorldElement, AnimalObserver {
     public void removeObserver(AnimalObserver observer) {
         observers.remove(observer);
     }
-
     public void notifyObservers() {
-        for (AnimalObserver observer : observers) {
+        for (AnimalObserver observer : new ArrayList<>(observers)) {
             if (this.amountOfDaysUntilDeath == Integer.MAX_VALUE) {
                 removeObserver(observer);
-            } else observer.updateDescendants();
+            } else {
+                observer.updateDescendants();
+            }
         }
     }
 
