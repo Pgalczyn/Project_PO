@@ -22,7 +22,6 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     private WorldMap worldMap;
     private Simulation simulation;
     private final Map<Vector2D, WorldMapCell> cells = new HashMap<>();
-//    private boolean isRunning = false;
     @FXML
     private GridPane mapGrid;
 
@@ -56,6 +55,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + informer.getAverageLevelOfEnergyOfAnimals());
         avgChildren.setText("średnia długości  " + informer.getAvgLifeTimeForDeadAnimal());
         avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + informer.getAvgAmountOfChildren());
+<<<<<<< HEAD
     }
 
     private void clearGrid() {
@@ -64,6 +64,8 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         }
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
+=======
+>>>>>>> 120df2a5f36e4fd9607c74be10eb0a0802803299
     }
 
 
@@ -83,7 +85,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
 
     public void Initialize() {
         createConstrains(worldMap.getWidth(), worldMap.getHeight());
-//        setLabels();
+        setLabels();
         for (int i = 0; i < worldMap.getHeight(); i++) {
             for (int j = 0; j < worldMap.getWidth(); j++) {
                 WorldMapCell cell = new WorldMapCell(worldMap, new Vector2D(j, i));
@@ -131,7 +133,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
             for (Vector2D position : updatedFields) {
                 this.cells.get(position).update(simulation.getDay());
             }
-           // setLabels();
+            setLabels();
         });
 
     }

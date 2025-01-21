@@ -45,7 +45,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="mapWidth" prefHeight="26.0" prefWidth="258.0" promptText="20" text="100" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="mapWidth" prefHeight="26.0" prefWidth="258.0" promptText="20" text="30" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -62,7 +62,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="mapHeight" promptText="15" text="100" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="mapHeight" promptText="15" text="30" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -76,7 +76,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="plantsOnStart" prefHeight="26.0" prefWidth="330.0" promptText="20" text="20" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="plantsOnStart" prefHeight="26.0" prefWidth="330.0" promptText="20" text="900" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -90,7 +90,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="dailyPlants" prefHeight="26.0" prefWidth="330.0" promptText="10" text="100" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="dailyPlants" prefHeight="26.0" prefWidth="330.0" promptText="10" text="0" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -229,7 +229,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="startAnimals" prefHeight="26.0" prefWidth="258.0" promptText="5" text="0" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="startAnimals" prefHeight="26.0" prefWidth="258.0" promptText="5" text="5" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -274,7 +274,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="dayLimit" promptText="100" text="1000" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="dayLimit" promptText="100" text="100000" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
