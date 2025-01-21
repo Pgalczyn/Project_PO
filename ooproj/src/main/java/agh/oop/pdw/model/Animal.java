@@ -7,7 +7,7 @@ import java.util.*;
 import static agh.oop.pdw.model.MapDirection.*;
 import static agh.oop.pdw.model.util.RandomUtils.RANDOM;
 
-public class Animal implements WorldElement, AnimalAncestor {
+public class Animal implements WorldElement {
     private MapDirection direction;
     private final List<MoveValidator> listeners = new ArrayList<>();
     private Vector2D position;
@@ -17,11 +17,10 @@ public class Animal implements WorldElement, AnimalAncestor {
     private int activeGene = 0;
     private int amountOfEatenPlants = 0;
     private int amountOfChildren = 0;
-    private int amountOfDescendants = 0;
     private int amountOfDaysAlive = 0;
     private int usedEnergyToReproduce;
-    private HashSet<Animal> ancestors = new HashSet<>();
-    private HashSet<Animal> descendants = new HashSet<>();
+    private HashSet<Animal> children = new HashSet<>();
+
 
 
     //constructor for animals that were born on the map
@@ -32,7 +31,7 @@ public class Animal implements WorldElement, AnimalAncestor {
         this.usedEnergyToReproduce = usedEnergyToReproduce;
         this.direction = randomDirection();
         this.currentEnergy = StartEnergy;
-        this.ancestors = ancestors;
+
     }
 
     //constructor for animals which we put on the map
@@ -64,6 +63,8 @@ public class Animal implements WorldElement, AnimalAncestor {
     }
 
 
+
+
     public Animal reproduce(Animal otherAnimal) {
         int[] newGenotype = getGenotypeForAnimal(this, otherAnimal);
 
@@ -71,34 +72,19 @@ public class Animal implements WorldElement, AnimalAncestor {
         this.currentEnergy -= this.usedEnergyToReproduce;
         otherAnimal.currentEnergy -= this.usedEnergyToReproduce;
 
-        //creating set of observers for new animal
-        HashSet<Animal> newAncestors = new HashSet<>();
-//        newAncestors.addAll(this.ancestors);
-//        newAncestors.addAll(otherAnimal.ancestors);
-//
-//        //adding parents to observers
-//        newAncestors.add(this);
-//        newAncestors.add(otherAnimal);
-
         //increasing number of children
         this.amountOfChildren += 1;
         otherAnimal.amountOfChildren += 1;
 
 
-        Animal child = new Animal(this.position, 2 * this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce, newAncestors);
-        child.notifyAncestors(true);
-        this.descendants.add(child);
-        otherAnimal.getDescendants().add(child);
+        Animal child = new Animal(this.position, 2 * this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce,children);
+        this.children.add(child);
+        otherAnimal.children.add(child);
 
         return child;
     }
 
-    private void notifyAncestors(boolean born) {
-        for (Animal animal : ancestors) {
-            if (born) DescendantSpawned(animal);
-            else DescendantDied(animal);
-        }
-    }
+
 
     public int[] getGenotypeForAnimal(Animal animal_1, Animal animal_2) {
         int[] newGenotype = new int[genotype.length];
@@ -142,11 +128,6 @@ public class Animal implements WorldElement, AnimalAncestor {
             }
         }
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
-        if (currentEnergy <= 0) {
-            for (Animal animal : descendants) {
-                animal.ancestors.remove(this);
-            }
-        }
         this.amountOfDaysAlive += 1;
     }
 
@@ -195,10 +176,6 @@ public class Animal implements WorldElement, AnimalAncestor {
         return currentEnergy;
     }
 
-    public int getAmountOfDescendants() {
-        return amountOfDescendants;
-    }
-
     public int getAmountOfDaysAlive() {
         return amountOfDaysAlive;
     }
@@ -230,30 +207,32 @@ public class Animal implements WorldElement, AnimalAncestor {
         this.currentEnergy = currentEnergy;
     }
 
-
-    public HashSet<Animal> getDescendants() {
-        return descendants;
+    public int getActiveGene() {
+        return activeGene;
     }
+
+    public HashSet<Animal> getChildren() {
+        return children;
+    }
+
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Animal animal = (Animal) o;
-        return activeGene == animal.activeGene && amountOfEatenPlants == animal.amountOfEatenPlants && amountOfChildren == animal.amountOfChildren && amountOfDescendants == animal.amountOfDescendants && amountOfDaysAlive == animal.amountOfDaysAlive && direction == animal.direction && Objects.equals(position, animal.position) && Objects.deepEquals(genotype, animal.genotype) && Objects.equals(ancestors, animal.ancestors);
+        return activeGene == animal.activeGene && amountOfEatenPlants == animal.amountOfEatenPlants && amountOfChildren == animal.amountOfChildren && amountOfDaysAlive == animal.amountOfDaysAlive && direction == animal.direction && Objects.equals(position, animal.position) && Objects.deepEquals(genotype, animal.genotype) && Objects.equals(children, animal.children);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(direction, position, Arrays.hashCode(genotype), activeGene, amountOfEatenPlants, amountOfChildren, amountOfDescendants, amountOfDaysAlive, ancestors);
+        return Objects.hash(direction, position, Arrays.hashCode(genotype), activeGene, amountOfEatenPlants, amountOfChildren, amountOfDaysAlive,children);
     }
 
-    @Override
-    public void DescendantDied(Animal animal) {
-        animal.descendants.remove(this);
-    }
 
-    @Override
-    public void DescendantSpawned(Animal animal) {
-        animal.descendants.add(this);
-    }
+
+
+
+
+
 }
+

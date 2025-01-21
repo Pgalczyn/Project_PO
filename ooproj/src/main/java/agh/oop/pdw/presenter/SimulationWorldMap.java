@@ -53,6 +53,16 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + informer.getAverageLevelOfEnergyOfAnimals());
         avgChildren.setText("średnia długości  " + informer.getAvgLifeTimeForDeadAnimal());
         avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + informer.getAvgAmountOfChildren());
+
+    }
+
+    private void clearGrid() {
+        if (!mapGrid.getChildren().isEmpty()) {
+            mapGrid.getChildren().clear();
+        }
+        mapGrid.getColumnConstraints().clear();
+        mapGrid.getRowConstraints().clear();
+
     }
 
 
@@ -122,5 +132,6 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
             }
             setLabels();
         });
+
     }
 }
