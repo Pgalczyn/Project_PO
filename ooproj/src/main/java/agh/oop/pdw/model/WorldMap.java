@@ -8,10 +8,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class WorldMap implements MoveValidator {
-    private final HashMap<Vector2D, ArrayList<Animal>> animals = new HashMap<>();
-    private final HashMap<Vector2D, Grass> grasses = new HashMap<>();
+    private final Map<Vector2D, ArrayList<Animal>> animals = new HashMap<>();
+    private final Map<Vector2D, Grass> grasses = new HashMap<>();
+    private final WorldMapInfo informer;
     private final List<Vector2D> emptyFields = new ArrayList<>();
-    private HashSet<Vector2D> updatedFields = new HashSet<>();
+    private final HashSet<Vector2D> updatedFields = new HashSet<>();
     private final Boundary boundary;
     private final Boundary jungleBoundary;
     private final List<WorldMapListener> listeners = new ArrayList<>();
@@ -20,6 +21,7 @@ public class WorldMap implements MoveValidator {
     public WorldMap(int height, int width, int plants) {
         this.boundary = new Boundary(new Vector2D(0, 0), new Vector2D(width - 1, height - 1));
         this.jungleBoundary = createJungle();
+        this.informer = new WorldMapInfo(this);
         spawnStartingGrass(plants);
     }
 
@@ -88,88 +90,6 @@ public class WorldMap implements MoveValidator {
         return elementsOnTheSamePole;
     }
 
-
-    public String amountOfAnimalsOnTheMap() {
-        int totalNumberOfAnimals = 0;
-        for (ArrayList<Animal> animalsArray : animals.values()) {
-            for (Animal animal : animalsArray) {
-                totalNumberOfAnimals++;
-            }
-        }
-        return String.valueOf(totalNumberOfAnimals);
-    }
-
-    public int amountOfGrassOnTheMap() {
-        return grasses.size();
-    }
-
-    public int amountOfEmptyFields() {
-        return emptyFields.size();
-    }
-
-    public String theMostPopularGenotype() {
-        Map<String, Integer> countGenotype = new HashMap<>();
-        for (ArrayList<Animal> animalsArray : animals.values()) {
-            for (Animal animal : animalsArray) {
-                String genotypeKey = Arrays.toString(animal.getGenotype());
-                countGenotype.put(genotypeKey, countGenotype.getOrDefault(genotypeKey, 0) + 1);
-
-            }
-        }
-
-        String mostPopularGenotype = null;
-        int maxCount = 0;
-
-        for (Map.Entry<String, Integer> entry : countGenotype.entrySet()) {
-            if (entry.getValue() > maxCount) {
-                maxCount = entry.getValue();
-                mostPopularGenotype = entry.getKey();
-            }
-
-        }
-        return mostPopularGenotype;
-    }
-
-    public double averageLevelOfEnergyOfAnimals() {
-        int totalEnergy = 0;
-        int amountOfAnimals = 0;
-
-
-        for (ArrayList<Animal> animalsArray : animals.values()) {
-            for (Animal animal : animalsArray) {
-                totalEnergy += animal.getCurrentEnergy();
-                amountOfAnimals++;
-            }
-        }
-        if (amountOfAnimals == 0) return 0;
-        double result = (double) totalEnergy/amountOfAnimals;
-        return Math.round(result * 100) / 100.0;
-    }
-
-//    public double avgLifeTimeForDeadAnimal(int amountOfDeadAnimals,int sumOfDaysAliveForDeadAnimals) {
-//
-//    }
-
-    public double avgAmountOfChildren() {
-        int amountOfAnimals = 0;
-        int totalChildren = 0;
-        ArrayList<ArrayList<Animal>> copyOfAnimals = new ArrayList<>(animals.values());
-        for (ArrayList<Animal> animalsArray : copyOfAnimals) {
-            for (Animal animal : animalsArray) {
-                totalChildren += animal.getAmountOfChildren();
-                amountOfAnimals++;
-            }
-        }
-
-        if (amountOfAnimals == 0) {
-            return 0.0;
-        }
-
-        double result = (double) totalChildren / amountOfAnimals;
-        return Math.round(result * 100.0) / 100.0;
-    }
-
-
     public void move(Animal animal) {
         removeAnimal(animal);
         updatedFields.add(animal.getPosition());
@@ -219,8 +139,8 @@ public class WorldMap implements MoveValidator {
         return updatedFields;
     }
 
-    public void setUpdatedFields(HashSet<Vector2D> updatedFields) {
-        this.updatedFields = updatedFields;
+    public WorldMapInfo getInformer() {
+        return informer;
     }
 
     @Override
@@ -253,4 +173,7 @@ public class WorldMap implements MoveValidator {
 //        System.out.println("Animal died at MAP: " + animal.getPosition());
         updatedFields.add(animal.getPosition());
     }
+
+
+
 }

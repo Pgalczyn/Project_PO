@@ -31,7 +31,7 @@
                <font>
                   <Font name="Arial" size="11.0" />
                </font></Label>
-                <Label fx:id="allGrassAMount" text="Liczba wszystkich roślin: ">
+                <Label fx:id="allGrassAmount" text="Liczba wszystkich roślin: ">
                <font>
                   <Font name="Arial" size="11.0" />
                </font></Label>
