@@ -10,7 +10,6 @@ import static agh.oop.pdw.model.Animal.ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN;
 import static agh.oop.pdw.model.util.RandomUtils.RANDOM;
 
 public class Simulation implements Runnable {
-    private boolean running = true;
     private boolean paused = false;
     SimulationProps props;
     private final WorldMap map;
@@ -59,32 +58,29 @@ public class Simulation implements Runnable {
 
 
     public void nextDay() {
-
-
-
         removeDeadAnimals();
         moveAnimals();
         animalsEatGrass();
         animalsBreed();
         spawnGrass();
-
+        HashSet<Vector2D> updatedFields = new HashSet<>(map.getUpdatedFields());
+        map.getUpdatedFields().clear();
         CsvExport.saveData(this.day,map.getInformer(),this.myId);
-
-
         for (SimulationListener listener : listeners) {
             listener.dayPassed(updatedFields);
         }
+    }
+
+    public int animalCold(Animal animal) {
+        int distance = 1 / animal.getDistanceFromPole(map.getHeight());
+//        System.out.println((int) distance * heightOfMap / 2);
+        return distance * map.getHeight() / 2;
     }
 
     public void subscribe(SimulationListener subscriber) {
         this.listeners.add(subscriber);
     }
 
-    private void runWithLimit() {
-        for (int i = 0; i < props.getDayLimit(); i++) {
-            run();
-        }
-    }
 
     private void removeDeadAnimals() {
         Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
@@ -96,29 +92,19 @@ public class Simulation implements Runnable {
                     sumOfDeadAnimalsDays += animal.getAmountOfDaysAlive();
                     deadAnimals++;
                 }
-                updateIfIsReadyToReproduceProp(animal);
                 animal.increaseAmountOfDaysAlive();
-
             }
-        }
-    }
-
-    public void updateIfIsReadyToReproduceProp(Animal animal) {
-        if (animal.getCurrentEnergy() >= props.getEnergyToBreed()) {
-            animal.setIsReadyToReproduce(true);
-        } else {
-            animal.setIsReadyToReproduce(false);
         }
     }
 
 
     private void moveAnimals() {
         Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
-        System.out.println(keySet);
         for (Vector2D position : keySet) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
             for (Animal animal : animalsOnPosition) {
                 map.move(animal);
+                if (props.isMapPoles()) animal.setCurrentEnergy(animal.getCurrentEnergy() - animalCold(animal));
                 animal.setCurrentEnergy(animal.getCurrentEnergy() - props.getEnergyPerMove());
             }
         }
@@ -137,38 +123,26 @@ public class Simulation implements Runnable {
 
     private void animalsBreed() {
         Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
-        long duration = 0;
-        long duration1 = 0;
         for (Vector2D position : animalsMap.keySet()) {
-            ArrayList<Animal> animalsOnPosition = new ArrayList<>(animalsMap.get(position));
-            if (animalsOnPosition.isEmpty() || animalsOnPosition.size() == 1) continue;
-            long startTime = System.nanoTime(); // Start pomiaru
-            animalsOnPosition.sort(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN);
-            long endTime = System.nanoTime(); // Koniec pomiaru
-            duration += endTime - startTime;
-            startTime = System.nanoTime();
-
-            List<Animal> animalsOnPostinionList = animalsOnPosition.stream()
-                    .filter(Animal::getisReadyToReproduce) // Filtrujemy zwierzęta gotowe do rozmnażania
+            ArrayList<Animal> animals = animalsMap.get(position);
+            List<Animal> animalsOnPostinionList = animals.stream()
+                    .filter(a -> a.getCurrentEnergy() >= props.getEnergyToBreed()) // Filtrujemy zwierzęta gotowe do rozmnażania
                     .sorted(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN)
                     .toList();
-
+            if (animalsOnPostinionList.size() < 2) continue;
             int i = 0;
-            while (i < animalsOnPostinionList.size()-1) {
+            while (i < animalsOnPostinionList.size() - 1) {
                 Animal animal = animalsOnPostinionList.get(i);
                 Animal child = animal.reproduce(animalsOnPostinionList.get(i + 1));
                 if (child == null) {
-                    return;
+                    i = animalsOnPostinionList.size();
+                    continue;
                 }
                 mutateNewAnimalGenotype(child);
                 map.placeAnimal(child);
                 i += 2;
             }
-            endTime = System.nanoTime();
-            duration1 += endTime - startTime;
         }
-        System.out.println("Czas sortowania: " + duration + " ns");
-        System.out.println("Czas WHILE: " + duration1 + " ns");
     }
 
     private void mutateNewAnimalGenotype(Animal child) {
@@ -210,17 +184,6 @@ public class Simulation implements Runnable {
         return map;
     }
 
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
-
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
-
-    public boolean isRunning() {
-        return running;
-    }
 
     public boolean isPaused() {
         return paused;

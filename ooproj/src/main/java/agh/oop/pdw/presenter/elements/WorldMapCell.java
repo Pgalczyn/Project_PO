@@ -1,9 +1,11 @@
 package agh.oop.pdw.presenter.elements;
 
 import agh.oop.pdw.model.Animal;
+import agh.oop.pdw.model.Exceptions.WrongColorFormatException;
 import agh.oop.pdw.model.Vector2D;
 import agh.oop.pdw.model.WorldElement;
 import agh.oop.pdw.model.WorldMap;
+import agh.oop.pdw.presenter.ColorManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -38,7 +40,7 @@ public class WorldMapCell extends Pane {
     }
 
 
-    public void update(int day) {
+    public void update(int day, int startEnergy) {
         if (day == lastUpdateDay) return;
         lastUpdateDay = day;
         this.getChildren().clear();
@@ -48,8 +50,17 @@ public class WorldMapCell extends Pane {
                     .stream()
                     .filter(a -> a instanceof Animal)
                     .toList();
-            if (!animals.isEmpty()) {
-                this.setStyle("-fx-background-color: #ff0000;");
+            if (animals.size() > 1) {
+                this.setStyle("-fx-background-color: #0077ff;");
+                this.loadImage(animals.getFirst().srcImage());
+            } else if (!animals.isEmpty()) {
+                Animal animal = (Animal) animals.getFirst();
+                try {
+                    String color = ColorManager.getColor(Double.min( Double.max(animal.getEnergy(), 0) / (startEnergy * 2), 1.0));
+                    this.setStyle("-fx-background-color:" + color);
+                } catch (WrongColorFormatException e) {
+                    System.out.println("Wrong color format: " + e.getMessage());
+                }
                 this.loadImage(animals.getFirst().srcImage());
             } else {
                 this.setStyle("-fx-background-color: none;");
@@ -57,6 +68,7 @@ public class WorldMapCell extends Pane {
             }
         }
     }
+
     private void loadImage(String path) {
         ImageView imageView = new ImageView();
         Image image = GetImage(path);
@@ -66,7 +78,6 @@ public class WorldMapCell extends Pane {
         imageView.setPreserveRatio(true);
         this.getChildren().add(imageView);
     }
-
 
 
 }

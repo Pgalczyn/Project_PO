@@ -7,6 +7,7 @@ import agh.oop.pdw.simulation.SimulationProps;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -122,7 +123,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     public void fieldUpdated(Vector2D position) {
         Platform.runLater(() -> {
             synchronized (this) {
-                this.cells.get(position).update(simulation.getDay());
+                this.cells.get(position).update(simulation.getDay(), simulation.getProps().getStartEnergy());
             }
         });
     }
@@ -131,7 +132,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     public void dayPassed(HashSet<Vector2D> updatedFields) {
         Platform.runLater(() -> {
             for (Vector2D position : updatedFields) {
-                this.cells.get(position).update(simulation.getDay());
+                this.cells.get(position).update(simulation.getDay(), simulation.getProps().getStartEnergy());
             }
             setLabels();
         });
