@@ -15,6 +15,8 @@ public class Simulation implements Runnable {
     private final WorldMap map;
     private final AnimalsCreator animalsCreator;
     private final List<SimulationListener> listeners = new ArrayList<>();
+    private int deadAnimals = 0;
+    private int sumOfDeadAnimalsDays = 0;
     private int day = 0;
 
     public Simulation(SimulationProps props) {
@@ -104,10 +106,13 @@ public class Simulation implements Runnable {
             for (Animal animal : animalsOnPosition) {
                 if (animal.getCurrentEnergy() <= 0) {
                     map.removeAnimal(animal);
+                    sumOfDeadAnimalsDays += animal.getAmountOfDaysAlive();
+                    deadAnimals++;
                 }
                 // dodana aktualizacja stanu ifIsReadyToReproduce
                 updateIfIsReadyToReproduceProp(animal);
                 animal.increaseAmountOfDaysAlive();
+
             }
 
         }
@@ -172,6 +177,7 @@ public class Simulation implements Runnable {
                 }
                 mutateNewAnimalGenotype(child);
                 map.placeAnimal(child);
+                i += 2;
             }
             endTime = System.nanoTime();
             duration1 += endTime - startTime;
@@ -233,5 +239,17 @@ public class Simulation implements Runnable {
 
     public boolean isPaused() {
         return paused;
+    }
+
+    public SimulationProps getProps() {
+        return props;
+    }
+
+    public int getDeadAnimals() {
+        return deadAnimals;
+    }
+
+    public int getSumOfDeadAnimalsDays() {
+        return sumOfDeadAnimalsDays;
     }
 }

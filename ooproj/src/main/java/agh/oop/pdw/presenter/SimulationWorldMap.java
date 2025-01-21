@@ -16,15 +16,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class SimulationWorldMap implements SimulationListener, WorldMapListener {
     private WorldMap worldMap;
     private Simulation simulation;
-    private HashMap<Vector2D, WorldMapCell> cells = new HashMap<>();
+    private final Map<Vector2D, WorldMapCell> cells = new HashMap<>();
 //    private boolean isRunning = false;
     @FXML
     private GridPane mapGrid;
@@ -32,7 +29,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     @FXML
     private Label allAnimalsAmount;
     @FXML
-    private Label allGrassAMount;
+    private Label allGrassAmount;
     @FXML
     private Label allFreeSpotsAmount;
     @FXML
@@ -49,15 +46,17 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     private Button startStopButton;
 
 
-    public void setLabels() {
-        allAnimalsAmount.setText("liczba wszystkich zwierzaków:" + worldMap.amountOfAnimalsOnTheMap());
-        allGrassAMount.setText("liczba wszystkich roślin: " + worldMap.amountOfGrassOnTheMap());
-        allFreeSpotsAmount.setText("liczba wolnych pól:" + worldMap.amountOfEmptyFields());
-        mostPopularGeno.setText("najpopularniejszy genotyp: " + worldMap.theMostPopularGenotype());
-        avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + worldMap.averageLevelOfEnergyOfAnimals());
-        avgChildren.setText("średnia długości  " );
-        avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + worldMap.avgAmountOfChildren());
-    }
+//    public void setLabels() {
+//        WorldMapInfo informer = worldMap.getInformer();
+//        informer.getInfoWorldMap(this.simulation);
+//        allAnimalsAmount.setText("liczba wszystkich zwierzaków:" + informer.getAmountOfAnimalsOnTheMap());
+//        allGrassAmount.setText("liczba wszystkich roślin: " + informer.getAmountOfGrassOnTheMap());
+//        allFreeSpotsAmount.setText("liczba wolnych pól:" + informer.getAmountOfEmptyFieldsOnTheMap());
+//        mostPopularGeno.setText("najpopularniejszy genotyp: " + informer.getTheMostPopularGenotype());
+//        avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + informer.getAverageLevelOfEnergyOfAnimals());
+//        avgChildren.setText("średnia długości  " + informer.getAvgLifeTimeForDeadAnimal());
+//        avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + informer.getAvgAmountOfChildren());
+//    }
 
     private void clearGrid() {
         if (!mapGrid.getChildren().isEmpty()) {
@@ -84,7 +83,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
 
     public void Initialize() {
         createConstrains(worldMap.getWidth(), worldMap.getHeight());
-        setLabels();
+//        setLabels();
         for (int i = 0; i < worldMap.getHeight(); i++) {
             for (int j = 0; j < worldMap.getWidth(); j++) {
                 WorldMapCell cell = new WorldMapCell(worldMap, new Vector2D(j, i));
@@ -94,8 +93,6 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
             }
         }
     }
-
-
 
 
     public void startStopSimulation() {
@@ -134,7 +131,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
             for (Vector2D position : updatedFields) {
                 this.cells.get(position).update(simulation.getDay());
             }
-            setLabels();
+           // setLabels();
         });
     }
 }

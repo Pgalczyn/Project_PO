@@ -19,8 +19,8 @@ public class SimulationProps {
     private int animalGenomeLength;//
     private int dayOffset;
     private int dayLimit;
-    private int amountOfDeadAnimals;
-    private int sumOfDaysAliveForDeadAnimals;
+//    private int amountOfDeadAnimals;
+//    private int sumOfDaysAliveForDeadAnimals;
     public SimulationProps() {
 
     }
@@ -181,19 +181,5 @@ public class SimulationProps {
         this.dayLimit = dayLimit;
     }
 
-    public int getAmountOfDeadAnimals() {
-        return amountOfDeadAnimals;
-    }
 
-    public void setAmountOfDeadAnimals(int amountOfDeadAnimals) {
-        this.amountOfDeadAnimals = amountOfDeadAnimals;
-    }
-
-    public int getSumOfDaysAliveForDeadAnimals() {
-        return sumOfDaysAliveForDeadAnimals;
-    }
-
-    public void setSumOfDaysAliveForDeadAnimals(int sumOfDaysAliveForDeadAnimals) {
-        this.sumOfDaysAliveForDeadAnimals = sumOfDaysAliveForDeadAnimals;
-    }
 }
