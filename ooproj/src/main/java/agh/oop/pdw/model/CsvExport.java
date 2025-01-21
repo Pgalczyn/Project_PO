@@ -15,12 +15,12 @@ public class CsvExport {
         try(FileWriter writer = new FileWriter(file,true)){
 
             if (!fileExist) {
-                writer.write("day,amountOfAnimalsOnTheMap,theMostPopularGenotype,averageLevelOfEnergyOfAnimals,avgAmountOfChildren,avgLifeTimeForDeadAnimal,amountOfGrassOnTheMap,amountOfEmptyFieldsOnTheMap\n");
+                writer.write("day;amountOfAnimalsOnTheMap;theMostPopularGenotype;averageLevelOfEnergyOfAnimals;avgAmountOfChildren;avgLifeTimeForDeadAnimal;amountOfGrassOnTheMap;amountOfEmptyFieldsOnTheMap\n");
             }
 
-            writer.append(String.valueOf(day) +"," + String.valueOf(worldMapInfo.getAmountOfAnimalsOnTheMap())+ "," + worldMapInfo.getTheMostPopularGenotype() + "," +
-                    String.valueOf(worldMapInfo.getAverageLevelOfEnergyOfAnimals()) + "," + String.valueOf(worldMapInfo.getAvgAmountOfChildren()) + "," + String.valueOf(worldMapInfo.getAvgLifeTimeForDeadAnimal()) + "," +
-                    String.valueOf(worldMapInfo.getAmountOfGrassOnTheMap()) + "," + String.valueOf(worldMapInfo.getAmountOfEmptyFieldsOnTheMap() + "\n")
+            writer.append(String.valueOf(day) +";" + String.valueOf(worldMapInfo.getAmountOfAnimalsOnTheMap())+ ";" + worldMapInfo.getTheMostPopularGenotype() + ";" +
+                    String.valueOf(worldMapInfo.getAverageLevelOfEnergyOfAnimals()) + ";" + String.valueOf(worldMapInfo.getAvgAmountOfChildren()) + ";" + String.valueOf(worldMapInfo.getAvgLifeTimeForDeadAnimal()) + ";" +
+                    String.valueOf(worldMapInfo.getAmountOfGrassOnTheMap()) + ";" + String.valueOf(worldMapInfo.getAmountOfEmptyFieldsOnTheMap() + "\n")
                     );
 
 

@@ -41,7 +41,6 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     @FXML
     private Label avgChildren;
 
-
     @FXML
     private Button startStopButton;
 
@@ -56,7 +55,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + informer.getAverageLevelOfEnergyOfAnimals());
         avgChildren.setText("średnia długości  " + informer.getAvgLifeTimeForDeadAnimal());
         avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + informer.getAvgAmountOfChildren());
-<<<<<<< HEAD
+
     }
 
     private void clearGrid() {
@@ -65,8 +64,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         }
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
-=======
->>>>>>> 120df2a5f36e4fd9607c74be10eb0a0802803299
+
     }
 
 

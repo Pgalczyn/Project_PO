@@ -6,6 +6,7 @@ import agh.oop.pdw.model.Vector2D;
 import agh.oop.pdw.model.WorldElement;
 import agh.oop.pdw.model.WorldMap;
 import agh.oop.pdw.presenter.ColorManager;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -77,6 +78,7 @@ public class WorldMapCell extends Pane {
         imageView.fitHeightProperty().bind(this.heightProperty());
         imageView.setPreserveRatio(true);
         this.getChildren().add(imageView);
+
     }
 
 
