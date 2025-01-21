@@ -107,7 +107,9 @@ public class Simulation implements Runnable {
                 }
                 // dodana aktualizacja stanu ifIsReadyToReproduce
                 updateIfIsReadyToReproduceProp(animal);
+                animal.increaseAmountOfDaysAlive();
             }
+
         }
     }
 
@@ -156,9 +158,13 @@ public class Simulation implements Runnable {
             animalsOnPosition.sort(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN);
             long endTime = System.nanoTime(); // Koniec pomiaru
             duration += endTime - startTime;
-
             startTime = System.nanoTime();
-            for (int i = 0; i < animalsOnPosition.size() - 1; i += 2) {
+
+            animalsOnPosition.stream()
+                    .filter(animal -> animal.getisReadyToReproduce()) // Filtrujemy zwierzęta gotowe do rozmnażania
+                    .sorted(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN);
+            int i = 0;
+            while (i < animalsOnPosition.size()-1) {
                 Animal animal = animalsOnPosition.get(i);
                 Animal child = animal.reproduce(animalsOnPosition.get(i + 1));
                 if (child == null) {
