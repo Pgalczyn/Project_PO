@@ -84,9 +84,22 @@ public class Simulation implements Runnable {
                 if (animal.getCurrentEnergy() <= 0) {
                     map.removeAnimal(animal);
                 }
+                // dodana aktualizacja stanu ifIsReadyToReproduce
+                updateIfIsReadyToReproduceProp(animal);
+
             }
         }
     }
+
+    public void updateIfIsReadyToReproduceProp(Animal animal) {
+        if (animal.getCurrentEnergy() >= props.getEnergyToBreed()) {
+            animal.setIsReadyToReproduce(true);
+        }
+        else {
+            animal.setIsReadyToReproduce(false);
+        }
+    }
+
 
     private void moveAnimals() {
         Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
@@ -115,6 +128,24 @@ public class Simulation implements Runnable {
     }
 
     private void animalsBreed() {
+        Map<Vector2D, ArrayList<Animal>> animalsMap =  map.getAnimals();
+        for (Vector2D position : animalsMap.keySet()) {
+            ArrayList<Animal> animalsOnPosition = new ArrayList<>(animalsMap.get(position));
+            if (animalsOnPosition.isEmpty() || animalsOnPosition.size() == 1) continue;
+            animalsOnPosition.sort(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN);
+
+            int i = 0;
+            while (i < animalsOnPosition.size()-1) {
+                Animal animal = animalsOnPosition.get(i);
+                Animal child = animal.reproduce(animalsOnPosition.get(i+1));
+                i+=2;
+                if (child != null) {
+                    System.out.println("kurwa nie dziala");
+                    map.placeAnimal(child);
+                }
+            }
+        }
+
     }
 
     private void spawnGrass() {

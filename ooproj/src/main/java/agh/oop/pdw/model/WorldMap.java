@@ -128,8 +128,10 @@ public class WorldMap implements MoveValidator {
         for(ArrayList<Animal> animalsArray : animals.values()) {
             for(Animal animal : animalsArray) {
                 totalEnergy += animal.getCurrentEnergy();
+                amountOfAnimals++;
             }
         }
+        if (amountOfAnimals == 0) return 0;
         return (double) totalEnergy/amountOfAnimals;
     }
     public double avgLifeTimeForDeadAnimal(){
@@ -139,9 +141,11 @@ public class WorldMap implements MoveValidator {
             for(Animal animal : animalsArray) {
                if(animal.getAmountOfDaysUntilDeath() != Integer.MAX_VALUE) {
                    totalLifeTime+= animal.getAmountOfDaysUntilDeath();
+                   amountOfAnimals++;
                }
             }
         }
+        if (amountOfAnimals == 0) return 0;
         return (double) totalLifeTime/amountOfAnimals;
     }
 
@@ -154,6 +158,7 @@ public class WorldMap implements MoveValidator {
                 amountOfAnimals++;
             }
         }
+        if (amountOfAnimals == 0) return 0;
         return (double) totalChildren/amountOfAnimals;
     }
 

@@ -271,8 +271,11 @@ public class Animal implements WorldElement, AnimalObserver {
         this.direction = direction;
     }
 
-    public boolean isReadyToReproduce() {
+    public boolean getisReadyToReproduce() {
         return readyToReproduce;
+    }
+    public void setIsReadyToReproduce(boolean readyToReproduce) {
+        this.readyToReproduce = readyToReproduce;
     }
 
     public int getCurrentEnergy() {
