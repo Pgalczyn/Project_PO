@@ -4,6 +4,7 @@ import agh.oop.pdw.model.*;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 import static agh.oop.pdw.model.Animal.ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN;
 import static agh.oop.pdw.model.util.RandomUtils.RANDOM;
@@ -81,9 +82,10 @@ public class Simulation implements Runnable {
 //        animalsEatGrass();
 //        animalsBreed();
 //        spawnGrass();
+        HashSet<Vector2D> updatedFields = new HashSet<>(map.getUpdatedFields());
+        map.getUpdatedFields().clear();
         for (SimulationListener listener : listeners) {
-//            System.out.println("Day passed" + map.getUpdatedFields().size());
-            listener.dayPassed(map.getUpdatedFields());
+            listener.dayPassed(updatedFields);
         }
     }
 
@@ -105,11 +107,9 @@ public class Simulation implements Runnable {
                 if (animal.getCurrentEnergy() <= 0) {
                     map.removeAnimal(animal);
                 }
-                // dodana aktualizacja stanu ifIsReadyToReproduce
                 updateIfIsReadyToReproduceProp(animal);
                 animal.increaseAmountOfDaysAlive();
             }
-
         }
     }
 
@@ -124,6 +124,7 @@ public class Simulation implements Runnable {
 
     private void moveAnimals() {
         Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
+        System.out.println(keySet);
         for (Vector2D position : keySet) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
             for (Animal animal : animalsOnPosition) {
@@ -137,11 +138,8 @@ public class Simulation implements Runnable {
         Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
         Map<Vector2D, Grass> grasses = map.getGrasses();
         for (Vector2D position : animalsMap.keySet()) {
-            if (!grasses.containsKey(position)) return;
-            ArrayList<Animal> animalsOnPosition = new ArrayList<>(animalsMap.get(position));
-            if (animalsOnPosition.isEmpty()) return;
-            animalsOnPosition.sort(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN);
-            Animal animal = animalsOnPosition.getFirst();
+            if (!grasses.containsKey(position)) continue;
+            Animal animal = animalsMap.get(position).stream().max(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN).orElse(null);
             animal.eat(props.getEnergyOnEat());
             map.removeGrass(position);
         }
@@ -160,18 +158,21 @@ public class Simulation implements Runnable {
             duration += endTime - startTime;
             startTime = System.nanoTime();
 
-            animalsOnPosition.stream()
-                    .filter(animal -> animal.getisReadyToReproduce()) // Filtrujemy zwierzęta gotowe do rozmnażania
-                    .sorted(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN);
+            List<Animal> animalsOnPostinionList = animalsOnPosition.stream()
+                    .filter(Animal::getisReadyToReproduce) // Filtrujemy zwierzęta gotowe do rozmnażania
+                    .sorted(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN)
+                    .toList();
+
             int i = 0;
-            while (i < animalsOnPosition.size()-1) {
-                Animal animal = animalsOnPosition.get(i);
-                Animal child = animal.reproduce(animalsOnPosition.get(i + 1));
+            while (i < animalsOnPostinionList.size()-1) {
+                Animal animal = animalsOnPostinionList.get(i);
+                Animal child = animal.reproduce(animalsOnPostinionList.get(i + 1));
                 if (child == null) {
-                    break;
+                    return;
                 }
                 mutateNewAnimalGenotype(child);
                 map.placeAnimal(child);
+                i += 2;
             }
             endTime = System.nanoTime();
             duration1 += endTime - startTime;

@@ -144,8 +144,6 @@ public class Animal implements WorldElement, AnimalObserver {
         int heightOfMap = validator.getBoundary().topRight().y;
         this.currentEnergy = currentEnergy - subtractingEnergyAlgo(heightOfMap);
         this.amountOfDaysAlive += 1;
-        //A4 - dodatkowy feature
-        // poprzez pomnożenie substractingEnergyAlgo(heightOfMap) mozemy ustawic jaką minimalnie energi zwierze bedzie tracić za ruch
     }
 
 

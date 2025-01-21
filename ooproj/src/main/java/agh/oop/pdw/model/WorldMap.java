@@ -8,8 +8,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class WorldMap implements MoveValidator {
-    private final Map<Vector2D, ArrayList<Animal>> animals = new HashMap<>();
-    private final Map<Vector2D, Grass> grasses = new HashMap<>();
+    private final HashMap<Vector2D, ArrayList<Animal>> animals = new HashMap<>();
+    private final HashMap<Vector2D, Grass> grasses = new HashMap<>();
     private final List<Vector2D> emptyFields = new ArrayList<>();
     private HashSet<Vector2D> updatedFields = new HashSet<>();
     private final Boundary boundary;
@@ -65,12 +65,6 @@ public class WorldMap implements MoveValidator {
 
     public void addListener(WorldMapListener listener) {
         listeners.add(listener);
-    }
-
-    public void notifySubscribers(Vector2D position) {
-        for (WorldMapListener listener : listeners) {
-            listener.fieldUpdated(position);
-        }
     }
 
     public boolean isOccupied(Vector2D position) {
@@ -159,8 +153,8 @@ public class WorldMap implements MoveValidator {
     public double avgAmountOfChildren() {
         int amountOfAnimals = 0;
         int totalChildren = 0;
-
-        for (ArrayList<Animal> animalsArray : animals.values()) {
+        ArrayList<ArrayList<Animal>> copyOfAnimals = new ArrayList<>(animals.values());
+        for (ArrayList<Animal> animalsArray : copyOfAnimals) {
             for (Animal animal : animalsArray) {
                 totalChildren += animal.getAmountOfChildren();
                 amountOfAnimals++;
@@ -177,17 +171,11 @@ public class WorldMap implements MoveValidator {
 
 
     public void move(Animal animal) {
-        Vector2D oldPosition = animal.getPosition();
+        removeAnimal(animal);
+        updatedFields.add(animal.getPosition());
         animal.move(this);
-        ArrayList<Animal> animalsAtPosition = animals.get(oldPosition);
-        animalsAtPosition.remove(animal);
-        if (animalsAtPosition.isEmpty()) {
-            animals.remove(oldPosition);
-        } else {
-            animals.put(oldPosition, animalsAtPosition);
-        }
         placeAnimal(animal);
-        updatedFields.add(oldPosition);
+        updatedFields.add(animal.getPosition());
     }
 
     public void removeGrass(Vector2D position) {
