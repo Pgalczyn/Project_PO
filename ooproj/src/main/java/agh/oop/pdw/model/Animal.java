@@ -86,14 +86,10 @@ public class Animal implements WorldElement, AnimalAncestor {
 
 
         Animal child = new Animal(this.position, 2 * this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce, newAncestors);
-        long start = System.nanoTime();
         child.notifyAncestors(true);
-        long end = System.nanoTime();
         this.descendants.add(child);
         otherAnimal.getDescendants().add(child);
 
-        System.out.println("OBSESRVERS: " + (end - start));
-        System.out.println(child);
         return child;
     }
 
@@ -146,8 +142,6 @@ public class Animal implements WorldElement, AnimalAncestor {
             }
         }
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
-        int heightOfMap = validator.getBoundary().topRight().y;
-        this.currentEnergy = currentEnergy - subtractingEnergyAlgo(heightOfMap);
         if (currentEnergy <= 0) {
             for (Animal animal : descendants) {
                 animal.ancestors.remove(this);
@@ -178,13 +172,6 @@ public class Animal implements WorldElement, AnimalAncestor {
         return Math.min(Math.abs(currentAnimalPositionY - heightOfMap), currentAnimalPositionY) + 1;
 
     }
-
-    public int subtractingEnergyAlgo(int heightOfMap) {
-        int distance = 1 / getDistanceFromPole(heightOfMap);
-//        System.out.println((int) distance * heightOfMap / 2);
-        return (int) distance * heightOfMap / 2;
-    }
-
 
     public static final Comparator<Animal> ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN = Comparator.comparingInt(Animal::getCurrentEnergy).thenComparing(Animal::getAmountOfDaysAlive).thenComparing(Animal::getAmountOfChildren);
 

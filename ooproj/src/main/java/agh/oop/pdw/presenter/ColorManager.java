@@ -1,12 +1,14 @@
 package agh.oop.pdw.presenter;
 
-public class ColorManager {
-    private final String startColor = "#ff8585";
-    private final String endColor = "#ff0000";
+import agh.oop.pdw.model.Exceptions.WrongColorFormatException;
 
-    public static String getColor(double percentage) {
+public class ColorManager {
+    public static String getColor(double percentage) throws WrongColorFormatException {
+        if (percentage < 0 || percentage > 1) {
+            throw new WrongColorFormatException("Percentage must be between 0 and 1");
+        }
         int r = (int) (255 * (1 - percentage));
         int g = (int) (255 * percentage);
-        return String.format("#%02x%02x%02x", r, g, 0);
+        return String.format("#%02X%02X%02X", r, g, 0);
     }
 }

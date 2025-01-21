@@ -11,7 +11,7 @@
 
 <BorderPane minHeight="650.0" minWidth="1050.0" style="-fx-background-color: #ddd;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="agh.oop.pdw.presenter.SimulationWorldMap">
     <center>
-        <GridPane fx:id="mapGrid" minHeight="300" minWidth="300" prefHeight="481.0" prefWidth="793.0" style="-fx-background-color: #aaa;" BorderPane.alignment="CENTER">
+        <GridPane fx:id="mapGrid" minHeight="300" minWidth="300" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: #aaa;" BorderPane.alignment="CENTER">
 
         </GridPane>
     </center>
@@ -25,7 +25,7 @@
         </HBox>
     </bottom>
    <left>
-        <VBox prefHeight="590.0" prefWidth="347.0" spacing="15.0" BorderPane.alignment="CENTER">
+        <VBox prefHeight="590.0" prefWidth="511.0" spacing="15.0" BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="allAnimalsAmount" text="Liczba wszystkich zwierzaków: ">
                <font>

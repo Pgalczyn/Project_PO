@@ -21,39 +21,45 @@ public class WorldMapInfo {
     }
 
     public void getInfoWorldMap(Simulation simulation) {
-        Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
-        ArrayList<Animal> animals = new ArrayList<>();
-        Map<String, Integer> countGenotype = new HashMap<>();
+        try {
+            Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
+            ArrayList<Animal> animals = new ArrayList<>();
+            Map<String, Integer> countGenotype = new HashMap<>();
 
-        int totalEnergy = 0;
-        int amountOfAnimals = 0;
-        int totalChildren = 0;
+            int totalEnergy = 0;
+            int amountOfAnimals = 0;
+            int totalChildren = 0;
 
-        for (ArrayList<Animal> animalList : animalsMap.values()) {
-            for (Animal animal : animalList) {
-                amountOfAnimals++;
-                totalEnergy += animal.getCurrentEnergy();
-                totalChildren += animal.getAmountOfChildren();
+            HashSet<ArrayList<Animal>> set = new HashSet<>(animalsMap.values());
+            for (ArrayList<Animal> animalList : set) {
+                for (Animal animal : animalList) {
+                    amountOfAnimals++;
+                    totalEnergy += animal.getCurrentEnergy();
+                    totalChildren += animal.getAmountOfChildren();
 
-                //counting genotypes
-                String genotypeKey = Arrays.toString(animal.getGenotype());
-                countGenotype.put(genotypeKey, countGenotype.getOrDefault(genotypeKey, 0) + 1);
+                    //counting genotypes
+                    String genotypeKey = Arrays.toString(animal.getGenotype());
+                    countGenotype.put(genotypeKey, countGenotype.getOrDefault(genotypeKey, 0) + 1);
 
+                }
             }
-        }
-        theMostPopularGenotype(countGenotype);
+            theMostPopularGenotype(countGenotype);
 
-        if (amountOfAnimals > 0) {
-            this.averageLevelOfEnergyOfAnimals = Math.round(((double) totalEnergy / amountOfAnimals) * 100.0) / 100.0;
-            this.avgAmountOfChildren = Math.round(((double) totalChildren / amountOfAnimals) * 100.0) / 100.0;
-            this.amountOfAnimalsOnTheMap = amountOfAnimals;
-        }
-        if (simulation.getDeadAnimals() > 0) {
-            avgLifeTimeForDeadAnimal(simulation.getDeadAnimals(), simulation.getSumOfDeadAnimalsDays());
+            if (amountOfAnimals > 0) {
+                this.averageLevelOfEnergyOfAnimals = Math.round(((double) totalEnergy / amountOfAnimals) * 100.0) / 100.0;
+                this.avgAmountOfChildren = Math.round(((double) totalChildren / amountOfAnimals) * 100.0) / 100.0;
+                this.amountOfAnimalsOnTheMap = amountOfAnimals;
+            }
+            if (simulation.getDeadAnimals() > 0) {
+                avgLifeTimeForDeadAnimal(simulation.getDeadAnimals(), simulation.getSumOfDeadAnimalsDays());
+            }
+
+            this.amountOfGrassOnTheMap = map.getGrasses().size();
+            this.amountOfEmptyFieldsOnTheMap = map.getEmptyFields().size();
+        } catch (ConcurrentModificationException e) {
+            System.out.println("Aborting calculation of statistics");
         }
 
-        this.amountOfGrassOnTheMap = map.getGrasses().size();
-        this.amountOfEmptyFieldsOnTheMap = map.getEmptyFields().size();
     }
 
     public void theMostPopularGenotype(Map<String, Integer> countGenotype) {

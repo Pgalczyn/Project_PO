@@ -10,7 +10,6 @@ import static agh.oop.pdw.model.Animal.ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN;
 import static agh.oop.pdw.model.util.RandomUtils.RANDOM;
 
 public class Simulation implements Runnable {
-    private boolean running = true;
     private boolean paused = false;
     SimulationProps props;
     private final WorldMap map;
@@ -53,42 +52,22 @@ public class Simulation implements Runnable {
 
 
     public void nextDay() {
-        long startTime = System.nanoTime(); // Start pomiaru
         removeDeadAnimals();
-        long endTime = System.nanoTime(); // Koniec pomiaru
-        long duration = endTime - startTime; // Czas wykonania w nanosekundach
-        System.out.println("Czas wykonania metody RemoveDead: " + duration + " ns");
-        startTime = System.nanoTime(); // Start pomiaru
         moveAnimals();
-        endTime = System.nanoTime(); // Koniec pomiaru
-        duration = endTime - startTime; // Czas wykonania w nanosekundach
-        System.out.println("Czas wykonania metody MOVE: " + duration + " ns");
-        startTime = System.nanoTime(); // Start pomiaru
         animalsEatGrass();
-        endTime = System.nanoTime(); // Koniec pomiaru
-        duration = endTime - startTime; // Czas wykonania w nanosekundach
-        System.out.println("Czas wykonania metody EAT: " + duration + " ns");
-        startTime = System.nanoTime(); // Start pomiaru
         animalsBreed();
-        endTime = System.nanoTime(); // Koniec pomiaru
-        duration = endTime - startTime; // Czas wykonania w nanosekundach
-        System.out.println("Czas wykonania metody BREED: " + duration + " ns");
-        startTime = System.nanoTime(); // Start pomiaru
         spawnGrass();
-        endTime = System.nanoTime(); // Koniec pomiaru
-        duration = endTime - startTime; // Czas wykonania w nanosekundach
-        System.out.println("Czas wykonania metody GRASS SPAWEN: " + duration + " ns");
-
-//        removeDeadAnimals();
-//        moveAnimals();
-//        animalsEatGrass();
-//        animalsBreed();
-//        spawnGrass();
         HashSet<Vector2D> updatedFields = new HashSet<>(map.getUpdatedFields());
         map.getUpdatedFields().clear();
         for (SimulationListener listener : listeners) {
             listener.dayPassed(updatedFields);
         }
+    }
+
+    public int animalCold(Animal animal) {
+        int distance = 1 / animal.getDistanceFromPole(map.getHeight());
+//        System.out.println((int) distance * heightOfMap / 2);
+        return distance * map.getHeight() / 2;
     }
 
     public void subscribe(SimulationListener subscriber) {
@@ -114,11 +93,11 @@ public class Simulation implements Runnable {
 
     private void moveAnimals() {
         Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
-        System.out.println(keySet);
         for (Vector2D position : keySet) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
             for (Animal animal : animalsOnPosition) {
                 map.move(animal);
+                if (props.isMapPoles()) animal.setCurrentEnergy(animal.getCurrentEnergy() - animalCold(animal));
                 animal.setCurrentEnergy(animal.getCurrentEnergy() - props.getEnergyPerMove());
             }
         }
@@ -137,7 +116,6 @@ public class Simulation implements Runnable {
 
     private void animalsBreed() {
         Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
-        System.out.println(animalsMap.keySet().size());
         for (Vector2D position : animalsMap.keySet()) {
             ArrayList<Animal> animals = animalsMap.get(position);
             List<Animal> animalsOnPostinionList = animals.stream()
@@ -145,14 +123,10 @@ public class Simulation implements Runnable {
                     .sorted(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN)
                     .toList();
             if (animalsOnPostinionList.size() < 2) continue;
-            System.out.println(animalsOnPostinionList);
             int i = 0;
-            while (i < animalsOnPostinionList.size()-1) {
+            while (i < animalsOnPostinionList.size() - 1) {
                 Animal animal = animalsOnPostinionList.get(i);
-                long start = System.nanoTime();
                 Animal child = animal.reproduce(animalsOnPostinionList.get(i + 1));
-                long end = System.nanoTime();
-                System.out.println("TIME REPOR: " + (end - start) );
                 if (child == null) {
                     i = animalsOnPostinionList.size();
                     continue;
@@ -203,17 +177,6 @@ public class Simulation implements Runnable {
         return map;
     }
 
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
-
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
-
-    public boolean isRunning() {
-        return running;
-    }
 
     public boolean isPaused() {
         return paused;
