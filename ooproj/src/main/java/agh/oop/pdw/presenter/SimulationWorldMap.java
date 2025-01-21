@@ -1,9 +1,6 @@
 package agh.oop.pdw.presenter;
 
-import agh.oop.pdw.model.SimulationListener;
-import agh.oop.pdw.model.Vector2D;
-import agh.oop.pdw.model.WorldElement;
-import agh.oop.pdw.model.WorldMap;
+import agh.oop.pdw.model.*;
 import agh.oop.pdw.presenter.elements.WorldMapCell;
 import agh.oop.pdw.simulation.Simulation;
 import agh.oop.pdw.simulation.SimulationProps;
@@ -20,11 +17,13 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class SimulationWorldMap implements SimulationListener {
+public class SimulationWorldMap implements SimulationListener, WorldMapListener {
     private WorldMap worldMap;
     private Simulation simulation;
+    private HashMap<Vector2D, WorldMapCell> cells = new HashMap<>();
 //    private boolean isRunning = false;
     @FXML
     private GridPane mapGrid;
@@ -82,13 +81,13 @@ public class SimulationWorldMap implements SimulationListener {
     }
 
 
-    public void drawMap() {
-        clearGrid();
+    public void Initialize() {
         createConstrains(worldMap.getWidth(), worldMap.getHeight());
         setLabels();
         for (int i = 0; i < worldMap.getHeight(); i++) {
             for (int j = 0; j < worldMap.getWidth(); j++) {
                 WorldMapCell cell = new WorldMapCell(worldMap, new Vector2D(j, i));
+                cells.put(new Vector2D(j, i), cell);
                 mapGrid.add(cell, j, i);
                 GridPane.setHalignment(cell, HPos.CENTER);
             }
@@ -98,8 +97,7 @@ public class SimulationWorldMap implements SimulationListener {
 
     @Override
     public void dayPassed() {
-        mapGrid.setGridLinesVisible(true);
-        Platform.runLater(this::drawMap);
+        Platform.runLater(this::setLabels);
     }
 
 
@@ -118,7 +116,19 @@ public class SimulationWorldMap implements SimulationListener {
         this.simulation = simulation;
         Thread thread = new Thread(simulation);
         thread.start();
+        Platform.runLater(this::Initialize);
         simulation.pause();
         simulation.subscribe(this);
+        simulation.getMap().addListener(this);
+    }
+
+    @Override
+    public void fieldUpdated(Vector2D position) {
+        System.out.println("field updated");
+        Platform.runLater(() -> {
+            synchronized (this) {
+                this.cells.get(position).update();
+            }
+        });
     }
 }
