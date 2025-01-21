@@ -111,7 +111,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     public void fieldUpdated(Vector2D position) {
         Platform.runLater(() -> {
             synchronized (this) {
-                this.cells.get(position).update(simulation.getDay());
+                this.cells.get(position).update(simulation.getDay(), simulation.getProps().getStartEnergy());
             }
         });
     }
@@ -120,7 +120,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     public void dayPassed(HashSet<Vector2D> updatedFields) {
         Platform.runLater(() -> {
             for (Vector2D position : updatedFields) {
-                this.cells.get(position).update(simulation.getDay());
+                this.cells.get(position).update(simulation.getDay(), simulation.getProps().getStartEnergy());
             }
             setLabels();
         });

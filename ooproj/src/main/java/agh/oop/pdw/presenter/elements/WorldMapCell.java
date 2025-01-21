@@ -4,6 +4,7 @@ import agh.oop.pdw.model.Animal;
 import agh.oop.pdw.model.Vector2D;
 import agh.oop.pdw.model.WorldElement;
 import agh.oop.pdw.model.WorldMap;
+import agh.oop.pdw.presenter.ColorManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -38,7 +39,7 @@ public class WorldMapCell extends Pane {
     }
 
 
-    public void update(int day) {
+    public void update(int day, int startEnergy) {
         if (day == lastUpdateDay) return;
         lastUpdateDay = day;
         this.getChildren().clear();
@@ -48,8 +49,13 @@ public class WorldMapCell extends Pane {
                     .stream()
                     .filter(a -> a instanceof Animal)
                     .toList();
+            if (animals.size() > 1){
+                this.setStyle("-fx-background-color: #0077ff;");
+                this.loadImage(animals.getFirst().srcImage());
+            }
             if (!animals.isEmpty()) {
-                this.setStyle("-fx-background-color: #ff0000;");
+                Animal animal = (Animal) animals.getFirst();
+                this.setStyle("-fx-background-color:" + ColorManager.getColor(animal.getEnergy() / startEnergy) );
                 this.loadImage(animals.getFirst().srcImage());
             } else {
                 this.setStyle("-fx-background-color: none;");
