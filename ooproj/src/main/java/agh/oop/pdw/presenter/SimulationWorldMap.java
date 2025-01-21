@@ -25,7 +25,6 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     private final Map<Vector2D, WorldMapCell> cells = new HashMap<>();
     @FXML
     private GridPane mapGrid;
-
     @FXML
     private Label allAnimalsAmount;
     @FXML
@@ -40,8 +39,6 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     private Label avgLife;
     @FXML
     private Label avgChildren;
-
-
     @FXML
     private Button startStopButton;
 
