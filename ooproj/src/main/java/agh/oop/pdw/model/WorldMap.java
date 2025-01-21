@@ -3,6 +3,7 @@ package agh.oop.pdw.model;
 import agh.oop.pdw.model.util.Boundary;
 import agh.oop.pdw.model.util.RandomUtils;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -149,37 +150,33 @@ public class WorldMap implements MoveValidator {
             }
         }
         if (amountOfAnimals == 0) return 0;
-        return (double) totalEnergy/amountOfAnimals;
+        double result = (double) totalEnergy/amountOfAnimals;
+        return Math.round(result * 100) / 100.0;
     }
 
-    public double avgLifeTimeForDeadAnimal() {
-        int totalLifeTime = 0;
-        int amountOfAnimals = 0;
-        for(ArrayList<Animal> animalsArray : animals.values()) {
-            for(Animal animal : animalsArray) {
-               if(animal.getAmountOfDaysUntilDeath() != Integer.MAX_VALUE) {
-                   totalLifeTime+= animal.getAmountOfDaysUntilDeath();
-                   amountOfAnimals++;
-               }
-            }
-        }
-        if (amountOfAnimals == 0) return 0;
-        return (double) totalLifeTime/amountOfAnimals;
-    }
+//    public double avgLifeTimeForDeadAnimal(int amountOfDeadAnimals,int sumOfDaysAliveForDeadAnimals) {
+//
+//    }
 
     public double avgAmountOfChildren() {
         int amountOfAnimals = 0;
         int totalChildren = 0;
+
         for (ArrayList<Animal> animalsArray : animals.values()) {
             for (Animal animal : animalsArray) {
                 totalChildren += animal.getAmountOfChildren();
                 amountOfAnimals++;
             }
         }
-        if (amountOfAnimals == 0) return 0;
-        System.out.println("Witaj, świecie!" + (double) totalChildren/amountOfAnimals);
-        return Math.round(((double) totalChildren/amountOfAnimals) * 100);
+
+        if (amountOfAnimals == 0) {
+            return 0.0;
+        }
+
+        double result = (double) totalChildren / amountOfAnimals;
+        return Math.round(result * 100.0) / 100.0;
     }
+
 
     public void move(Animal animal) {
         Vector2D oldPosition = animal.getPosition();

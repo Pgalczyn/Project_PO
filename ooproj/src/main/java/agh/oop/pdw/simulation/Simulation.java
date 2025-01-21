@@ -83,8 +83,9 @@ public class Simulation implements Runnable {
                 }
                 // dodana aktualizacja stanu ifIsReadyToReproduce
                 updateIfIsReadyToReproduceProp(animal);
-
+                animal.increaseAmountOfDaysAlive();
             }
+
         }
     }
 
@@ -128,8 +129,10 @@ public class Simulation implements Runnable {
         for (Vector2D position : animalsMap.keySet()) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(animalsMap.get(position));
             if (animalsOnPosition.isEmpty() || animalsOnPosition.size() == 1) continue;
-            animalsOnPosition.sort(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN);
 
+            animalsOnPosition.stream()
+                    .filter(animal -> animal.getisReadyToReproduce()) // Filtrujemy zwierzęta gotowe do rozmnażania
+                    .sorted(ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN);
             int i = 0;
             while (i < animalsOnPosition.size()-1) {
                 Animal animal = animalsOnPosition.get(i);

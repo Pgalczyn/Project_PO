@@ -91,7 +91,7 @@ public class Animal implements WorldElement, AnimalObserver {
             Animal child = new Animal(this.position, 2 * this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce, newObservers);
 
 
-            child.notifyObservers();
+           // child.notifyObservers();
             child.mutateGenotype();
 
             return child;
@@ -221,7 +221,7 @@ public class Animal implements WorldElement, AnimalObserver {
     }
     public void notifyObservers() {
         for (AnimalObserver observer : new ArrayList<>(observers)) {
-            if (this.amountOfDaysUntilDeath == Integer.MAX_VALUE) {
+            if (observer.getCurrentEnergyObserver() <= 0 ) {
                 removeObserver(observer);
             } else {
                 observer.updateDescendants();
@@ -253,6 +253,9 @@ public class Animal implements WorldElement, AnimalObserver {
 
     public int getAmountOfDaysAlive() {
         return amountOfDaysAlive;
+    }
+    public void increaseAmountOfDaysAlive() {
+        amountOfDaysAlive++;
     }
 
     public int getAmountOfDaysUntilDeath() {
@@ -292,6 +295,12 @@ public class Animal implements WorldElement, AnimalObserver {
 
         this.amountOfDescendants++;
     }
+    @Override
+    public int getCurrentEnergyObserver() {
+
+        return this.currentEnergy;
+    }
+
 
 
     @Override
