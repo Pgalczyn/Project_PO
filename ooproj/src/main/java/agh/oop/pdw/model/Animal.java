@@ -132,9 +132,9 @@ public class Animal implements WorldElement {
     }
 
     //przyjąłem na sztywno 800 i 1000 dni jeśli będziemy chcieli można będzie to podać w dodatkowych atrybutach
-    public Boolean isMissingMove() {
+    public Boolean isMissingMove(int lengthOfSimulation) {
 
-        int chanceBoundary = Math.min(this.amountOfDaysAlive, 800);
+        int chanceBoundary = Math.min(this.amountOfDaysAlive,(int) (lengthOfSimulation * 0.8)  );
 
         return RANDOM.nextInt(1000) < chanceBoundary;
     }

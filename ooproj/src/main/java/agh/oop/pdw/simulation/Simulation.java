@@ -106,7 +106,7 @@ public class Simulation implements Runnable {
         for (Vector2D position : keySet) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
             for (Animal animal : animalsOnPosition) {
-                if (!props.isSpecialMutation() || !animal.isMissingMove()) {
+                if (!props.isSpecialMutation() || !animal.isMissingMove(this.props.getDayLimit())) {
                     map.move(animal);
                     if (props.isMapPoles()) animal.setCurrentEnergy(animal.getCurrentEnergy() - animalCold(animal));
                     animal.setCurrentEnergy(animal.getCurrentEnergy() - props.getEnergyPerMove());
