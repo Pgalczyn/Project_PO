@@ -251,7 +251,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="startAnimals" prefHeight="26.0" prefWidth="258.0" promptText="5" text="5" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="startAnimals" prefHeight="26.0" prefWidth="258.0" promptText="15" text="15" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
