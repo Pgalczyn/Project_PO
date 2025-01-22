@@ -19,7 +19,7 @@ public class Simulation implements Runnable {
     private int sumOfDeadAnimalsDays = 0;
     private int day = 0;
     public static int SimulationId = 0;
-    private int myId;
+    private final int myId;
 
     public Simulation(SimulationProps props) {
         this.props = props;

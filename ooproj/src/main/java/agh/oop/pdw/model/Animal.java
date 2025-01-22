@@ -213,17 +213,6 @@ public class Animal implements WorldElement {
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Animal animal = (Animal) o;
-        return activeGene == animal.activeGene && amountOfEatenPlants == animal.amountOfEatenPlants && amountOfChildren == animal.amountOfChildren && amountOfDaysAlive == animal.amountOfDaysAlive && direction == animal.direction && Objects.equals(position, animal.position) && Objects.deepEquals(genotype, animal.genotype) && Objects.equals(children, animal.children);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(direction, position, Arrays.hashCode(genotype), activeGene, amountOfEatenPlants, amountOfChildren, amountOfDaysAlive,children);
-    }
 
 
     public void setAmountOfChildren(int amountOfChildren) {
