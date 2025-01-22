@@ -26,6 +26,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     private final Map<Vector2D, WorldMapCell> cells = new HashMap<>();
     @FXML
     private GridPane mapGrid;
+
     @FXML
     private Label allAnimalsAmount;
     @FXML
@@ -40,6 +41,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     private Label avgLife;
     @FXML
     private Label avgChildren;
+
     @FXML
     private Button startStopButton;
     @FXML
@@ -48,6 +50,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     public void setLabels() {
         WorldMapInfo informer = worldMap.getInformer();
         informer.getInfoWorldMap(this.simulation);
+
         allAnimalsAmount.setText(informer.getAmountOfAnimalsOnTheMap());
         allGrassAmount.setText(informer.getAmountOfGrassOnTheMap());
         allFreeSpotsAmount.setText(informer.getAmountOfEmptyFieldsOnTheMap());
@@ -55,6 +58,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         avgEnergy.setText(informer.getAverageLevelOfEnergyOfAnimals());
         avgChildren.setText(informer.getAvgLifeTimeForDeadAnimal());
         avgLife.setText(informer.getAvgAmountOfChildren());
+
 
     }
 

@@ -21,6 +21,7 @@ public class WorldMapInfo {
     }
 
     public void getInfoWorldMap(Simulation simulation) {
+
         try {
             Map<String, Integer> countGenotype = new HashMap<>();
             Map<Vector2D, ArrayList<Animal>> animals = new HashMap<>(map.getAnimals());
@@ -51,10 +52,12 @@ public class WorldMapInfo {
 
             this.amountOfGrassOnTheMap = map.getGrasses().size();
             this.amountOfEmptyFieldsOnTheMap = map.getEmptyFields().size();
+
         } catch (ConcurrentModificationException e) {
             System.err.println("Skipping information update");
 //            e.printStackTrace();
         }
+
 
     }
 

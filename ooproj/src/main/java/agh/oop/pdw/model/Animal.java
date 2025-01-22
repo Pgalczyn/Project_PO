@@ -18,7 +18,7 @@ public class Animal implements WorldElement {
     private int amountOfEatenPlants = 0;
     private int amountOfChildren = 0;
     private int amountOfDaysAlive = 0;
-    private int usedEnergyToReproduce;
+    private final int usedEnergyToReproduce;
     private HashSet<Animal> children = new HashSet<>();
 
 
@@ -99,10 +99,8 @@ public class Animal implements WorldElement {
         if (leftOrRight_Animal_1 == 0) {
 
             for (int i = 0; i < animal_1.lengthOfGenotype; i++) {
-
                 if (i < Animal_1_Part) newGenotype[i] = animal_1.genotype[i];
                 else newGenotype[i] = animal_2.genotype[i];
-
             }
 
         } else {
@@ -113,9 +111,6 @@ public class Animal implements WorldElement {
         }
         return newGenotype;
     }
-
-
-    //w czasie wolnym poprawić optymalizacja
     public void move(MoveValidator validator) {
         this.rotate();
         if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
@@ -130,13 +125,11 @@ public class Animal implements WorldElement {
         int newDirection = (this.direction.ordinal() + this.genotype[this.activeGene]) % 8;
         this.direction = MapDirection.values()[newDirection];
     }
+    public Boolean isMissingMove(int LengthOfSimulation) {
 
-    //przyjąłem na sztywno 800 i 1000 dni jeśli będziemy chcieli można będzie to podać w dodatkowych atrybutach
-    public Boolean isMissingMove() {
+        int chanceBoundary = Math.min(this.amountOfDaysAlive, ((int) (LengthOfSimulation * 0.8)));
 
-        int chanceBoundary = Math.min(this.amountOfDaysAlive, 800);
-
-        return RANDOM.nextInt(1000) < chanceBoundary;
+        return RANDOM.nextInt(LengthOfSimulation) < chanceBoundary;
     }
 
     //[A] bieguny – bieguny zdefiniowane są na dolnej i górnej krawędzi mapy.
@@ -156,6 +149,9 @@ public class Animal implements WorldElement {
 
     public int[] getGenotype() {
         return genotype;
+    }
+    public void increaseAmountOfEatenPlants(){
+        this.amountOfEatenPlants++;
     }
 
     public int getAmountOfEatenPlants() {
@@ -208,7 +204,6 @@ public class Animal implements WorldElement {
     public HashSet<Animal> getChildren() {
         return children;
     }
-
 
     @Override
     public boolean equals(Object object) {
