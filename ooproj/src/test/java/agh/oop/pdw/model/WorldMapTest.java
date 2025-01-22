@@ -92,16 +92,16 @@ public class WorldMapTest {
         animal.setGenotype(new int[]{1,3,6,7});
         map.placeAnimal(animal);
 
-        animal.move(map,10);
+        animal.move(map);
         assertEquals(new Vector2D(6, 6), animal.getPosition());
 
-        animal.move(map,10);
+        animal.move(map);
         assertEquals(new Vector2D(6, 5), animal.getPosition());
 
-        animal.move(map,10);
+        animal.move(map);
         assertEquals(new Vector2D(7, 5), animal.getPosition());
 
-        animal.move(map,10);
+        animal.move(map);
         assertEquals(new Vector2D(8, 6), animal.getPosition());
     }
 

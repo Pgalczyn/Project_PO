@@ -62,7 +62,7 @@ public class AnimalTest {
         Vector2D initialPosition = animal1.getPosition();
 
         // Zakładając, że mamy odpowiednie dane do testów ruchu
-        animal1.move(worldMap, 100);
+        animal1.move(worldMap);
 
         // Testujemy, czy zwierzę zmieniło pozycję
         assertNotEquals(initialPosition, animal1.getPosition());

@@ -13,6 +13,9 @@ public class Simulation implements Runnable {
     private boolean paused = false;
     SimulationProps props;
     private final WorldMap map;
+
+
+
     private final AnimalsCreator animalsCreator;
     private final List<SimulationListener> listeners = new ArrayList<>();
     private int deadAnimals = 0;
@@ -104,7 +107,7 @@ public class Simulation implements Runnable {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
             for (Animal animal : animalsOnPosition) {
 
-                if (!props.isSpecialMutation() || !animal.isMissingMove()) {
+                if (!props.isSpecialMutation() || !animal.isMissingMove(this.props.getDayLimit())) {
                      map.move(animal);
                     if (props.isMapPoles()) animal.setCurrentEnergy(animal.getCurrentEnergy() - animalCold(animal));
                     animal.setCurrentEnergy(animal.getCurrentEnergy() - props.getEnergyPerMove());
@@ -114,7 +117,7 @@ public class Simulation implements Runnable {
         }
     }
 
-    private void animalsEatGrass() {
+    protected void animalsEatGrass() {
         Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
         Map<Vector2D, Grass> grasses = map.getGrasses();
         for (Vector2D position : animalsMap.keySet()) {
@@ -126,7 +129,7 @@ public class Simulation implements Runnable {
         }
     }
 
-    private void animalsBreed() {
+    protected void animalsBreed() {
         Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
         for (Vector2D position : animalsMap.keySet()) {
             ArrayList<Animal> animals = animalsMap.get(position);
@@ -204,5 +207,8 @@ public class Simulation implements Runnable {
 
     public int getSumOfDeadAnimalsDays() {
         return sumOfDeadAnimalsDays;
+    }
+    public AnimalsCreator getAnimalsCreator() {
+        return animalsCreator;
     }
 }
