@@ -65,7 +65,7 @@ public class Simulation implements Runnable {
         spawnGrass();
         HashSet<Vector2D> updatedFields = new HashSet<>(map.getUpdatedFields());
         map.getUpdatedFields().clear();
-        CsvExport.saveData(this.day,map.getInformer(),this.myId);
+        CsvExport.saveData(this.day, map.getInformer(), this.myId);
         for (SimulationListener listener : listeners) {
             listener.dayPassed(updatedFields);
         }
@@ -73,7 +73,6 @@ public class Simulation implements Runnable {
 
     public int animalCold(Animal animal) {
         int distance = 1 / animal.getDistanceFromPole(map.getHeight());
-//        System.out.println((int) distance * heightOfMap / 2);
         return distance * map.getHeight() / 2;
     }
 
@@ -103,9 +102,11 @@ public class Simulation implements Runnable {
         for (Vector2D position : keySet) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
             for (Animal animal : animalsOnPosition) {
-                map.move(animal);
-                if (props.isMapPoles()) animal.setCurrentEnergy(animal.getCurrentEnergy() - animalCold(animal));
-                animal.setCurrentEnergy(animal.getCurrentEnergy() - props.getEnergyPerMove());
+                if (!props.isSpecialMutation() || !animal.isMissingMove()) {
+                     map.move(animal);
+                    if (props.isMapPoles()) animal.setCurrentEnergy(animal.getCurrentEnergy() - animalCold(animal));
+                    animal.setCurrentEnergy(animal.getCurrentEnergy() - props.getEnergyPerMove());
+                }
             }
         }
     }

@@ -22,25 +22,20 @@ public class WorldMapInfo {
 
     public void getInfoWorldMap(Simulation simulation) {
         try {
-            Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
-            ArrayList<Animal> animals = new ArrayList<>();
             Map<String, Integer> countGenotype = new HashMap<>();
-
+            Map<Vector2D, ArrayList<Animal>> animals = new HashMap<>(map.getAnimals());
             int totalEnergy = 0;
             int amountOfAnimals = 0;
             int totalChildren = 0;
 
-            HashSet<ArrayList<Animal>> set = new HashSet<>(animalsMap.values());
-            for (ArrayList<Animal> animalList : set) {
+            for (ArrayList<Animal> animalList : animals.values()) {
                 for (Animal animal : animalList) {
                     amountOfAnimals++;
                     totalEnergy += animal.getCurrentEnergy();
                     totalChildren += animal.getAmountOfChildren();
 
-                    //counting genotypes
                     String genotypeKey = Arrays.toString(animal.getGenotype());
                     countGenotype.put(genotypeKey, countGenotype.getOrDefault(genotypeKey, 0) + 1);
-
                 }
             }
             theMostPopularGenotype(countGenotype);
@@ -57,7 +52,8 @@ public class WorldMapInfo {
             this.amountOfGrassOnTheMap = map.getGrasses().size();
             this.amountOfEmptyFieldsOnTheMap = map.getEmptyFields().size();
         } catch (ConcurrentModificationException e) {
-            System.out.println("Aborting calculation of statistics");
+            System.err.println("Skipping information update");
+//            e.printStackTrace();
         }
 
     }
@@ -80,32 +76,32 @@ public class WorldMapInfo {
     }
 
 
-    public double getAvgLifeTimeForDeadAnimal() {
-        return avgLifeTimeForDeadAnimal;
+    public String getAvgLifeTimeForDeadAnimal() {
+        return Double.toString(avgLifeTimeForDeadAnimal);
     }
 
-    public int getAmountOfEmptyFieldsOnTheMap() {
-        return amountOfEmptyFieldsOnTheMap;
+    public String getAmountOfEmptyFieldsOnTheMap() {
+        return Double.toString(amountOfEmptyFieldsOnTheMap);
     }
 
-    public int getAmountOfGrassOnTheMap() {
-        return amountOfGrassOnTheMap;
+    public String getAmountOfGrassOnTheMap() {
+        return Double.toString(amountOfGrassOnTheMap);
     }
 
-    public double getAvgAmountOfChildren() {
-        return avgAmountOfChildren;
+    public String getAvgAmountOfChildren() {
+        return Double.toString(avgAmountOfChildren);
     }
 
-    public double getAverageLevelOfEnergyOfAnimals() {
-        return averageLevelOfEnergyOfAnimals;
+    public String getAverageLevelOfEnergyOfAnimals() {
+        return Double.toString(averageLevelOfEnergyOfAnimals);
     }
 
     public String getTheMostPopularGenotype() {
         return theMostPopularGenotype;
     }
 
-    public int getAmountOfAnimalsOnTheMap() {
-        return amountOfAnimalsOnTheMap;
+    public String getAmountOfAnimalsOnTheMap() {
+        return Double.toString(amountOfAnimalsOnTheMap);
     }
 }
 
