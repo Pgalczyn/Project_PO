@@ -22,7 +22,6 @@ public class Animal implements WorldElement {
     private HashSet<Animal> children = new HashSet<>();
 
 
-
     //constructor for animals that were born on the map
     public Animal(Vector2D position, int StartEnergy, int[] genotype, int usedEnergyToReproduce, HashSet<Animal> ancestors) {
         this.position = position;
@@ -63,8 +62,6 @@ public class Animal implements WorldElement {
     }
 
 
-
-
     public Animal reproduce(Animal otherAnimal) {
         int[] newGenotype = getGenotypeForAnimal(this, otherAnimal);
 
@@ -77,13 +74,12 @@ public class Animal implements WorldElement {
         otherAnimal.amountOfChildren += 1;
 
 
-        Animal child = new Animal(this.position, 2 * this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce,children);
+        Animal child = new Animal(this.position, 2 * this.usedEnergyToReproduce, newGenotype, this.usedEnergyToReproduce, children);
         this.children.add(child);
         otherAnimal.children.add(child);
 
         return child;
     }
-
 
 
     public int[] getGenotypeForAnimal(Animal animal_1, Animal animal_2) {
@@ -115,13 +111,10 @@ public class Animal implements WorldElement {
         }
         return newGenotype;
     }
-
-    public void move(MoveValidator validator,int LengthOfSimulation) {
-        if (!this.isMissingMove(LengthOfSimulation)) {
-            this.rotate();
-            if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
-                this.position = validator.getNextPosition(this);
-            }
+    public void move(MoveValidator validator) {
+        this.rotate();
+        if (validator.canMoveTo(position.addVector(this.direction.toVector()))) {
+            this.position = validator.getNextPosition(this);
         }
         this.activeGene = (this.activeGene + 1) % lengthOfGenotype;
         this.amountOfDaysAlive += 1;
@@ -212,11 +205,16 @@ public class Animal implements WorldElement {
         return children;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Animal animal)) return false;
+        return currentEnergy == animal.currentEnergy && lengthOfGenotype == animal.lengthOfGenotype && activeGene == animal.activeGene && amountOfEatenPlants == animal.amountOfEatenPlants && amountOfChildren == animal.amountOfChildren && amountOfDaysAlive == animal.amountOfDaysAlive && usedEnergyToReproduce == animal.usedEnergyToReproduce && direction == animal.direction && Objects.equals(listeners, animal.listeners) && Objects.equals(position, animal.position) && Objects.deepEquals(genotype, animal.genotype) && Objects.equals(children, animal.children);
+    }
 
-
-
-    public void setAmountOfChildren(int amountOfChildren) {
-        this.amountOfChildren = amountOfChildren;
+    @Override
+    public int hashCode() {
+        return Objects.hash(direction, listeners, position, currentEnergy, Arrays.hashCode(genotype), lengthOfGenotype, activeGene, amountOfEatenPlants, amountOfChildren, amountOfDaysAlive, usedEnergyToReproduce, children);
     }
 }
 

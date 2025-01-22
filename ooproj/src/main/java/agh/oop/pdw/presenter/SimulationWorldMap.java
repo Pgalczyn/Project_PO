@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -43,27 +44,21 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
 
     @FXML
     private Button startStopButton;
-
+    @FXML
+    private VBox statBox;
 
     public void setLabels() {
         WorldMapInfo informer = worldMap.getInformer();
         informer.getInfoWorldMap(this.simulation);
-        allAnimalsAmount.setText("liczba wszystkich zwierzaków:" + informer.getAmountOfAnimalsOnTheMap());
-        allGrassAmount.setText("liczba wszystkich roślin: " + informer.getAmountOfGrassOnTheMap());
-        allFreeSpotsAmount.setText("liczba wolnych pól:" + informer.getAmountOfEmptyFieldsOnTheMap());
-        mostPopularGeno.setText("najpopularniejszy genotyp: " + informer.getTheMostPopularGenotype());
-        avgEnergy.setText("średni poziomu energii dla żyjących zwierzaków: " + informer.getAverageLevelOfEnergyOfAnimals());
-        avgChildren.setText("Avg długości życia zwierzaków dla martwych zw.:" + informer.getAvgLifeTimeForDeadAnimal());
-        avgLife.setText("średnia liczby dzieci dla żyjących zwierzaków: " + informer.getAvgAmountOfChildren());
 
-    }
+        allAnimalsAmount.setText(informer.getAmountOfAnimalsOnTheMap());
+        allGrassAmount.setText(informer.getAmountOfGrassOnTheMap());
+        allFreeSpotsAmount.setText(informer.getAmountOfEmptyFieldsOnTheMap());
+        mostPopularGeno.setText(informer.getTheMostPopularGenotype());
+        avgEnergy.setText(informer.getAverageLevelOfEnergyOfAnimals());
+        avgChildren.setText(informer.getAvgLifeTimeForDeadAnimal());
+        avgLife.setText(informer.getAvgAmountOfChildren());
 
-    private void clearGrid() {
-        if (!mapGrid.getChildren().isEmpty()) {
-            mapGrid.getChildren().clear();
-        }
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
 
     }
 
@@ -87,7 +82,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         setLabels();
         for (int i = 0; i < worldMap.getHeight(); i++) {
             for (int j = 0; j < worldMap.getWidth(); j++) {
-                WorldMapCell cell = new WorldMapCell(worldMap, new Vector2D(j, i));
+                WorldMapCell cell = new WorldMapCell(worldMap, new Vector2D(j, i), statBox);
                 cells.put(new Vector2D(j, i), cell);
                 mapGrid.add(cell, j, i);
                 GridPane.setHalignment(cell, HPos.CENTER);
@@ -134,6 +129,5 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
             }
             setLabels();
         });
-
     }
 }

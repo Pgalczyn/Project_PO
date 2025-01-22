@@ -69,20 +69,15 @@ public class WorldMap implements MoveValidator {
         listeners.add(listener);
     }
 
-    public boolean isOccupied(Vector2D position) {
-        return objectAt(position) != null;
-    }
 
     public List<WorldElement> objectAt(Vector2D position) {
 
         List<WorldElement> elementsOnTheSamePole = new ArrayList<>();
-//dodaje tylko jednego animala bo i tak jesteśmy w stanie wyświtlić tylko jednego animala na mapie na danym polu
         if (animals.containsKey(position)) {
             elementsOnTheSamePole.addAll(animals.get(position));
         }
         if (grasses.containsKey(position)) {
             elementsOnTheSamePole.add(grasses.get(position));
-
         }
         if (elementsOnTheSamePole.isEmpty()) {
             return null;
