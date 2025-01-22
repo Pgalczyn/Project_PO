@@ -24,6 +24,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
     private WorldMap worldMap;
     private Simulation simulation;
     private final Map<Vector2D, WorldMapCell> cells = new HashMap<>();
+    private StatEngine statEngine;
     @FXML
     private GridPane mapGrid;
 
@@ -82,7 +83,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         setLabels();
         for (int i = 0; i < worldMap.getHeight(); i++) {
             for (int j = 0; j < worldMap.getWidth(); j++) {
-                WorldMapCell cell = new WorldMapCell(worldMap, new Vector2D(j, i), statBox);
+                WorldMapCell cell = new WorldMapCell(worldMap, new Vector2D(j, i), statEngine, this.simulation);
                 cells.put(new Vector2D(j, i), cell);
                 mapGrid.add(cell, j, i);
                 GridPane.setHalignment(cell, HPos.CENTER);
@@ -110,6 +111,7 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         simulation.pause();
         simulation.subscribe(this);
         simulation.getMap().addListener(this);
+        this.statEngine = new StatEngine(statBox);
     }
 
     @Override
@@ -128,6 +130,15 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
                 this.cells.get(position).update(simulation.getDay(), simulation.getProps().getStartEnergy());
             }
             setLabels();
+            statEngine.updateLabels();
+        });
+    }
+
+    @Override
+    public void endOfSimulaltion() {
+        Platform.runLater(() -> {
+            Stage stage = (Stage) startStopButton.getScene().getWindow();
+            stage.close();
         });
     }
 }
