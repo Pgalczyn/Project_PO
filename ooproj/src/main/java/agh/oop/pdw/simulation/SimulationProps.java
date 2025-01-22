@@ -20,15 +20,12 @@ public class SimulationProps {
     private int dayOffset;
     private int dayLimit;
     private boolean exportData;
-//    private int amountOfDeadAnimals;
-//    private int sumOfDaysAliveForDeadAnimals;
-    public SimulationProps() {
-
-    }
 
     public int getDayLimit() {
         return dayLimit;
     }
+
+    public SimulationProps() {}
 
     public SimulationProps(int mapWidth, int mapHeight, int startEnergy, boolean isMapPoles, int plants, int energyOnEat, int plantsPerDay, int energyPerMove, int startAnimals, int energyToBreed, int energyLossOnBreed, int minChildrenMutations, int maxChildrenMutations, boolean isSpecialMutation, int dayLimit, int animalGenomeLength, int dayOffset, boolean exportData) {
         this.mapWidth = mapWidth;
@@ -49,6 +46,16 @@ public class SimulationProps {
         this.animalGenomeLength = animalGenomeLength;
         this.dayOffset = dayOffset;
         this.exportData = exportData;
+    }
+
+    public boolean validate(){
+        if (mapWidth < 1 || mapHeight < 1 || startEnergy < 1 || plants < 0 || energyOnEat < 0 || plantsPerDay < 0 || energyPerMove < 0 || startAnimals < 0 || energyToBreed < 0 || energyLossOnBreed < 0 || minChildrenMutations < 0 || maxChildrenMutations < 0 || animalGenomeLength < 0 || dayOffset < 0 || dayLimit < 1) {
+            return false;
+        }
+        if (maxChildrenMutations < minChildrenMutations) {
+            return false;
+        }
+        return true;
     }
 
     public int getMapWidth() {
@@ -183,5 +190,11 @@ public class SimulationProps {
         this.dayLimit = dayLimit;
     }
 
+    public boolean isExportData() {
+        return exportData;
+    }
 
+    public void setExportData(boolean exportData) {
+        this.exportData = exportData;
+    }
 }

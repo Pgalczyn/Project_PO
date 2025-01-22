@@ -3,12 +3,13 @@ package agh.oop.pdw.model;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class CsvExport {
 
     public static void saveData(int day,WorldMapInfo worldMapInfo,int simulationID){
-
-        File file = new File("simulation_" + simulationID + ".csv");
+        Path path = Path.of("src/main/resources/statistics/simulation_" + simulationID + ".csv");
+        File file = new File(path.toString());
 
         boolean fileExist = file.exists();
 

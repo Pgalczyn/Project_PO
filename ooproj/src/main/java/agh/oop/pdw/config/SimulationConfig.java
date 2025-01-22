@@ -22,6 +22,15 @@ public class SimulationConfig {
     private boolean specialMutation;
     private boolean mapPoles;
     private int simulationTimeout;
+    private boolean exportData;
+
+    public boolean isExportData() {
+        return exportData;
+    }
+
+    public void setExportData(boolean exportData) {
+        this.exportData = exportData;
+    }
 
     public String getConfigName() {
         return configName;
@@ -171,6 +180,6 @@ public class SimulationConfig {
 
     @Override
     public String toString() {
-        return "" + mapWidth + ";" + mapHeight + ";" + plantsOnStart + ";" + dailyPlants + ";" + startEnergy + ";" + energyOnEat + ";" + energyPerMove + ";" + genomeLength + ";" + energyToBreed + ";" + breedCost + ";" + startAnimals + ";" + minMutations + ";" + maxMutations + ";" + dayLimit + ";" + specialMutation + ";" + mapPoles + ";" + simulationTimeout;
+        return "" + mapWidth + ";" + mapHeight + ";" + plantsOnStart + ";" + dailyPlants + ";" + startEnergy + ";" + energyOnEat + ";" + energyPerMove + ";" + genomeLength + ";" + energyToBreed + ";" + breedCost + ";" + startAnimals + ";" + minMutations + ";" + maxMutations + ";" + dayLimit + ";" + specialMutation + ";" + mapPoles + ";" + simulationTimeout + ";" + exportData;
     }
 }

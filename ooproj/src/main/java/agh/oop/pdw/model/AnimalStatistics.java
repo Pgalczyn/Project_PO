@@ -1,10 +1,11 @@
 package agh.oop.pdw.model;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 public class AnimalStatistics {
 
-    private  final Animal animal;
+    private final Animal animal;
     private String genotype;
     private String activeGene;
     private String energy;
@@ -17,16 +18,17 @@ public class AnimalStatistics {
 
     public AnimalStatistics(Animal animal) {
         this.animal = animal;
-        updateStatistics();
+        updateStatistics(animal);
     }
 
-    public void updateStatistics() {
+    public void updateStatistics(Animal animal) {
+        if (animal == null) {return;}
         this.energy = Integer.toString(animal.getEnergy());
         this.activeGene = Integer.toString(animal.getActiveGene());
         this.amountOfEatenPlants = Integer.toString(animal.getAmountOfEatenPlants());
-        this.amountOfChildren =  Integer.toString(animal.getAmountOfChildren());
-        this.amountOfDaysAlive =  Integer.toString(animal.getAmountOfDaysAlive());
-        this.amountOfDescendants =  Integer.toString(getAmountOfDescendants(animal));
+        this.amountOfChildren = Integer.toString(animal.getAmountOfChildren());
+        this.amountOfDaysAlive = Integer.toString(animal.getAmountOfDaysAlive());
+        this.amountOfDescendants = Integer.toString(getAmountOfDescendants(animal));
         this.isDead = Boolean.toString(animal.getCurrentEnergy() <= 0);
         this.genotype = Arrays.toString(animal.getGenotype());
     }
@@ -34,42 +36,51 @@ public class AnimalStatistics {
 
     public int getAmountOfDescendants(Animal animal) {
         int amountOfDescendants = 0;
-        if(animal.getChildren().isEmpty()) return amountOfDescendants;
-
-        for(Animal child : animal.getChildren()) {
-            amountOfDescendants++;
-            amountOfDescendants += getAmountOfDescendants(child);
+        if (animal.getChildren().isEmpty()) return amountOfDescendants;
+        Iterator<Animal> iterator = animal.getChildren().iterator();
+        while (iterator.hasNext()){
+            Animal child = (Animal) iterator.next();
+            if (child.getCurrentEnergy() > 0) {
+                amountOfDescendants++;
+                amountOfDescendants += getAmountOfDescendants(child);
+            } else {
+                iterator.remove();
+            }
         }
         return amountOfDescendants;
     }
 
+    public String getPosition() {
+        return "Position: [" + animal.getPosition().x + ", " + animal.getPosition().y + "]";
+    }
+
 
     public String getGenotype() {
-        return "Genotype: " + genotype;
+        return (animal == null) ? "" : "genotype: " + genotype;
     }
 
     public String getActiveGene() {
-        return "Active gene: " + activeGene;
+        return (animal == null) ? "" :"Active gene: " + activeGene;
     }
 
     public String getEnergy() {
-        return "Current Energy: " + energy;
+        return (animal == null) ? "" :"Current Energy: " + energy;
     }
 
     public String getAmountOfEatenPlants() {
-        return "Eaten grass: " + amountOfEatenPlants;
+        return (animal == null) ? "" :"Eaten grass: " + amountOfEatenPlants;
     }
 
     public String getAmountOfChildren() {
-        return "Children count: " + amountOfChildren;
+        return (animal == null) ? "" :"Children count: " + amountOfChildren;
     }
 
     public String getAmountOfDescendants() {
-        return "Descendants: " + amountOfDescendants;
+        return (animal == null) ? "" :"Descendants: " + amountOfDescendants;
     }
 
     public String getAmountOfDaysAlive() {
-        return "Age of animal" + amountOfDaysAlive;
+        return (animal == null) ? "" :"Age of animal: " + amountOfDaysAlive;
     }
 
 }

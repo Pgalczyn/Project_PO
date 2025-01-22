@@ -20,6 +20,7 @@ public class Simulation implements Runnable {
     private int day = 0;
     public static int SimulationId = 0;
     private int myId;
+    private boolean running = true;
 
     public Simulation(SimulationProps props) {
         this.props = props;
@@ -31,7 +32,7 @@ public class Simulation implements Runnable {
 
     public void run() {
         animalsCreator.createAnimals(props.getStartAnimals());
-        while (day < props.getDayLimit()) {
+        while (day < props.getDayLimit() && running) {
             synchronized (this) {
                 while (paused) {
                     System.out.println("Paused");
@@ -47,13 +48,10 @@ public class Simulation implements Runnable {
             try {
                 Thread.sleep(props.getDayOffset());
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                System.out.println("END OF SIMULATION");
             }
-
-
         }
         System.out.println("Day limit reached");
-        System.out.println("Grass count: " + map.getGrasses().size());
     }
 
 
@@ -65,7 +63,7 @@ public class Simulation implements Runnable {
         spawnGrass();
         HashSet<Vector2D> updatedFields = new HashSet<>(map.getUpdatedFields());
         map.getUpdatedFields().clear();
-        CsvExport.saveData(this.day, map.getInformer(), this.myId);
+        if (props.isExportData()) CsvExport.saveData(this.day, map.getInformer(), this.myId);
         for (SimulationListener listener : listeners) {
             listener.dayPassed(updatedFields);
         }
@@ -94,6 +92,13 @@ public class Simulation implements Runnable {
                 animal.increaseAmountOfDaysAlive();
             }
         }
+        if (map.getAnimals().isEmpty()) {
+            for (SimulationListener listener : listeners) {
+                listener.endOfSimulaltion();
+                Thread.currentThread().interrupt();
+                this.running = false;
+            }
+        }
     }
 
 
@@ -103,7 +108,7 @@ public class Simulation implements Runnable {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
             for (Animal animal : animalsOnPosition) {
                 if (!props.isSpecialMutation() || !animal.isMissingMove()) {
-                     map.move(animal);
+                    map.move(animal);
                     if (props.isMapPoles()) animal.setCurrentEnergy(animal.getCurrentEnergy() - animalCold(animal));
                     animal.setCurrentEnergy(animal.getCurrentEnergy() - props.getEnergyPerMove());
                 }

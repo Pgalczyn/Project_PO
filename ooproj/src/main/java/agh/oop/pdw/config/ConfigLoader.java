@@ -54,6 +54,7 @@ public class ConfigLoader {
             config.setSpecialMutation(Boolean.parseBoolean(values[14]));
             config.setMapPoles(Boolean.parseBoolean(values[15]));
             config.setSimulationTimeout(Integer.parseInt(values[16]));
+            config.setExportData(Boolean.parseBoolean(values[17]));
             config.setConfigName(configName);
             return config;
         } catch (Exception e) {

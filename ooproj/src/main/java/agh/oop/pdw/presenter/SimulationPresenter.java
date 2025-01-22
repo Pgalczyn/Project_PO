@@ -56,33 +56,38 @@ public class SimulationPresenter {
     @FXML
     private Button saveButton;
     @FXML
-    private AnchorPane configPane;
-    @FXML
     private ChoiceBox configBox;
+    @FXML
+    private CheckBox exportCheck;
 
     private SimulationEngine engine;
 
     public void openSimulationWindow() {
-        SimulationProps props = new SimulationProps();
-        props.setMapWidth(Integer.parseInt(mapWidth.getText()));
-        props.setMapHeight(Integer.parseInt(mapHeight.getText()));
-        props.setPlants(Integer.parseInt(plantsOnStart.getText()));
-        props.setPlantsPerDay(Integer.parseInt(dailyPlants.getText()));
-        props.setStartEnergy(Integer.parseInt(startEnergy.getText()));
-        props.setEnergyOnEat(Integer.parseInt(energyOnEat.getText()));
-        props.setEnergyPerMove(Integer.parseInt(energyPerMove.getText()));
-        props.setAnimalGenomeLength(Integer.parseInt(genomeLength.getText()));
-        props.setEnergyToBreed(Integer.parseInt(energyToBreed.getText()));
-        props.setEnergyLossOnBreed(Integer.parseInt(breedCost.getText()));
-        props.setStartAnimals(Integer.parseInt(startAnimals.getText()));
-        props.setMinChildrenMutations(Integer.parseInt(minMutations.getText()));
-        props.setMaxChildrenMutations(Integer.parseInt(maxMutations.getText()));
-        props.setDayLimit(Integer.parseInt(dayLimit.getText()));
-        props.setSpecialMutation(specialMutation.isSelected());
-        props.setMapPoles(mapPoles.isSelected());
-        props.setDayOffset(Integer.parseInt(simulationTimeout.getText()));
-        engine.runSimulation(props);
-        System.out.println("Simulation started");
+        try {
+            SimulationProps props = new SimulationProps();
+            props.setMapWidth(Integer.parseInt(mapWidth.getText()));
+            props.setMapHeight(Integer.parseInt(mapHeight.getText()));
+            props.setPlants(Integer.parseInt(plantsOnStart.getText()));
+            props.setPlantsPerDay(Integer.parseInt(dailyPlants.getText()));
+            props.setStartEnergy(Integer.parseInt(startEnergy.getText()));
+            props.setEnergyOnEat(Integer.parseInt(energyOnEat.getText()));
+            props.setEnergyPerMove(Integer.parseInt(energyPerMove.getText()));
+            props.setAnimalGenomeLength(Integer.parseInt(genomeLength.getText()));
+            props.setEnergyToBreed(Integer.parseInt(energyToBreed.getText()));
+            props.setEnergyLossOnBreed(Integer.parseInt(breedCost.getText()));
+            props.setStartAnimals(Integer.parseInt(startAnimals.getText()));
+            props.setMinChildrenMutations(Integer.parseInt(minMutations.getText()));
+            props.setMaxChildrenMutations(Integer.parseInt(maxMutations.getText()));
+            props.setDayLimit(Integer.parseInt(dayLimit.getText()));
+            props.setSpecialMutation(specialMutation.isSelected());
+            props.setMapPoles(mapPoles.isSelected());
+            props.setDayOffset(Integer.parseInt(simulationTimeout.getText()));
+            props.setExportData(exportCheck.isSelected());
+            if (!props.validate()) {throw new NumberFormatException("Wrong int value");}
+            engine.runSimulation(props);
+        } catch (NumberFormatException e) {
+            System.err.println("Error while parsing simulation properties: " + e.getMessage());
+        }
     }
 
     public void saveConfig() {

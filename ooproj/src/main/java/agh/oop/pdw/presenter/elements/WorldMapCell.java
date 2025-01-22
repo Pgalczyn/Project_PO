@@ -7,18 +7,15 @@ import agh.oop.pdw.model.WorldElement;
 import agh.oop.pdw.model.WorldMap;
 import agh.oop.pdw.presenter.ColorManager;
 import agh.oop.pdw.presenter.StatEngine;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import agh.oop.pdw.simulation.Simulation;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Ellipse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static agh.oop.pdw.presenter.ImageLoader.GetImage;
 
@@ -26,13 +23,15 @@ public class WorldMapCell extends Pane {
     private final Vector2D position;
     private final WorldMap map;
     private int lastUpdateDay = 0;
-    private VBox statBox;
+    private StatEngine engine;
+    private Simulation simulation;
 
-    public WorldMapCell(WorldMap map, Vector2D position, VBox statBox) {
+    public WorldMapCell(WorldMap map, Vector2D position, StatEngine engine, Simulation s) {
         this.map = map;
         this.position = position;
-        this.statBox = statBox;
+        this.engine = engine;
         this.setStyle("-fx-padding: 3px;");
+        this.simulation = s;
         if (map.objectAt(position) != null) {
             List<WorldElement> animals = map.objectAt(position)
                     .stream()
@@ -49,6 +48,7 @@ public class WorldMapCell extends Pane {
     }
 
     private void handleClick(MouseEvent event) {
+        if (!simulation.isPaused()) return;
         ArrayList<WorldElement> elements = new ArrayList<WorldElement>(map.objectAt(position));
         if (elements.isEmpty()) return;
         Animal animal = elements
@@ -58,7 +58,8 @@ public class WorldMapCell extends Pane {
                 .findFirst()
                 .orElse(null);
         if (animal == null) return;
-        StatEngine.showStatistics(statBox, animal);
+        engine.setAnimal(animal);
+        engine.updateLabels();
     }
 
 
@@ -83,7 +84,6 @@ public class WorldMapCell extends Pane {
                 } catch (WrongColorFormatException e) {
                     System.out.println("Wrong color format: " + e.getMessage());
                 }
-//                this.loadImage(animals.getFirst().srcImage());
             } else {
                 this.setStyle("-fx-background-color: none;");
                 WorldElement element = map.objectAt(position).getFirst();

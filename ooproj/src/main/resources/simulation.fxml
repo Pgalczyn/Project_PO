@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -92,36 +91,34 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="dailyPlants" prefHeight="26.0" prefWidth="330.0" promptText="10" text="4" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="dailyPlants" prefHeight="26.0" prefWidth="330.0" promptText="10" text="0" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
                         </TextField>
                      </children>
                   </VBox>
-                  <Label text="Wybierz konfiguracje">
-                     <VBox.margin>
-                        <Insets left="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <ChoiceBox fx:id="configBox" prefWidth="150.0">
-                     <VBox.margin>
+                  <HBox prefHeight="16.0" prefWidth="288.0">
+                     <padding>
                         <Insets left="15.0" />
-                     </VBox.margin>
-                  </ChoiceBox>
-                  <HBox prefHeight="34.0" prefWidth="288.0">
+                     </padding>
                      <children>
-                        <TextField fx:id="configName" prefHeight="26.0" prefWidth="204.0">
-                           <HBox.margin>
-                              <Insets right="5.0" />
-                           </HBox.margin>
-                        </TextField>
-                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveConfig" prefHeight="26.0" prefWidth="78.0" text="Zapisz" />
+                        <ChoiceBox fx:id="configBox" prefWidth="150.0">
+                           <padding>
+                              <Insets left="15.0" />
+                           </padding>
+                        </ChoiceBox>
                      </children>
-                     <VBox.margin>
-                        <Insets left="15.0" />
-                     </VBox.margin>
                   </HBox>
+                  <VBox prefHeight="7.0" prefWidth="288.0" spacing="15.0">
+                     <children>
+                        <TextField fx:id="configName" />
+                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveConfig" prefHeight="26.0" prefWidth="190.0" text="Zapisz konfiguracje" />
+                     </children>
+                     <padding>
+                        <Insets left="15.0" />
+                     </padding>
+                  </VBox>
                </children>
                <padding>
                   <Insets left="15.0" right="15.0" />
@@ -179,7 +176,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="energyPerMove" promptText="100" text="2" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="energyPerMove" promptText="100" text="0" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -193,7 +190,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="genomeLength" promptText="30" text="50" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="genomeLength" promptText="30" text="30" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -221,7 +218,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="breedCost" promptText="20" text="40" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="breedCost" promptText="20" text="20" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -254,7 +251,7 @@
                               <Insets left="15.0" />
                            </VBox.margin>
                         </Text>
-                        <TextField fx:id="startAnimals" prefHeight="26.0" prefWidth="258.0" promptText="5" text="15" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="startAnimals" prefHeight="26.0" prefWidth="258.0" promptText="5" text="5" VBox.vgrow="ALWAYS">
                            <VBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </VBox.margin>
@@ -334,6 +331,20 @@
                         </CheckBox>
                      </children>
                   </VBox>
+                  <VBox spacing="5.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Zapisywanie danych symualcji" VBox.vgrow="ALWAYS">
+                           <VBox.margin>
+                              <Insets left="15.0" />
+                           </VBox.margin>
+                        </Text>
+                        <CheckBox fx:id="exportCheck" mnemonicParsing="false" text="Zaznacz, aby użyć">
+                           <VBox.margin>
+                              <Insets left="15.0" right="15.0" />
+                           </VBox.margin>
+                        </CheckBox>
+                     </children>
+                  </VBox>
                </children>
                <padding>
                   <Insets left="15.0" right="15.0" />
@@ -355,7 +366,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Text>
-                  <TextField fx:id="simulationTimeout" promptText="200" text="40" />
+                  <TextField fx:id="simulationTimeout" promptText="200" text="30" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="70.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
