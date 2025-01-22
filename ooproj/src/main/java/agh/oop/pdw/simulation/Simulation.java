@@ -3,8 +3,7 @@ package agh.oop.pdw.simulation;
 import agh.oop.pdw.model.*;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
+
 
 import static agh.oop.pdw.model.Animal.ENERGY_THEN_AGE_THEN_NUMBER_OF_CHILDREN;
 import static agh.oop.pdw.model.util.RandomUtils.RANDOM;
@@ -79,7 +78,7 @@ public class Simulation implements Runnable {
     }
 
 
-    private void removeDeadAnimals() {
+    public void removeDeadAnimals() {
         Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
         for (Vector2D position : keySet) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
@@ -102,7 +101,7 @@ public class Simulation implements Runnable {
     }
 
 
-    private void moveAnimals() {
+    public void moveAnimals() {
         Set<Vector2D> keySet = new HashSet<>(map.getAnimals().keySet());
         for (Vector2D position : keySet) {
             ArrayList<Animal> animalsOnPosition = new ArrayList<>(map.getAnimals().get(position));
@@ -116,7 +115,7 @@ public class Simulation implements Runnable {
         }
     }
 
-    private void animalsEatGrass() {
+    public void animalsEatGrass() {
         Map<Vector2D, ArrayList<Animal>> animalsMap = map.getAnimals();
         Map<Vector2D, Grass> grasses = map.getGrasses();
         for (Vector2D position : animalsMap.keySet()) {
@@ -201,6 +200,10 @@ public class Simulation implements Runnable {
 
     public int getDeadAnimals() {
         return deadAnimals;
+    }
+
+    public AnimalsCreator getAnimalsCreator() {
+        return animalsCreator;
     }
 
     public int getSumOfDeadAnimalsDays() {
