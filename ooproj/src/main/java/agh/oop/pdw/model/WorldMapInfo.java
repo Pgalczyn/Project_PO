@@ -53,7 +53,7 @@ public class WorldMapInfo {
             this.amountOfEmptyFieldsOnTheMap = map.getEmptyFields().size();
         } catch (ConcurrentModificationException e) {
             System.err.println("Skipping information update");
-//            e.printStackTrace();
+
         }
 
     }

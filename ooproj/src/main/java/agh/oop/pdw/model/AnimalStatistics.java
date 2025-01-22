@@ -51,36 +51,36 @@ public class AnimalStatistics {
     }
 
     public String getPosition() {
-        return "Position: [" + animal.getPosition().x + ", " + animal.getPosition().y + "]";
+        return "Pozycja: [" + animal.getPosition().x + ", " + animal.getPosition().y + "]";
     }
 
 
     public String getGenotype() {
-        return (animal == null) ? "" : "genotype: " + genotype;
+        return (animal == null) ? "" : "Genotyp: " + genotype;
     }
 
     public String getActiveGene() {
-        return (animal == null) ? "" :"Active gene: " + activeGene;
+        return (animal == null) ? "" :"Aktywny gen: " + activeGene;
     }
 
     public String getEnergy() {
-        return (animal == null) ? "" :"Current Energy: " + energy;
+        return (animal == null) ? "" :"Bieżąca energia: " + energy;
     }
 
     public String getAmountOfEatenPlants() {
-        return (animal == null) ? "" :"Eaten grass: " + amountOfEatenPlants;
+        return (animal == null) ? "" :"Ilość zjedzonej trawy: " + amountOfEatenPlants;
     }
 
     public String getAmountOfChildren() {
-        return (animal == null) ? "" :"Children count: " + amountOfChildren;
+        return (animal == null) ? "" :"Liczba dzieci: " + amountOfChildren;
     }
 
     public String getAmountOfDescendants() {
-        return (animal == null) ? "" :"Descendants: " + amountOfDescendants;
+        return (animal == null) ? "" :"Potomkowie: " + amountOfDescendants;
     }
 
     public String getAmountOfDaysAlive() {
-        return (animal == null) ? "" :"Age of animal: " + amountOfDaysAlive;
+        return (animal == null) ? "" :"Wiek zwierzaka: " + amountOfDaysAlive;
     }
 
 }

@@ -54,8 +54,8 @@ public class SimulationWorldMap implements SimulationListener, WorldMapListener 
         allFreeSpotsAmount.setText(informer.getAmountOfEmptyFieldsOnTheMap());
         mostPopularGeno.setText(informer.getTheMostPopularGenotype());
         avgEnergy.setText(informer.getAverageLevelOfEnergyOfAnimals());
-        avgChildren.setText(informer.getAvgLifeTimeForDeadAnimal());
-        avgLife.setText(informer.getAvgAmountOfChildren());
+        avgChildren.setText(informer.getAvgAmountOfChildren());
+        avgLife.setText(informer.getAvgLifeTimeForDeadAnimal());
 
     }
 

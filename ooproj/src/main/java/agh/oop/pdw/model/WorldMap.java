@@ -3,9 +3,7 @@ package agh.oop.pdw.model;
 import agh.oop.pdw.model.util.Boundary;
 import agh.oop.pdw.model.util.RandomUtils;
 
-import java.text.DecimalFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class WorldMap implements MoveValidator {
     private final Map<Vector2D, ArrayList<Animal>> animals = new HashMap<>();
